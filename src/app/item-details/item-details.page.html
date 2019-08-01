@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div *ngIf="!missingItemDetails">
+    <ion-card>
+      <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
+      <ion-card-header>
+        <ion-card-subtitle>
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-card-subtitle>
+        <ion-card-title>
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-list lines="none">
+        <ion-item *ngFor="let x of [1, 2]">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+  </div>
+
+  <div *ngIf="missingItemDetails">
+    <ion-img [src]="(missingItemDetails | async).itemImage" [alt]="(missingItemDetails | async).itemImage"></ion-img>
+    <ion-card no-margin>
+      <ion-card-header>
+        <ion-card-subtitle>{{ (missingItemDetails | async).itemDescription }}</ion-card-subtitle>
+        <ion-card-title>{{ (missingItemDetails | async).itemName }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>No items added yet.</p>
+        <p>Add items which people borrowed from you recently.</p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-list lines="none">
+        <ion-item>
+          <ion-label>Date Borrowed</ion-label>
+          <ion-chip color="primary">{{ (missingItemDetails | async).dateBorrowed }}</ion-chip>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Item Type</ion-label>
+          <ion-chip color="primary">{{ (missingItemDetails | async).itemCategory }}</ion-chip>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+  </div>
+
+</ion-content>

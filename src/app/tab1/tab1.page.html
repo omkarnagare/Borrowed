@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Borrowed.
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div *ngIf="!missingItems">
+    <ion-card *ngFor="let x of [1, 2, 3, 4]">
+      <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
+      <ion-card-header>
+        <ion-card-subtitle>
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-card-subtitle>
+        <ion-card-title>
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ion-card [routerLink]="['item-details', missingItem.itemId]" button class="welcome-card"
+    *ngFor="let missingItem of (missingItems | async)">
+    <img [src]="missingItem.itemImage" [alt]="missingItem.itemImage" />
+    <ion-card-header>
+      <ion-card-subtitle>{{ missingItem.itemDescription }}</ion-card-subtitle>
+      <ion-card-title>{{ missingItem.itemName }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>No items added yet.</p>
+      <p>Add items which people borrowed from you recently.</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="openAddItemModal()">
+      <ion-icon color="secondary" name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

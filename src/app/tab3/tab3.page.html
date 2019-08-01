@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Profile
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-avatar (click)="selectImageSource()" class="profile-picture">
+    <ion-img [src]="profileImage">
+    </ion-img>
+  </ion-avatar>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Omkar Nagare</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Ekach chhava...</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="shareToSocialNetworks()">
+      <ion-icon color="success" name="share"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
