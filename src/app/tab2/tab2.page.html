@@ -1,9 +1,42 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab Two
+      Urgent Items
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content>
+
+    <div *ngIf="!urgentMissingItems">
+        <ion-card *ngFor="let x of [1, 2, 3, 4]">
+          <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
+          <ion-card-header>
+            <ion-card-subtitle>
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-card-subtitle>
+            <ion-card-title>
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-skeleton-text animated></ion-skeleton-text>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    
+      <ion-card [routerLink]="['item-details', urgentMissingItem.itemId]" button class="welcome-card"
+        *ngFor="let urgentMissingItem of (urgentMissingItems | async)">
+        <img [src]="urgentMissingItem.itemImage" alt="/assets/shapes.svg" />
+        <ion-card-header>
+          <ion-card-subtitle>{{ urgentMissingItem.itemDescription }}</ion-card-subtitle>
+          <ion-card-title>{{ urgentMissingItem.itemName }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>No items added yet.</p>
+          <p>Add items which people borrowed from you recently.</p>
+        </ion-card-content>
+      </ion-card>
+
+</ion-content>

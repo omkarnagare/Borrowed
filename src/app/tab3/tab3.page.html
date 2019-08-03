@@ -9,7 +9,7 @@
 <ion-content>
 
   <ion-avatar (click)="selectImageSource()" class="profile-picture">
-    <ion-img [src]="profileImage">
+    <ion-img [src]="(storedUserProfile | async)?.profile_image">
     </ion-img>
   </ion-avatar>
 

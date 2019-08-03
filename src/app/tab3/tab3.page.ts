@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { BorrowedAppConstants } from '../constants';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-tab3',
@@ -13,15 +17,19 @@ export class Tab3Page implements OnInit {
   cameraOptions: CameraOptions;
   gallaryOptions: CameraOptions;
 
-  profileImage: any;
+  storedUserProfile: Observable<any>;
 
   constructor(
+    private _anugularFirestore: AngularFirestore,
+    private _angualrFireAuth: AngularFireAuth,
     private _socialShare: SocialSharing,
     private _camera: Camera,
     private _alertController: AlertController
   ) {
 
-    this.profileImage = "/assets/shapes.svg";
+    this.storedUserProfile = this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
+      .doc(this._angualrFireAuth.auth.currentUser.uid)
+      .valueChanges();
 
     this.cameraOptions = {
       quality: 50,
@@ -73,14 +81,21 @@ export class Tab3Page implements OnInit {
     await alert.present();
   }
 
-  getProfileImage(cameraOption: CameraOptions){
+  getProfileImage(cameraOption: CameraOptions) {
     this._camera.getPicture(cameraOption)
-    .then ((imageData) => {
-      this.profileImage = "data:image/jpeg;base64,"+ imageData;
-    });
+      .then((imageData) => {
+        //store profile image to firestore
+        const image = BorrowedAppConstants.BASE64_IMAGE_PREFIX_DATA + imageData;
+        this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
+          .doc(this._angualrFireAuth.auth.currentUser.uid)
+          .set({
+            profile_image: image
+          })
+
+      });
   }
 
-  shareToSocialNetworks(){
+  shareToSocialNetworks() {
     this._socialShare.share(
       "I found this on Borrowed.",
       "",

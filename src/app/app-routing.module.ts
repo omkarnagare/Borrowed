@@ -1,10 +1,16 @@
-import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { PreloadAllModules, RouterModule, Routes } from "@angular/router";
+import { CanEnterLogInPageGuard } from './guards/can-enter-log-in-page.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+    path: "",
+    loadChildren: () => import("./tabs/tabs.module").then(m => m.TabsPageModule)
+  },
+  {
+    path: "log-in",
+    loadChildren: "./log-in/log-in.module#LogInPageModule",
+    canActivate: [ CanEnterLogInPageGuard ]
   }
 ];
 @NgModule({
@@ -13,4 +19,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

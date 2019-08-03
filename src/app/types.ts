@@ -6,3 +6,7 @@ export interface Item {
     itemImage?: string;
     itemCategory?: string;
 }
+export interface LogInCredentials {
+    email: string;
+    password: string;
+}

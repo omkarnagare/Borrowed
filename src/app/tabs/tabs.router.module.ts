@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { CanEnterTabsPagesGuard } from '../guards/can-enter-tabs-pages.guard';
 
 const routes: Routes = [
   {
     path: 'tabs',
     component: TabsPage,
+    canActivate: [ CanEnterTabsPagesGuard ],
     children: [
       {
         path: 'borrowed',
@@ -24,12 +26,18 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'pressing-items',
+        path: 'urgent-items',
         children: [
           {
             path: '',
             loadChildren: () =>
               import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+          },
+          {
+            path: 'item-details/:itemId',
+            loadChildren: () =>
+              import('../item-details/item-details.module').then(m => m.ItemDetailsPageModule),
+            // loadChildren: '../missing-item-details/missing-item-details.module#ItemDetailsPageModule'
           }
         ]
       },
@@ -52,7 +60,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/tabs/borrowed',
+    redirectTo: '/log-in',
     pathMatch: 'full'
   }
 ];

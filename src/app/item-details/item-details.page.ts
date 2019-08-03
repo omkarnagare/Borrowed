@@ -3,6 +3,10 @@ import { Observable } from 'rxjs';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
 import { ActivatedRoute } from '@angular/router';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { BorrowedAppConstants } from '../constants';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-item-details',
@@ -15,6 +19,9 @@ export class ItemDetailsPage implements OnInit {
   missingItemDetails: Observable<Item>;
 
   constructor(
+    private _toastController: ToastController,
+    private _angularFirestore: AngularFirestore,
+    private _angularFireAuth: AngularFireAuth,
     activatedRoute: ActivatedRoute,
     itemService: ItemsService) {
     this.itemId = activatedRoute.snapshot.params["itemId"];
@@ -27,6 +34,36 @@ export class ItemDetailsPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  addToUrgentItems(){
+    // this.missingItemDetails.subscribe(
+    //   (itemDetails) => {
+    //     this._angularFirestore.collection(BorrowedAppConstants.ITEMS_COLLECTION)
+    //     .doc(this._angularFireAuth.auth.currentUser.uid)
+    //     .collection (BorrowedAppConstants.ITEMS_COLLECTION , (ref) => {
+    //       return ref.where("id", "==", itemDetails.itemId)
+    //     })
+    //     .get()
+    //     .subscribe((doc) => {
+    //       if (doc.empty){
+    //         this._angularFirestore.collection(BorrowedAppConstants.ITEMS_COLLECTION)
+    //         .doc(this._angularFireAuth.auth.currentUser.uid)
+    //         .collection(BorrowedAppConstants.ITEMS_COLLECTION)
+    //         .add(itemDetails)
+    //         .then(() => {
+    //           const toast = this._toastController.create({
+    //             message: "Test toast notification",
+    //             duration: 2000,
+    //             position: "bottom"
+    //           });
+    //           toast.then((toastMessage) => {
+    //             toastMessage.present();
+    //           });
+    //         });
+    //       }
+    //     });
+    // });
   }
 
 }

@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Item } from '../types';
+import { ItemsService } from '../services/items.service';
 
 @Component({
   selector: 'app-tab2',
@@ -7,6 +10,12 @@ import { Component } from '@angular/core';
 })
 export class Tab2Page {
 
-  constructor() {}
+  urgentMissingItems: Observable<any>;
+
+  constructor(
+    itemsService: ItemsService
+  ) {
+    this.urgentMissingItems = itemsService.getItems();
+  }
 
 }
