@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
@@ -8,14 +8,21 @@ import { ItemsService } from '../services/items.service';
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss']
 })
-export class Tab2Page {
+export class Tab2Page implements OnInit{
 
   urgentMissingItems: Observable<any>;
 
   constructor(
-    itemsService: ItemsService
+    private _itemsService: ItemsService
   ) {
-    this.urgentMissingItems = itemsService.getItems();
+    this.urgentMissingItems = this._itemsService.getUrgentItems();
+    this.urgentMissingItems.subscribe((data) => {
+      console.log("urgent items: ", data);
+    });
+  }
+
+  ngOnInit() {
+
   }
 
 }

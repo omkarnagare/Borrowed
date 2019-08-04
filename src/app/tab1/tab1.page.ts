@@ -27,11 +27,30 @@ export class Tab1Page implements OnInit {
     // setTimeout(()=> {
     //   this.missingItems = missingItemsService.getItems();
     // }, 5000);
-    this.missingItems = _itemsService.getItems();
+
+    this.missingItems = this._itemsService.getItems();
+    this.missingItems.subscribe((data) => {
+      console.log("item list: ", data);
+    });
   }
 
   ngOnInit() {
+  }
 
+  removeItem(id: string) {
+    this._itemsService.deleteItem(id);
+  }
+
+  toggleUrgentStatus(id: string, missingItem: Item) {
+    missingItem.isUrgent = !missingItem.isUrgent;
+    this._itemsService.updateItem(id, missingItem).then((result) => {
+      const message = missingItem.isUrgent
+        ? "Item " + missingItem.itemName + " added to urgent List"
+        : "Item " + missingItem.itemName + " removed from urgent List"
+      this._itemsService.showToast(message);
+    }).catch((error) => {
+      this._itemsService.showToast(error);
+    });
   }
 
   async openAddItemModal() {

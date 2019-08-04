@@ -14,52 +14,35 @@ import { ToastController } from '@ionic/angular';
 export class ItemDetailsPage implements OnInit {
 
   itemId: string;
-  missingItemDetails: Observable<Item>;
+  itemObject: Item;
+
+  itemDetails: Observable<Item>;
 
   constructor(
-    private _toastController: ToastController,
-    activatedRoute: ActivatedRoute,
-    itemService: ItemsService) {
+    private _itemService: ItemsService,
+    activatedRoute: ActivatedRoute
+  ) {
     this.itemId = activatedRoute.snapshot.params["itemId"];
-    this.missingItemDetails = itemService.getItem(this.itemId);
-
-    // simulate timeout
-    // setTimeout(()=> {
-    //   this.missingItemDetails = itemService.getItem(this.itemId);
-    // }, 4000);
+    this.itemDetails = _itemService.getItem(this.itemId);
+    this.itemDetails.subscribe((item) => {
+      console.log("item details", item);
+      this.itemObject = item;
+    })
   }
 
   ngOnInit() {
   }
 
-  addToUrgentItems(){
-    // this.missingItemDetails.subscribe(
-    //   (itemDetails) => {
-    //     this._angularFirestore.collection(BorrowedAppConstants.ITEMS_COLLECTION)
-    //     .doc(this._angularFireAuth.auth.currentUser.uid)
-    //     .collection (BorrowedAppConstants.ITEMS_COLLECTION , (ref) => {
-    //       return ref.where("id", "==", itemDetails.itemId)
-    //     })
-    //     .get()
-    //     .subscribe((doc) => {
-    //       if (doc.empty){
-    //         this._angularFirestore.collection(BorrowedAppConstants.ITEMS_COLLECTION)
-    //         .doc(this._angularFireAuth.auth.currentUser.uid)
-    //         .collection(BorrowedAppConstants.ITEMS_COLLECTION)
-    //         .add(itemDetails)
-    //         .then(() => {
-    //           const toast = this._toastController.create({
-    //             message: "Test toast notification",
-    //             duration: 2000,
-    //             position: "bottom"
-    //           });
-    //           toast.then((toastMessage) => {
-    //             toastMessage.present();
-    //           });
-    //         });
-    //       }
-    //     });
-    // });
+  toggleUrgentStatus() {
+    this.itemObject.isUrgent = !this.itemObject.isUrgent;
+    this._itemService.updateItem(this.itemId, this.itemObject).then((result) => {
+      const message = this.itemObject.isUrgent
+        ? "Item " + this.itemObject.itemName + " added to urgent List"
+        : "Item " + this.itemObject.itemName + " removed from urgent List"
+      this._itemService.showToast(message);
+    }).catch((error) => {
+      this._itemService.showToast(error);
+    });
   }
 
 }

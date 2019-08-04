@@ -4,12 +4,18 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title></ion-title>
+    <ion-buttons slot="end">
+        <ion-button (click)="toggleUrgentStatus()">
+          <ion-icon *ngIf="(itemDetails | async)?.isUrgent" color="danger" name="star"></ion-icon>
+          <ion-icon *ngIf="!(itemDetails | async)?.isUrgent" color="danger" name="star-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <div *ngIf="!missingItemDetails">
+  <div *ngIf="!itemDetails">
     <ion-card>
       <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
       <ion-card-header>
@@ -35,11 +41,11 @@
     </ion-card>
   </div>
 
-  <ion-img [src]="(missingItemDetails | async)?.itemImage" alt="/assets/shapes.svg"></ion-img>
+  <ion-img [src]="(itemDetails | async)?.itemImage" alt="/assets/shapes.svg"></ion-img>
   <ion-card no-margin>
     <ion-card-header>
-      <ion-card-subtitle>{{ (missingItemDetails | async)?.itemDescription }}</ion-card-subtitle>
-      <ion-card-title>{{ (missingItemDetails | async)?.itemName }}</ion-card-title>
+      <ion-card-subtitle>{{ (itemDetails | async)?.itemDescription }}</ion-card-subtitle>
+      <ion-card-title>{{ (itemDetails | async)?.itemName }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <p>No items added yet.</p>
@@ -51,15 +57,15 @@
     <ion-list lines="none">
       <ion-item>
         <ion-label>Date Borrowed</ion-label>
-        <ion-chip color="primary">{{ (missingItemDetails | async)?.dateBorrowed }}</ion-chip>
+        <ion-chip color="primary">{{ (itemDetails | async)?.dateBorrowed }}</ion-chip>
       </ion-item>
     </ion-list>
   </ion-card>
 
-  <ion-fab vertical="top" horizontal="start" slot="fixed">
+  <!-- <ion-fab vertical="top" horizontal="start" slot="fixed">
     <ion-fab-button (click)="addToUrgentItems()">
       <ion-icon color="danger" name="star"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
+  </ion-fab> -->
 
 </ion-content>

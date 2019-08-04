@@ -70,21 +70,24 @@ export class AddItemPage implements OnInit {
         this.itemImage = BorrowedAppConstants.BASE64_IMAGE_PREFIX_DATA + imageData;
         console.log("imageData", this.itemImage);
       },
-      (error) => {
-        console.log("error occurred while getting Item Image: ", error);
-      });
+        (error) => {
+          console.log("error occurred while getting Item Image: ", error);
+        });
   }
 
   addItem() {
-    const itemObject: Item = {... this.itemDetailsFormGroup.value};
+    const itemObject: Item = { ... this.itemDetailsFormGroup.value };
     itemObject["itemImage"] = this.itemImage;
 
     this._itemService
-    .addItem(itemObject)
-    .subscribe((result) => {
-      this._modalController
-      .dismiss(itemObject);
-    });
+      .addItem(itemObject)
+      .then((result) => {
+        this._itemService.showToast(result.message);
+        this._modalController.dismiss(itemObject);
+      }).catch((error) => {
+        this._itemService.showToast(error);
+        this._modalController.dismiss();
+      });
   }
 
   closeModal() {

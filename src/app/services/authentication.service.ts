@@ -41,7 +41,7 @@ export class AuthenticationService {
     return this._angularFireAuth.auth.currentUser.uid;
   }
 
-  showToast(errorMessage: string) {
+  showToast(errorMessage: any) {
     const toast = this._toastController.create({
       message: errorMessage,
       duration: 4000,
