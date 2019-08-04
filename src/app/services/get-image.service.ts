@@ -15,24 +15,24 @@ export class GetImageService {
   ) {
 
     this.cameraOptions = {
-      quality: 10,
+      quality: 50,
       destinationType: this._camera.DestinationType.DATA_URL,
       encodingType: this._camera.EncodingType.JPEG,
       mediaType: this._camera.MediaType.PICTURE,
-      targetHeight: 100,
-      targetWidth: 100,
+      targetHeight: 200,
+      targetWidth: 200,
       correctOrientation: false,
       cameraDirection: this._camera.Direction.FRONT,
       sourceType: this._camera.PictureSourceType.CAMERA
     }
 
     this.gallaryOptions = {
-      quality: 10,
+      quality: 50,
       destinationType: this._camera.DestinationType.DATA_URL,
       encodingType: this._camera.EncodingType.JPEG,
       mediaType: this._camera.MediaType.PICTURE,
-      targetHeight: 100,
-      targetWidth: 100,
+      targetHeight: 200,
+      targetWidth: 200,
       correctOrientation: false,
       sourceType: this._camera.PictureSourceType.SAVEDPHOTOALBUM
     }

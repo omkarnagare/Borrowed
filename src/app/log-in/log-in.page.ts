@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LogInCredentials } from '../types';
-import { LogInService } from '../services/log-in.service';
+import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,7 +15,7 @@ export class LogInPage implements OnInit {
 
   constructor(
     private _router: Router,
-    private _logInService: LogInService,
+    private _authenticationService: AuthenticationService,
     formBuilder: FormBuilder
   ) {
     this.logInFormGroup = formBuilder.group({
@@ -31,7 +31,7 @@ export class LogInPage implements OnInit {
 
   logIn() {
     const credentials: LogInCredentials = this.logInFormGroup.value;
-    this._logInService.logIn(credentials)
+    this._authenticationService.logIn(credentials)
       .then((authData) => {
         console.log(authData);
         this._router.navigate(["/tabs"]);

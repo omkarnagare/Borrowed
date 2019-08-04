@@ -5,6 +5,7 @@ import { Item } from '../types';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { BorrowedAppConstants } from '../constants';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,13 @@ export class ItemsService {
 
   constructor(
     private _angularFirestore: AngularFirestore,
-    private _angularFireAuth: AngularFireAuth,
+    private _authenticationService: AuthenticationService,
     private _httpClient: HttpClient
     ) { }
 
   addItem(itemDetails: Item): Observable<any> {
     return this._angularFirestore.collection(BorrowedAppConstants.ITEMS_COLLECTION)
-    .doc(this._angularFireAuth.auth.currentUser.uid)
+    .doc(this._authenticationService.getCurrentUserId())
     .get();
   }
 
