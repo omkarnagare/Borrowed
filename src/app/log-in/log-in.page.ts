@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LogInCredentials } from '../types';
 import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-log-in',
@@ -33,10 +34,23 @@ export class LogInPage implements OnInit {
     const credentials: LogInCredentials = this.logInFormGroup.value;
     this._authenticationService.logIn(credentials)
       .then((authData) => {
-        console.log(authData);
+        // console.log(authData);
         this._router.navigate(["/tabs"]);
       }).catch((authDataError) => {
         console.log("Auth Error :", authDataError)
+        this._authenticationService.showToast(authDataError);
+      });
+  }
+
+  signUp() {
+    const credentials: LogInCredentials = this.logInFormGroup.value;
+    this._authenticationService.signUp(credentials)
+      .then((authData) => {
+        // console.log(authData);
+        this._router.navigate(["/tabs"]);
+      }).catch((authDataError) => {
+        console.log("Auth Error :", authDataError);
+        this._authenticationService.showToast(authDataError);
       });
   }
 

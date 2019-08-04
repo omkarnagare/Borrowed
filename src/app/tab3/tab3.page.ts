@@ -5,6 +5,8 @@ import { UsersService } from '../services/users.service';
 import { SocialNetworksService } from '../services/social-networks.service';
 import { GetImageService } from '../services/get-image.service';
 import { ImageSourceType } from '../constants';
+import { AuthenticationService } from '../services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab3',
@@ -15,8 +17,10 @@ export class Tab3Page implements OnInit {
   storedUserProfile: Observable<any>;
 
   constructor(
+    private _router: Router,
     private _usersService: UsersService,
     private _socialNetworkService: SocialNetworksService,
+    private _authenticationService: AuthenticationService,
     private _getImageService: GetImageService,
     private _alertController: AlertController
   ) {
@@ -54,13 +58,23 @@ export class Tab3Page implements OnInit {
       .then((imageData) => {
         this._usersService.setUserProfileImage(imageData);
       },
-      (error) => {
-        console.log("error occurred while getting Profile Image: ", error);
-      });
+        (error) => {
+          console.log("error occurred while getting Profile Image: ", error);
+        });
   }
 
   shareToSocialNetworks() {
     this._socialNetworkService.shareToSocialNetworks({});
+  }
+
+  logOut() {
+    this._authenticationService.logOut().then(() => {
+      this._router.navigate(['']);
+      console.log("User logged out successfully");
+    }).catch((error) => {
+      console.log("Log Out Error :", error);
+      this._authenticationService.showToast(error);
+    });
   }
 
 }

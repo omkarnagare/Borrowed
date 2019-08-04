@@ -4,6 +4,8 @@ import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
 import { ModalController, ToastController } from '@ionic/angular';
 import { AddItemPage } from '../add-item/add-item.page';
+import { AuthenticationService } from '../services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab1',
@@ -15,15 +17,17 @@ export class Tab1Page implements OnInit {
   missingItems: Observable<Item[]>;
 
   constructor(
+    private _router: Router,
     private _toastController: ToastController,
     private _modalController: ModalController,
-    itemsService: ItemsService
+    private _itemsService: ItemsService,
+    private _authenticationService: AuthenticationService
   ) {
     // simulate delay
     // setTimeout(()=> {
     //   this.missingItems = missingItemsService.getItems();
     // }, 5000);
-    this.missingItems = itemsService.getItems();
+    this.missingItems = _itemsService.getItems();
   }
 
   ngOnInit() {
@@ -56,6 +60,16 @@ export class Tab1Page implements OnInit {
     });
     toast.then((toastMessage) => {
       toastMessage.present();
+    });
+  }
+
+  logOut() {
+    this._authenticationService.logOut().then(() => {
+      this._router.navigate(['']);
+      console.log("User logged out successfully");
+    }).catch((authDataError) => {
+      console.log("Auth Error :", authDataError);
+      this._authenticationService.showToast(authDataError);
     });
   }
 
