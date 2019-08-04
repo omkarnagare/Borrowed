@@ -63,7 +63,6 @@ export class Tab1Page implements OnInit {
     addItemModal.onDidDismiss().then((modalData) => {
       if (modalData.data) {
         console.log("Item Added: ", modalData.data);
-        this.showToast(modalData.data);
       } else {
         console.log("Modal dissmissed without adding any item");
       }

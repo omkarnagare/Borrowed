@@ -24,7 +24,7 @@ export class Tab3Page implements OnInit {
     private _getImageService: GetImageService,
     private _alertController: AlertController
   ) {
-    // this.storedUserProfile = _usersService.getUserProfile();
+    this.storedUserProfile = _usersService.getUserProfile();
   }
 
   ngOnInit() {
@@ -56,6 +56,7 @@ export class Tab3Page implements OnInit {
   getProfileImage(sourceType: ImageSourceType) {
     this._getImageService.getImage(sourceType)
       .then((imageData) => {
+        // console.log(imageData);
         this._usersService.setUserProfileImage(imageData);
       },
         (error) => {

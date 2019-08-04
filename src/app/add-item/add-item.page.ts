@@ -5,6 +5,7 @@ import { ItemsService } from '../services/items.service';
 import { BorrowedAppConstants, ImageSourceType } from '../constants';
 import { Item } from '../types';
 import { GetImageService } from '../services/get-image.service';
+import { CloudFilesStorageService } from '../services/cloud-files-storage.service';
 
 @Component({
   selector: 'app-add-item',
@@ -20,6 +21,7 @@ export class AddItemPage implements OnInit {
   constructor(
     private _itemService: ItemsService,
     private _getImageService: GetImageService,
+    private _cloudService: CloudFilesStorageService,
     private _modalController: ModalController,
     private _alertController: AlertController,
     navParams: NavParams,
@@ -78,6 +80,8 @@ export class AddItemPage implements OnInit {
   addItem() {
     const itemObject: Item = { ... this.itemDetailsFormGroup.value };
     itemObject["itemImage"] = this.itemImage;
+
+    // this._cloudService.uploadTextFile();
 
     this._itemService
       .addItem(itemObject)
