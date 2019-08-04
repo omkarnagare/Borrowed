@@ -3,8 +3,6 @@ import { Observable } from 'rxjs';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
 import { ActivatedRoute } from '@angular/router';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { BorrowedAppConstants } from '../constants';
 import { ToastController } from '@ionic/angular';
 
@@ -20,8 +18,6 @@ export class ItemDetailsPage implements OnInit {
 
   constructor(
     private _toastController: ToastController,
-    private _angularFirestore: AngularFirestore,
-    private _angularFireAuth: AngularFireAuth,
     activatedRoute: ActivatedRoute,
     itemService: ItemsService) {
     this.itemId = activatedRoute.snapshot.params["itemId"];

@@ -1,10 +1,10 @@
 export interface Item {
-    itemId: string;
+    itemId?: string;
     itemName: string;
     itemDescription?: string;
     dateBorrowed: string;
     itemImage?: string;
-    itemCategory?: string;
+    isUrgent?: boolean;
 }
 export interface LogInCredentials {
     email: string;

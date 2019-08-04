@@ -28,7 +28,7 @@
 
     <ion-card>
       <ion-list lines="none">
-        <ion-item *ngFor="let x of [1, 2]">
+        <ion-item *ngFor="let x of [1]">
           <ion-skeleton-text animated></ion-skeleton-text>
         </ion-item>
       </ion-list>
@@ -52,11 +52,6 @@
       <ion-item>
         <ion-label>Date Borrowed</ion-label>
         <ion-chip color="primary">{{ (missingItemDetails | async)?.dateBorrowed }}</ion-chip>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>Item Type</ion-label>
-        <ion-chip color="primary">{{ (missingItemDetails | async)?.itemCategory }}</ion-chip>
       </ion-item>
     </ion-list>
   </ion-card>

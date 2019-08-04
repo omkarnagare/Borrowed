@@ -3,3 +3,8 @@ export class BorrowedAppConstants {
     public static ITEMS_COLLECTION = "items";
     public static BASE64_IMAGE_PREFIX_DATA = "data:image/jpeg;base64,"
 }
+
+export enum ImageSourceType {
+    CAMERA = 100,
+    GALLERY = 101
+}

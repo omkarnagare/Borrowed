@@ -9,18 +9,20 @@
     <ion-card-content>
       <form [formGroup]="logInFormGroup">
         <ion-item>
-          <ion-label>Email: </ion-label>
-          <ion-input formControlName="email" type="email"></ion-input>
+          <!-- <ion-label>Email: </ion-label> -->
+          <ion-icon slot="start" name="person"></ion-icon>
+          <ion-input placeholder="Enter Email" formControlName="email" type="email"></ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-label>Password: </ion-label>
-          <ion-input formControlName="password" type="password"></ion-input>
+          <!-- <ion-label>Password: </ion-label> -->
+          <ion-icon slot="start" name="unlock"></ion-icon>
+          <ion-input placeholder="Enter Password" formControlName="password" type="password"></ion-input>
         </ion-item>
 
         <ion-button 
         (click)="logIn()"
-        [disabled]="logIn.invalid" margin-top expand="full">
+        [disabled]="logInFormGroup.invalid" margin-top expand="full">
           LogIn</ion-button>
       </form>
     </ion-card-content>

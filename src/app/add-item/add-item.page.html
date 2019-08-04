@@ -1,9 +1,46 @@
-<ion-content color="dark">
+<ion-content>
 
-    <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-        <ion-fab-button (click)="closeModal()">
-          <ion-icon color="danger" name="close"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
+  <ion-card no-margin>
+    <ion-card-content>
+      <form [formGroup]="itemDetailsFormGroup">
+        <ion-item lines="none">
+          <ion-avatar (click)="selectImageSource()" class="profile-picture" slot="start">
+            <ion-img [src]="itemImage">
+            </ion-img>
+          </ion-avatar>
+          <div slot="end">
+            <ion-item>
+              <!-- <ion-label floating>Name: </ion-label> -->
+              <ion-input placeholder="Item Name/Category" formControlName="itemName" type="text"></ion-input>
+            </ion-item>
+            <ion-item>
+              <!-- <ion-label>Date borrowed: </ion-label> -->
+              <ion-input placeholder="Given Date" formControlName="dateBorrowed" type="text"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>Urgent</ion-label>
+              <!-- <ion-checkbox formControlName="isUrgent" checked="false"></ion-checkbox> -->
+              <ion-toggle color="danger" slot="start" formControlName="isUrgent" checked="false"></ion-toggle>
+            </ion-item>
+          </div>
+        </ion-item>
+
+        <ion-item>
+          <!-- <ion-label>Description: </ion-label> -->
+          <ion-textarea placeholder="Enter more information here..." formControlName="itemDescription"></ion-textarea>
+        </ion-item>
+
+        <ion-button (click)="addItem()" [disabled]="itemDetailsFormGroup.invalid" margin-top expand="full">
+          Add</ion-button>
+      </form>
+    </ion-card-content>
+
+  </ion-card>
+
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="closeModal()">
+      <ion-icon color="danger" name="close"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>

@@ -17,6 +17,12 @@ export class ItemsService {
     private _httpClient: HttpClient
     ) { }
 
+  addItem(itemDetails: Item): Observable<any> {
+    return this._angularFirestore.collection(BorrowedAppConstants.ITEMS_COLLECTION)
+    .doc(this._angularFireAuth.auth.currentUser.uid)
+    .get();
+  }
+
   getItem(itemId: string): Observable<Item> {
     // return this._httpClient.get<Item>("");
     return of(
@@ -25,8 +31,7 @@ export class ItemsService {
         "itemName": "Borrowed.",
         "itemDescription": "App which makes you un-forget",
         "dateBorrowed": "today",
-        "itemImage": "/assets/shapes.svg",
-        "itemCategory": "Category"
+        "itemImage": "/assets/shapes.svg"
       });
   }
 
