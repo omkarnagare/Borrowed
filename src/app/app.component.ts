@@ -25,7 +25,8 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      this._networkService.initializeNetworkEvents();
+      // no need to check for internet connection as data persistence is enabled
+      // this._networkService.initializeNetworkEvents();
     });
   }
 }

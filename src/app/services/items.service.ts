@@ -28,7 +28,8 @@ export class ItemsService {
       .collection(BorrowedAppConstants.ITEMS_COLLECTION);
       if (this.collectionRef) {
         this.collectionRef.ref.get().then().catch(error => {
-          this._networkService.presentAlert('Error occurred while connecting to database');
+          // no need to check - as data persistence is enabled
+          // this._networkService.presentAlert('Error occurred while connecting to database');
         });
       } else {
         this.showToast("Couldn't connect to database. Please try again with healthy internet connection.");

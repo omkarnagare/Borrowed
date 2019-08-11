@@ -32,21 +32,21 @@ export class NetworkService implements OnDestroy {
   }
 
   public async presentAlert(message: string) {
-    // if (!this.alertPresented) {
-    //   this.alertPresented = true;
-    //   const alert = await this._alertController.create({
-    //     header: 'Borrowed Exiting ..',
-    //     message: message,
-    //     buttons: [{
-    //       text: 'Exit App',
-    //       handler: () => {
-    //         this.alertPresented = false;
-    //         navigator['app'].exitApp();
-    //       }
-    //     }]
-    //   });
-    //   await alert.present();
-    // }
+    if (!this.alertPresented) {
+      this.alertPresented = true;
+      const alert = await this._alertController.create({
+        header: 'Borrowed Exiting ..',
+        message: message,
+        buttons: [{
+          text: 'Exit App',
+          handler: () => {
+            this.alertPresented = false;
+            navigator['app'].exitApp();
+          }
+        }]
+      });
+      await alert.present();
+    }
   }
 
   public dissmissAlert() {
