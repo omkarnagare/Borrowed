@@ -1,40 +1,75 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
-import { ModalController, ToastController } from '@ionic/angular';
+import { ModalController, ToastController, Platform } from '@ionic/angular';
 import { AddItemPage } from '../add-item/add-item.page';
 import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { debounceTime, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
-export class Tab1Page implements OnInit {
+export class Tab1Page implements OnInit, OnDestroy, AfterViewInit {
+
+  backButtonSubscription$;
 
   missingItems: Observable<Item[]>;
 
+  searchFromGroup: FormGroup;
+  searching: boolean;
+  enableSearchBar: boolean;
+
   constructor(
-    private _router: Router,
+    private _platform: Platform,
     private _toastController: ToastController,
     private _modalController: ModalController,
     private _itemsService: ItemsService,
-    private _authenticationService: AuthenticationService
+    formBuilder: FormBuilder
   ) {
-    // simulate delay
-    // setTimeout(()=> {
-    //   this.missingItems = missingItemsService.getItems();
-    // }, 5000);
-
-    this.missingItems = this._itemsService.getItems();
-    this.missingItems.subscribe((data) => {
-      console.log("item list: ", data);
+    this.searchFromGroup = formBuilder.group({
+      searchControl: ""
     });
+    this.searching = true;
+    this.enableSearchBar = false;
   }
 
   ngOnInit() {
+    this.setFilteredItems("");
+    this.searchFromGroup.get("searchControl").valueChanges
+      .pipe(debounceTime(700))
+      .subscribe(search => {
+        this.setFilteredItems(search);
+      });
+  }
+
+  ngAfterViewInit() {
+    this.backButtonSubscription$ = this._platform.backButton.subscribe(() => {
+      navigator['app'].exitApp();
+    });
+  }
+ 
+  ngOnDestroy() {
+    this.backButtonSubscription$.unsubscribe();
+  }
+
+  setFilteredItems(searchTerm: string) {
+    this.missingItems = this._itemsService.getItems().pipe(
+      map((data) => {
+        this.searching = false;
+        return data.filter(item => {
+          return item.itemName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+        });
+      })
+    );
+  }
+
+  onSearchInput() {
+    this.searching = true;
   }
 
   removeItem(id: string) {
@@ -74,21 +109,20 @@ export class Tab1Page implements OnInit {
     const toast = this._toastController.create({
       message: "Item " + itemDetails.itemName + " added successfully",
       duration: 2000,
-      position: "bottom"
+      position: "bottom",
+      showCloseButton: true,
+      closeButtonText: "dismiss"
     });
     toast.then((toastMessage) => {
       toastMessage.present();
     });
   }
 
-  logOut() {
-    this._authenticationService.logOut().then(() => {
-      this._router.navigate(['']);
-      console.log("User logged out successfully");
-    }).catch((authDataError) => {
-      console.log("Auth Error :", authDataError);
-      this._authenticationService.showToast(authDataError);
-    });
+  toggleFiltering() {
+    this.enableSearchBar = !this.enableSearchBar;
+    if (!this.enableSearchBar) {
+      this.setFilteredItems("");
+    }
   }
 
 }

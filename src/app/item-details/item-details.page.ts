@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BorrowedAppConstants } from '../constants';
 import { ToastController } from '@ionic/angular';
 
@@ -20,6 +20,7 @@ export class ItemDetailsPage implements OnInit {
 
   constructor(
     private _itemService: ItemsService,
+    private _router: Router,
     activatedRoute: ActivatedRoute
   ) {
     this.itemId = activatedRoute.snapshot.params["itemId"];
@@ -31,6 +32,16 @@ export class ItemDetailsPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  removeItem() {
+    const message = "Item " + this.itemObject.itemName + " removed from urgent List";
+    this._router.navigate(["/tabs/borrowed"]);
+    this._itemService.deleteItem(this.itemId).then((result) => {
+      this._itemService.showToast(message);
+    }).catch((error) => {
+      this._itemService.showToast(error);
+    });
   }
 
   toggleUrgentStatus() {

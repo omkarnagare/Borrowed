@@ -9,8 +9,9 @@
       Borrowed.
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logOut()">
-        <ion-icon name="power" color="danger"></ion-icon>
+      <ion-button *ngIf="(missingItems | async)?.length !== 0" (click)="toggleFiltering()">
+        <ion-icon *ngIf="!enableSearchBar" name="search" color="primary"></ion-icon>
+        <ion-icon *ngIf="enableSearchBar" name="search" color="danger"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -18,36 +19,30 @@
 
 <ion-content>
 
+  <div *ngIf="enableSearchBar">
+    <form [formGroup]="searchFromGroup">
+      <ion-searchbar formControlName="searchControl" (ionChange)="onSearchInput()"></ion-searchbar>
+    </form>
+  </div>
+
+  <div *ngIf="searching" class="spinner-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
   <div *ngIf="!missingItems">
-    <ion-card *ngFor="let x of [1, 2, 3, 4]">
-      <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
-      <ion-card-header>
-        <ion-card-subtitle>
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-card-subtitle>
-        <ion-card-title>
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-skeleton-text animated></ion-skeleton-text>
-        <ion-skeleton-text animated></ion-skeleton-text>
-      </ion-card-content>
+    <ion-card *ngFor="let x of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]">
+      <ion-skeleton-text animated></ion-skeleton-text>
+      <ion-skeleton-text animated></ion-skeleton-text>
     </ion-card>
   </div>
 
-  <!-- <ion-card [routerLink]="['item-details', missingItem.itemId]" button class="welcome-card"
-    *ngFor="let missingItem of (missingItems | async)">
-    <img [src]="missingItem.itemImage" alt="/assets/shapes.svg" />
-    <ion-card-header>
-      <ion-card-subtitle>{{ missingItem.itemDescription }}</ion-card-subtitle>
-      <ion-card-title>{{ missingItem.itemName }}</ion-card-title>
-    </ion-card-header>
+  <ion-card *ngIf="(missingItems | async)?.length === 0" class="card-center">
     <ion-card-content>
-      <p>No items added yet.</p>
-      <p>Add items which people borrowed from you recently.</p>
+      <ion-img src="/assets/empty-box.svg" class="image-med"></ion-img>
+      <p>No Items Present !!</p>
+      <p>Use "+" button to add your missings Items to the List.</p>
     </ion-card-content>
-  </ion-card> -->
+  </ion-card>
 
   <ion-list>
     <ion-item-sliding [routerLink]="['item-details', missingItem.itemId]"
@@ -58,22 +53,21 @@
         </ion-item-option>
       </ion-item-options>
 
-      <ion-item>
-        <ion-label> {{ missingItem.itemName }} </ion-label>
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <ion-img [src]="missingItem.itemImage"></ion-img>
+        </ion-avatar>
+
+        <ion-chip color="primary"> {{ missingItem.itemName }} </ion-chip>
+        <ion-chip color="secondary" slot="end"> {{ missingItem.dateBorrowed | date: 'dd-MM-yy' }} </ion-chip>
       </ion-item>
 
       <ion-item-options side="end" (click)="toggleUrgentStatus( missingItem.itemId, missingItem )">
         <ion-item-option>
-          <ion-icon *ngIf="missingItem.isUrgent" color="danger" name="star" slot="icon-only"></ion-icon>
-          <ion-icon *ngIf="!missingItem.isUrgent" color="danger" name="star-outline" slot="icon-only"></ion-icon>
+          <ion-icon *ngIf="missingItem.isUrgent" color="success" name="star" slot="icon-only"></ion-icon>
+          <ion-icon *ngIf="!missingItem.isUrgent" color="success" name="star-outline" slot="icon-only"></ion-icon>
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-
-  <!-- <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-    <ion-fab-button (click)="openAddItemModal()">
-      <ion-icon color="secondary" name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab> -->
 </ion-content>

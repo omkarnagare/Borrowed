@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { UsersService } from '../services/users.service';
 import { SocialNetworksService } from '../services/social-networks.service';
@@ -7,6 +6,9 @@ import { GetImageService } from '../services/get-image.service';
 import { ImageSourceType } from '../constants';
 import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
+import { Item } from '../types';
+import { ItemsService } from '../services/items.service';
+import { ActionSheetController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab3',
@@ -15,6 +17,8 @@ import { Router } from '@angular/router';
 })
 export class Tab3Page implements OnInit {
   storedUserProfile: Observable<any>;
+  missingItems: Observable<Item[]>;
+  urgentMissingItems: Observable<Item[]>;
 
   constructor(
     private _router: Router,
@@ -22,9 +26,12 @@ export class Tab3Page implements OnInit {
     private _socialNetworkService: SocialNetworksService,
     private _authenticationService: AuthenticationService,
     private _getImageService: GetImageService,
-    private _alertController: AlertController
+    private _itemsService: ItemsService,
+    private _actionSheetController: ActionSheetController
   ) {
     this.storedUserProfile = _usersService.getUserProfile();
+    this.missingItems = this._itemsService.getItems();
+    this.urgentMissingItems = this._itemsService.getUrgentItems();
   }
 
   ngOnInit() {
@@ -32,20 +39,28 @@ export class Tab3Page implements OnInit {
   }
 
   async selectImageSource() {
-    const alert = await this._alertController.create({
-      header: "Select Source",
-      message: "Pick a source for your Profile picture",
+    const alert = await this._actionSheetController.create({
       buttons: [
         {
           text: "Camera",
+          icon: 'camera',
           handler: () => {
-            this.getProfileImage(ImageSourceType.CAMERA);
+            this.getProfileImage(ImageSourceType.BACK_CAMERA);
           }
         },
         {
           text: "Gallery",
+          icon: 'images',
           handler: () => {
             this.getProfileImage(ImageSourceType.GALLERY);
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
           }
         }
       ]

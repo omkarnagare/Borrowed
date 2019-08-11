@@ -1,20 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LogInCredentials } from '../types';
 import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ToastController, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-log-in',
   templateUrl: './log-in.page.html',
   styleUrls: ['./log-in.page.scss'],
 })
-export class LogInPage implements OnInit {
+export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
+
+  backButtonSubscription$;
 
   logInFormGroup: FormGroup;
 
   constructor(
+    private _platform: Platform,
     private _router: Router,
     private _authenticationService: AuthenticationService,
     formBuilder: FormBuilder
@@ -28,6 +31,16 @@ export class LogInPage implements OnInit {
   ngOnInit() {
     // TODO: test email
     this.logInFormGroup.get('email').setValue("omkar.nagare@borrowed.com");
+  }
+
+  ngAfterViewInit() {
+    this.backButtonSubscription$ = this._platform.backButton.subscribe(() => {
+      navigator['app'].exitApp();
+    });
+  }
+ 
+  ngOnDestroy() {
+    this.backButtonSubscription$.unsubscribe();
   }
 
   logIn() {

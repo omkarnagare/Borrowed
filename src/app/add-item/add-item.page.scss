@@ -1,6 +1,11 @@
-.profile-picture {
+.item-picture {
     width: 200px;
     height: 200px;
-    border: gray solid 1px;
+    border: gray solid 3px;
     margin: 10px auto;
+}
+
+.center-chip {
+    margin: 10px auto;
+    text-align: center;
 }

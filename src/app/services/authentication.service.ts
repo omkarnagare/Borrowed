@@ -45,7 +45,9 @@ export class AuthenticationService {
     const toast = this._toastController.create({
       message: errorMessage,
       duration: 4000,
-      position: "top"
+      position: "top",
+      showCloseButton: true,
+      closeButtonText: "dismiss"
     });
     toast.then((toastMessage) => {
       toastMessage.present();

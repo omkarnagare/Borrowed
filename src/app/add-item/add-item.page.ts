@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams, AlertController } from '@ionic/angular';
+import { ModalController, NavParams, ActionSheetController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ItemsService } from '../services/items.service';
 import { BorrowedAppConstants, ImageSourceType } from '../constants';
@@ -21,17 +21,12 @@ export class AddItemPage implements OnInit {
   constructor(
     private _itemService: ItemsService,
     private _getImageService: GetImageService,
-    private _cloudService: CloudFilesStorageService,
     private _modalController: ModalController,
-    private _alertController: AlertController,
+    private _actionSheetController: ActionSheetController,
     navParams: NavParams,
     formBuilder: FormBuilder
   ) {
 
-    // to get parameters from parent component
-    // navParams.get("parameter_name");
-
-    this.itemImage = "/assets/shapes.svg";
     this.itemDetailsFormGroup = formBuilder.group({
       itemName: ["", [Validators.required]],
       itemDescription: "",
@@ -45,20 +40,28 @@ export class AddItemPage implements OnInit {
   }
 
   async selectImageSource() {
-    const alert = await this._alertController.create({
-      header: "Select Source",
-      message: "Add image for your Item",
+    const alert = await this._actionSheetController.create({
       buttons: [
         {
           text: "Camera",
+          icon: 'camera',
           handler: () => {
-            this.getItemImage(ImageSourceType.CAMERA);
+            this.getItemImage(ImageSourceType.BACK_CAMERA);
           }
         },
         {
           text: "Gallery",
+          icon: 'images',
           handler: () => {
             this.getItemImage(ImageSourceType.GALLERY);
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
           }
         }
       ]
@@ -79,14 +82,12 @@ export class AddItemPage implements OnInit {
 
   addItem() {
     const itemObject: Item = { ... this.itemDetailsFormGroup.value };
-    itemObject["itemImage"] = this.itemImage;
-
-    // this._cloudService.uploadTextFile();
+    itemObject["itemImage"] = this.itemImage ? this.itemImage: "/assets/shapes.svg";
 
     this._itemService
       .addItem(itemObject)
       .then((result) => {
-        this._itemService.showToast(result.message);
+        this._itemService.showToast("Item "+ itemObject.itemName + " added successfully.");
         this._modalController.dismiss(itemObject);
       }).catch((error) => {
         this._itemService.showToast(error);

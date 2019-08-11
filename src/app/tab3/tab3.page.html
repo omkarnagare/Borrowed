@@ -1,5 +1,10 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="shareToSocialNetworks()">
+        <ion-icon color="primary" name="share"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>
       Profile
     </ion-title>
@@ -13,24 +18,39 @@
 
 <ion-content>
 
-  <ion-avatar (click)="selectImageSource()" class="profile-picture">
+  <ion-avatar class="profile-picture">
     <ion-img [src]="(storedUserProfile | async)?.profile_image">
     </ion-img>
   </ion-avatar>
 
-  <ion-card>
+  <ion-item *ngIf="(storedUserProfile | async)?.name">
+    <ion-chip color="primary" class="center-chip"> {{ (storedUserProfile | async)?.name }} </ion-chip>
+  </ion-item>
+
+  <ion-item>
+    <ion-chip (click)="selectImageSource()" class="center-chip">
+      <ion-icon name="camera" color="primary"></ion-icon>
+      <ion-label>{{ (storedUserProfile | async)?.profile_image ? "Change Picture" : "Add Picture" }}</ion-label>
+    </ion-chip>
+  </ion-item>
+
+  <ion-item routerLink="/tabs/borrowed">
+    <ion-label>Items Given</ion-label>
+    <ion-badge color="success" slot="end">{{ (missingItems | async)?.length }}</ion-badge>
+  </ion-item>
+
+  <ion-item routerLink="/tabs/urgent-items">
+    <ion-label>Urgent Items</ion-label>
+    <ion-badge color="danger" slot="end">{{ (urgentMissingItems | async)?.length }}</ion-badge>
+  </ion-item>
+
+  <!-- <ion-card>
     <ion-card-header>
       <ion-card-title>Omkar Nagare</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <p>Ekach chhava...</p>
     </ion-card-content>
-  </ion-card>
-
-  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-    <ion-fab-button (click)="shareToSocialNetworks()">
-      <ion-icon color="success" name="share"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  </ion-card> -->
 
 </ion-content>

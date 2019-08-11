@@ -9,36 +9,20 @@
 <ion-content>
 
   <div *ngIf="!urgentMissingItems">
-    <ion-card *ngFor="let x of [1, 2, 3, 4]">
-      <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
-      <ion-card-header>
-        <ion-card-subtitle>
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-card-subtitle>
-        <ion-card-title>
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-skeleton-text animated></ion-skeleton-text>
-        <ion-skeleton-text animated></ion-skeleton-text>
-      </ion-card-content>
+    <ion-card *ngFor="let x of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]">
+      <ion-skeleton-text animated></ion-skeleton-text>
+      <ion-skeleton-text animated></ion-skeleton-text>
     </ion-card>
   </div>
 
-  <!-- <ion-card [routerLink]="['item-details', urgentMissingItem.itemId]" button class="welcome-card"
-        *ngFor="let urgentMissingItem of (urgentMissingItems | async)">
-        <img [src]="urgentMissingItem.itemImage" alt="/assets/shapes.svg" />
-        <ion-card-header>
-          <ion-card-subtitle>{{ urgentMissingItem.itemDescription }}</ion-card-subtitle>
-          <ion-card-title>{{ urgentMissingItem.itemName }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <p>No items added yet.</p>
-          <p>Add items which people borrowed from you recently.</p>
-        </ion-card-content>
-      </ion-card> -->
-
+  <ion-card *ngIf="(urgentMissingItems | async)?.length === 0" class="card-center">
+    <ion-card-content>
+      <ion-img src="/assets/empty-box.svg" class="image-med"></ion-img>
+      <p>No Urgent items present yet.</p>
+      <p>Use star button from the toolbar in the item details or
+        that from the left-sliding of item on the home page to mark your important Items as urgent.</p>
+    </ion-card-content>
+  </ion-card>
 
   <ion-list>
     <ion-item-sliding [routerLink]="['item-details', urgentMissingItem.itemId]"
@@ -49,9 +33,21 @@
         </ion-item-option>
       </ion-item-options>
 
-      <ion-item>
-        <ion-label> {{ urgentMissingItem.itemName }} </ion-label>
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <ion-img [src]="urgentMissingItem.itemImage"></ion-img>
+        </ion-avatar>
+
+        <ion-chip color="primary"> {{ urgentMissingItem.itemName }} </ion-chip>
+        <ion-chip color="secondary" slot="end"> {{ urgentMissingItem.dateBorrowed | date: 'dd-MM-yy' }} </ion-chip>
       </ion-item>
+
+      <ion-item-options side="end" (click)="toggleUrgentStatus( urgentMissingItem.itemId, urgentMissingItem )">
+        <ion-item-option>
+          <ion-icon *ngIf="urgentMissingItem.isUrgent" color="success" name="star" slot="icon-only"></ion-icon>
+          <ion-icon *ngIf="!urgentMissingItem.isUrgent" color="success" name="star-outline" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
     </ion-item-sliding>
   </ion-list>
 

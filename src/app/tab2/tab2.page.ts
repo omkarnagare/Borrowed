@@ -10,7 +10,7 @@ import { ItemsService } from '../services/items.service';
 })
 export class Tab2Page implements OnInit{
 
-  urgentMissingItems: Observable<any>;
+  urgentMissingItems: Observable<Item[]>;
 
   constructor(
     private _itemsService: ItemsService
