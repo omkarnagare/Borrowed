@@ -3,12 +3,11 @@ import { HttpClient } from '@angular/common/http'
 import { Observable, of } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { Item } from '../types';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { BorrowedAppConstants } from '../constants';
 import { AuthenticationService } from './authentication.service';
 import { ToastController } from '@ionic/angular';
-import { NetworkService } from './network.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +18,7 @@ export class ItemsService {
   constructor(
     private _angularFirestore: AngularFirestore,
     private _authenticationService: AuthenticationService,
-    private _toastController: ToastController,
-    private _networkService: NetworkService
+    private _toastController: ToastController
     ) {
       this.collectionRef = this._angularFirestore
       .collection(BorrowedAppConstants.ITEMS_COLLECTION)
@@ -41,9 +39,11 @@ export class ItemsService {
     .add({
       itemName: itemDetails.itemName,
       itemDescription: itemDetails.itemDescription,
-      dateBorrowed: itemDetails.dateBorrowed,
+      borrowingDate: itemDetails.borrowingDate,
       isUrgent: itemDetails.isUrgent,
-      itemImage: itemDetails.itemImage
+      itemImage: itemDetails.itemImage,
+      lendeeName: itemDetails.lendeeName,
+      lendeeContact: itemDetails.lendeeContact
     });
   }
 

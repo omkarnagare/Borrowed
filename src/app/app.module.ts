@@ -17,6 +17,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { Network } from '@ionic-native/network/ngx';
+import { Contacts } from '@ionic-native/contacts/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -34,6 +35,7 @@ import { AppComponent } from './app.component';
     IonicModule.forRoot(),
     AppRoutingModule],
   providers: [
+    Contacts,
     Network,
     SocialSharing,
     Camera,

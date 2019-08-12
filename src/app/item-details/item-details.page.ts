@@ -16,26 +16,29 @@ export class ItemDetailsPage implements OnInit {
   itemId: string;
   itemObject: Item;
 
-  itemDetails: Observable<Item>;
-
   constructor(
     private _itemService: ItemsService,
     private _router: Router,
     activatedRoute: ActivatedRoute
   ) {
+    this.itemObject = {
+      itemName: "",
+      borrowingDate: "",
+      isUrgent: false
+    }
     this.itemId = activatedRoute.snapshot.params["itemId"];
-    this.itemDetails = _itemService.getItem(this.itemId);
-    this.itemDetails.subscribe((item) => {
-      console.log("item details", item);
-      this.itemObject = item;
-    })
+    _itemService.getItem(this.itemId)
+      .subscribe((item) => {
+        console.log("item details", item);
+        this.itemObject = item;
+      })
   }
 
   ngOnInit() {
   }
 
   removeItem() {
-    const message = "Item " + this.itemObject.itemName + " removed from urgent List";
+    const message = "Item " + this.itemObject.itemName + " removed from Lent List";
     this._router.navigate(["/tabs/borrowed"]);
     this._itemService.deleteItem(this.itemId).then((result) => {
       this._itemService.showToast(message);

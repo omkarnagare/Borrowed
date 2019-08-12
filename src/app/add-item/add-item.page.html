@@ -19,18 +19,40 @@
           <ion-input placeholder="Item Name/Category" formControlName="itemName" type="text"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label>Given Date</ion-label>
-          <ion-datetime displayFormat="DD MMM YYYY" formControlName="dateBorrowed" placeholder="Date Given"></ion-datetime>
+          <ion-label>Borrowing Date</ion-label>
+          <ion-datetime displayFormat="DD MMM YYYY" formControlName="borrowingDate" placeholder="Date Given">
+          </ion-datetime>
         </ion-item>
-        <!-- <ion-item>
-          <ion-input placeholder="Given Date" formControlName="dateBorrowed" type="text"></ion-input>
-        </ion-item> -->
+        <ion-item *ngIf="showSearchBarForContacts" lines="none">
+          <ion-searchbar formControlName="searchQuery" (ionChange)="searchForContacts()" searchIcon="contacts"
+            placeholder="browse from contact list" autocomplete="on" debounce="700">
+          </ion-searchbar>
+        </ion-item>
+        <ion-item *ngIf="contactsFound && contactsFound.length !== 0" lines="none">
+          <ion-list class="container">
+            <ion-item *ngFor="let contact of contactsFound" lines="none">
+              <div class="scroll" scrollX="true">
+                <ion-chip>{{ contact?.displayName }}</ion-chip>
+                <ion-chip color="primary" *ngFor="let number of contact?.phoneNumbers"
+                  (click)="assignContactDetails(contact, number.value)">
+                  {{ number.value }}
+                </ion-chip>
+              </div>
+            </ion-item>
+          </ion-list>
+        </ion-item>
+        <ion-item>
+          <ion-input placeholder="Lendee" formControlName="lendeeName" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input placeholder="Contact For Lendee" formControlName="lendeeContact" type="text"></ion-input>
+        </ion-item>
         <ion-item lines="none">
           <ion-label>Urgent</ion-label>
           <ion-toggle color="danger" formControlName="isUrgent" checked="false"></ion-toggle>
         </ion-item>
         <ion-item>
-          <ion-textarea placeholder="Enter more information here..." formControlName="itemDescription">
+          <ion-textarea placeholder="more about the lent item ..." formControlName="itemDescription">
           </ion-textarea>
         </ion-item>
 

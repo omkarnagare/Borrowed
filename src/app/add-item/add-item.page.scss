@@ -9,3 +9,17 @@
     margin: 10px auto;
     text-align: center;
 }
+
+.container {
+    width: 300px;
+    margin: 10px auto;
+    overflow: hidden; 
+    white-space: nowrap;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    .scroll {
+        min-width: 100%;
+        overflow: auto;
+    }
+  }

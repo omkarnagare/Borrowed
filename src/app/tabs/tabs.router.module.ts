@@ -20,8 +20,7 @@ const routes: Routes = [
           {
             path: 'item-details/:itemId',
             loadChildren: () =>
-              import('../item-details/item-details.module').then(m => m.ItemDetailsPageModule),
-            // loadChildren: '../missing-item-details/missing-item-details.module#ItemDetailsPageModule'
+              import('../item-details/item-details.module').then(m => m.ItemDetailsPageModule)
           }
         ]
       },
@@ -36,8 +35,7 @@ const routes: Routes = [
           {
             path: 'item-details/:itemId',
             loadChildren: () =>
-              import('../item-details/item-details.module').then(m => m.ItemDetailsPageModule),
-            // loadChildren: '../missing-item-details/missing-item-details.module#ItemDetailsPageModule'
+              import('../item-details/item-details.module').then(m => m.ItemDetailsPageModule)
           }
         ]
       },

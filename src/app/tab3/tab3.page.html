@@ -36,7 +36,7 @@
 
   <ion-item routerLink="/tabs/borrowed">
     <ion-label>Items Given</ion-label>
-    <ion-badge color="success" slot="end">{{ (missingItems | async)?.length }}</ion-badge>
+    <ion-badge color="success" slot="end">{{ (lentItems | async)?.length }}</ion-badge>
   </ion-item>
 
   <ion-item routerLink="/tabs/urgent-items">

@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
     "@ionic-native/camera": "^5.11.0",
+    "@ionic-native/contacts": "^5.12.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/ionic-webview": "^5.12.0",
     "@ionic-native/network": "^5.12.0",
@@ -31,6 +32,7 @@
     "@ionic/angular": "^4.7.1",
     "cordova-android": "^8.0.0",
     "cordova-plugin-camera": "^4.1.0",
+    "cordova-plugin-contacts": "^3.0.1",
     "cordova-plugin-ionic-webview": "^4.1.1",
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-plugin-x-socialsharing": "^5.4.7",
@@ -88,7 +90,8 @@
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
-      "cordova-plugin-network-information": {}
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-contacts": {}
     },
     "platforms": [
       "android"

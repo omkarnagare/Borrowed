@@ -17,7 +17,7 @@ import { ActionSheetController } from '@ionic/angular';
 })
 export class Tab3Page implements OnInit {
   storedUserProfile: Observable<any>;
-  missingItems: Observable<Item[]>;
+  lentItems: Observable<Item[]>;
   urgentMissingItems: Observable<Item[]>;
 
   constructor(
@@ -30,7 +30,7 @@ export class Tab3Page implements OnInit {
     private _actionSheetController: ActionSheetController
   ) {
     this.storedUserProfile = _usersService.getUserProfile();
-    this.missingItems = this._itemsService.getItems();
+    this.lentItems = this._itemsService.getItems();
     this.urgentMissingItems = this._itemsService.getUrgentItems();
   }
 

@@ -18,7 +18,7 @@ export class Tab1Page implements OnInit, OnDestroy, AfterViewInit {
 
   backButtonSubscription$;
 
-  missingItems: Observable<Item[]>;
+  lentItems: Observable<Item[]>;
 
   searchFromGroup: FormGroup;
   searching: boolean;
@@ -58,7 +58,7 @@ export class Tab1Page implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setFilteredItems(searchTerm: string) {
-    this.missingItems = this._itemsService.getItems().pipe(
+    this.lentItems = this._itemsService.getItems().pipe(
       map((data) => {
         this.searching = false;
         return data.filter(item => {
@@ -76,12 +76,12 @@ export class Tab1Page implements OnInit, OnDestroy, AfterViewInit {
     this._itemsService.deleteItem(id);
   }
 
-  toggleUrgentStatus(id: string, missingItem: Item) {
-    missingItem.isUrgent = !missingItem.isUrgent;
-    this._itemsService.updateItem(id, missingItem).then((result) => {
-      const message = missingItem.isUrgent
-        ? "Item " + missingItem.itemName + " added to urgent List"
-        : "Item " + missingItem.itemName + " removed from urgent List"
+  toggleUrgentStatus(id: string, lentItems: Item) {
+    lentItems.isUrgent = !lentItems.isUrgent;
+    this._itemsService.updateItem(id, lentItems).then((result) => {
+      const message = lentItems.isUrgent
+        ? "Item " + lentItems.itemName + " added to urgent List"
+        : "Item " + lentItems.itemName + " removed from urgent List"
       this._itemsService.showToast(message);
     }).catch((error) => {
       this._itemsService.showToast(error);

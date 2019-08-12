@@ -9,7 +9,7 @@
       Borrowed.
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="(missingItems | async)?.length !== 0" (click)="toggleFiltering()">
+      <ion-button *ngIf="(lentItems | async)?.length !== 0" (click)="toggleFiltering()">
         <ion-icon *ngIf="!enableSearchBar" name="search" color="primary"></ion-icon>
         <ion-icon *ngIf="enableSearchBar" name="search" color="danger"></ion-icon>
       </ion-button>
@@ -29,43 +29,43 @@
     <ion-spinner></ion-spinner>
   </div>
 
-  <div *ngIf="!missingItems">
+  <div *ngIf="!lentItems">
     <ion-card *ngFor="let x of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]">
       <ion-skeleton-text animated></ion-skeleton-text>
       <ion-skeleton-text animated></ion-skeleton-text>
     </ion-card>
   </div>
 
-  <ion-card *ngIf="(missingItems | async)?.length === 0" class="card-center">
+  <ion-card *ngIf="(lentItems | async)?.length === 0" class="card-center">
     <ion-card-content>
       <ion-img src="/assets/empty-box.svg" class="image-med"></ion-img>
-      <p>No Items Present !!</p>
-      <p>Use "+" button to add your missings Items to the List.</p>
+      <p>No Lent Items Present !!</p>
+      <p>Use "+" button to add your lent Items to the List.</p>
     </ion-card-content>
   </ion-card>
 
   <ion-list>
-    <ion-item-sliding [routerLink]="['item-details', missingItem.itemId]"
-      *ngFor="let missingItem of (missingItems | async)">
+    <ion-item-sliding [routerLink]="['item-details', lentItems.itemId]" *ngFor="let lentItems of (lentItems | async)">
       <ion-item-options side="start">
-        <ion-item-option color="danger" (click)="removeItem( missingItem.itemId )">
+        <ion-item-option color="danger" (click)="removeItem( lentItems.itemId )">
           <ion-icon name="trash" slot="icon-only"></ion-icon>
         </ion-item-option>
       </ion-item-options>
 
-      <ion-item lines="none">
+      <!-- <ion-item lines="none"> -->
+      <ion-item>
         <ion-avatar slot="start">
-          <ion-img [src]="missingItem.itemImage"></ion-img>
+          <ion-img [src]="lentItems.itemImage"></ion-img>
         </ion-avatar>
 
-        <ion-chip color="primary"> {{ missingItem.itemName }} </ion-chip>
-        <ion-chip color="secondary" slot="end"> {{ missingItem.dateBorrowed | date: 'dd-MM-yy' }} </ion-chip>
+        <ion-chip color="primary"> {{ lentItems.itemName }} </ion-chip>
+        <ion-chip color="secondary" slot="end"> {{ lentItems.borrowingDate | date: 'dd-MM-yy' }} </ion-chip>
       </ion-item>
 
-      <ion-item-options side="end" (click)="toggleUrgentStatus( missingItem.itemId, missingItem )">
+      <ion-item-options side="end" (click)="toggleUrgentStatus( lentItems.itemId, lentItems )">
         <ion-item-option>
-          <ion-icon *ngIf="missingItem.isUrgent" color="success" name="star" slot="icon-only"></ion-icon>
-          <ion-icon *ngIf="!missingItem.isUrgent" color="success" name="star-outline" slot="icon-only"></ion-icon>
+          <ion-icon *ngIf="lentItems.isUrgent" color="success" name="star" slot="icon-only"></ion-icon>
+          <ion-icon *ngIf="!lentItems.isUrgent" color="success" name="star-outline" slot="icon-only"></ion-icon>
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>

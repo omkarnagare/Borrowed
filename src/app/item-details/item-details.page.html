@@ -6,8 +6,8 @@
     <ion-title></ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="toggleUrgentStatus()">
-        <ion-icon *ngIf="(itemDetails | async)?.isUrgent" color="success" name="star"></ion-icon>
-        <ion-icon *ngIf="!(itemDetails | async)?.isUrgent" color="success" name="star-outline"></ion-icon>
+        <ion-icon *ngIf="itemObject.isUrgent" color="success" name="star"></ion-icon>
+        <ion-icon *ngIf="!itemObject.isUrgent" color="success" name="star-outline"></ion-icon>
       </ion-button>
       <ion-button (click)="removeItem()">
         <ion-icon color="danger" name="trash"></ion-icon>
@@ -18,7 +18,7 @@
 
 <ion-content>
 
-  <div *ngIf="!itemDetails">
+  <div *ngIf="!itemObject.itemName">
     <ion-card>
       <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
       <ion-card-header>
@@ -44,26 +44,34 @@
     </ion-card>
   </div>
 
-  <div *ngIf="itemDetails">
-    <ion-avatar class="item-image">
-      <ion-img [src]="(itemDetails | async)?.itemImage" class="item-image"></ion-img>
+  <div *ngIf="itemObject.itemName">
+    <ion-avatar class="item-image" *ngIf="itemObject.itemImage">
+      <ion-img [src]="itemObject.itemImage" class="item-image"></ion-img>
     </ion-avatar>
 
     <ion-card no-margin class="card-center">
       <ion-card-header>
         <!-- <ion-card-subtitle></ion-card-subtitle> -->
-        <ion-card-title>{{ (itemDetails | async)?.itemName }}</ion-card-title>
+        <ion-card-title>{{ itemObject.itemName }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <p>{{ (itemDetails | async)?.itemDescription }}</p>
+        <p>{{ itemObject.itemDescription }}</p>
       </ion-card-content>
     </ion-card>
 
     <ion-card class="card-center">
       <ion-list lines="none">
-        <ion-item>
-          <ion-chip color="primary">Item Given on : </ion-chip>
-          <ion-chip color="success">{{ (itemDetails | async)?.dateBorrowed  | date: 'dd-MMM-yyyy HH:mm' }}</ion-chip>
+        <ion-item *ngIf="itemObject.borrowingDate" >
+          <ion-chip color="primary">Lent on : </ion-chip>
+          <ion-chip color="success">{{ itemObject.borrowingDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-chip>
+        </ion-item>
+        <ion-item *ngIf="itemObject.lendeeName" >
+          <ion-chip color="primary">Lent To : </ion-chip>
+          <ion-chip color="success">{{ itemObject.lendeeName }}</ion-chip>
+        </ion-item>
+        <ion-item *ngIf="itemObject.lendeeContact" >
+          <ion-chip color="primary">Lendee Contact : </ion-chip>
+          <ion-chip color="success">{{ itemObject.lendeeContact }}</ion-chip>
         </ion-item>
       </ion-list>
     </ion-card>

@@ -20,7 +20,7 @@
       <ion-img src="/assets/empty-box.svg" class="image-med"></ion-img>
       <p>No Urgent items present yet.</p>
       <p>Use star button from the toolbar in the item details or
-        that from the left-sliding of item on the home page to mark your important Items as urgent.</p>
+        that from the left-sliding of item on the home page to mark your important Lent items as urgent.</p>
     </ion-card-content>
   </ion-card>
 
@@ -39,7 +39,7 @@
         </ion-avatar>
 
         <ion-chip color="primary"> {{ urgentMissingItem.itemName }} </ion-chip>
-        <ion-chip color="secondary" slot="end"> {{ urgentMissingItem.dateBorrowed | date: 'dd-MM-yy' }} </ion-chip>
+        <ion-chip color="secondary" slot="end"> {{ urgentMissingItem.borrowingDate | date: 'dd-MM-yy' }} </ion-chip>
       </ion-item>
 
       <ion-item-options side="end" (click)="toggleUrgentStatus( urgentMissingItem.itemId, urgentMissingItem )">
