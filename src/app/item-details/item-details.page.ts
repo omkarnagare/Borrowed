@@ -3,18 +3,18 @@ import { Observable } from 'rxjs';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BorrowedAppConstants } from '../constants';
-import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-item-details',
   templateUrl: './item-details.page.html',
   styleUrls: ['./item-details.page.scss'],
 })
-export class ItemDetailsPage implements OnInit {
+export class ItemDetailsPage {
 
   itemId: string;
   itemObject: Item;
+
+  parentURL: string;
 
   constructor(
     private _itemService: ItemsService,
@@ -27,24 +27,13 @@ export class ItemDetailsPage implements OnInit {
       isUrgent: false
     }
     this.itemId = activatedRoute.snapshot.params["itemId"];
-    _itemService.getItem(this.itemId)
+    this._itemService.getItem(this.itemId)
       .subscribe((item) => {
         console.log("item details", item);
-        this.itemObject = item;
-      })
-  }
-
-  ngOnInit() {
-  }
-
-  removeItem() {
-    const message = "Item " + this.itemObject.itemName + " removed from Lent List";
-    this._router.navigate(["/tabs/borrowed"]);
-    this._itemService.deleteItem(this.itemId).then((result) => {
-      this._itemService.showToast(message);
-    }).catch((error) => {
-      this._itemService.showToast(error);
-    });
+        if (item) {
+          this.itemObject = item;
+        }
+      });
   }
 
   toggleUrgentStatus() {

@@ -76,12 +76,12 @@ export class Tab1Page implements OnInit, OnDestroy, AfterViewInit {
     this._itemsService.deleteItem(id);
   }
 
-  toggleUrgentStatus(id: string, lentItems: Item) {
-    lentItems.isUrgent = !lentItems.isUrgent;
-    this._itemsService.updateItem(id, lentItems).then((result) => {
-      const message = lentItems.isUrgent
-        ? "Item " + lentItems.itemName + " added to urgent List"
-        : "Item " + lentItems.itemName + " removed from urgent List"
+  toggleUrgentStatus(id: string, lentItem: Item) {
+    lentItem.isUrgent = !lentItem.isUrgent;
+    this._itemsService.updateItem(id, lentItem).then((result) => {
+      const message = lentItem.isUrgent
+        ? "Item " + lentItem.itemName + " added to urgent List"
+        : "Item " + lentItem.itemName + " removed from urgent List"
       this._itemsService.showToast(message);
     }).catch((error) => {
       this._itemsService.showToast(error);

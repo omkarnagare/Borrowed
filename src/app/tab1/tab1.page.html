@@ -45,7 +45,7 @@
   </ion-card>
 
   <ion-list>
-    <ion-item-sliding [routerLink]="['item-details', lentItems.itemId]" *ngFor="let lentItems of (lentItems | async)">
+    <ion-item-sliding *ngFor="let lentItems of (lentItems | async)">
       <ion-item-options side="start">
         <ion-item-option color="danger" (click)="removeItem( lentItems.itemId )">
           <ion-icon name="trash" slot="icon-only"></ion-icon>
@@ -53,7 +53,7 @@
       </ion-item-options>
 
       <!-- <ion-item lines="none"> -->
-      <ion-item>
+      <ion-item [routerLink]="['item-details', lentItems.itemId]">
         <ion-avatar slot="start">
           <ion-img [src]="lentItems.itemImage"></ion-img>
         </ion-avatar>

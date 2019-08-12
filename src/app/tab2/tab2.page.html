@@ -25,7 +25,7 @@
   </ion-card>
 
   <ion-list>
-    <ion-item-sliding [routerLink]="['item-details', urgentMissingItem.itemId]"
+    <ion-item-sliding
       *ngFor="let urgentMissingItem of (urgentMissingItems | async)">
       <ion-item-options side="start">
         <ion-item-option color="danger" (click)="removeItem( urgentMissingItem.itemId )">
@@ -33,7 +33,7 @@
         </ion-item-option>
       </ion-item-options>
 
-      <ion-item lines="none">
+      <ion-item [routerLink]="['item-details', urgentMissingItem.itemId]">
         <ion-avatar slot="start">
           <ion-img [src]="urgentMissingItem.itemImage"></ion-img>
         </ion-avatar>
