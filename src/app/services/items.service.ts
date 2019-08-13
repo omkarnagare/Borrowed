@@ -43,7 +43,8 @@ export class ItemsService {
       isUrgent: itemDetails.isUrgent,
       itemImage: itemDetails.itemImage,
       lendeeName: itemDetails.lendeeName,
-      lendeeContact: itemDetails.lendeeContact
+      lendeeContact: itemDetails.lendeeContact,
+      lendeeEmail: itemDetails.lendeeEmail
     });
   }
 

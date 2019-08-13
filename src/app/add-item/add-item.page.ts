@@ -34,12 +34,15 @@ export class AddItemPage implements OnInit {
 
     this.showSearchBarForContacts = this._platformInfoService.isMobilePlatform();
     this.itemDetailsFormGroup = formBuilder.group({
+      // item related
       itemName: ["", [Validators.required]],
       itemDescription: "",
       borrowingDate: ["", [Validators.required]],
       isUrgent: false,
       lendeeName: ["", [Validators.pattern("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")]],
       lendeeContact: ["", [Validators.pattern("^[+]*[ (]{0,1}[0-9 ]{1,4}[) ]{0,1}[-\s\./0-9 ]*$")]],
+      lendeeEmail: ["", [Validators.email]],
+      // query related
       searchQuery: ""
     });
 

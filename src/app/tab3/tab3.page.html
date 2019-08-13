@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header translucent>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="shareToSocialNetworks()">
@@ -16,7 +16,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen>
 
   <ion-avatar class="profile-picture">
     <ion-img [src]="(storedUserProfile | async)?.profile_image">

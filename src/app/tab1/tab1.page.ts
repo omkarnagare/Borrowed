@@ -4,8 +4,6 @@ import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
 import { ModalController, ToastController, Platform } from '@ionic/angular';
 import { AddItemPage } from '../add-item/add-item.page';
-import { AuthenticationService } from '../services/authentication.service';
-import { Router } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime, map } from 'rxjs/operators';
 
@@ -36,10 +34,7 @@ export class Tab1Page implements OnInit, OnDestroy, AfterViewInit {
     });
     this.searching = true;
     this.enableSearchBar = false;
-  }
 
-  ngOnInit() {
-    this.setFilteredItems("");
     this.searchFromGroup.get("searchControl").valueChanges
       .pipe(debounceTime(700))
       .subscribe(search => {
@@ -47,12 +42,19 @@ export class Tab1Page implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  ngOnInit() {
+  }
+
+  ionViewDidEnter() {
+    this.setFilteredItems("");
+  }
+
   ngAfterViewInit() {
     this.backButtonSubscription$ = this._platform.backButton.subscribe(() => {
       navigator['app'].exitApp();
     });
   }
- 
+
   ngOnDestroy() {
     this.backButtonSubscription$.unsubscribe();
   }
@@ -98,6 +100,7 @@ export class Tab1Page implements OnInit, OnDestroy, AfterViewInit {
     addItemModal.onDidDismiss().then((modalData) => {
       if (modalData.data) {
         console.log("Item Added: ", modalData.data);
+        this.setFilteredItems("");
       } else {
         console.log("Modal dissmissed without adding any item");
       }

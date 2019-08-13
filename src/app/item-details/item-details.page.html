@@ -1,19 +1,25 @@
-<ion-header>
+<ion-header translucent>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title></ion-title>
+    <ion-title> {{ itemObject.itemName }} </ion-title>
     <ion-buttons slot="end">
+      <ion-button *ngIf="itemObject.lendeeContact" (click)="sendNotificationOnWhatsapp()">
+        <ion-icon color="success" name="logo-whatsapp"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="itemObject.lendeeEmail" (click)="sendNotificationOnEmail()">
+        <ion-icon color="danger" name="mail"></ion-icon>
+      </ion-button>
       <ion-button (click)="toggleUrgentStatus()">
-        <ion-icon *ngIf="itemObject.isUrgent" color="success" name="star"></ion-icon>
-        <ion-icon *ngIf="!itemObject.isUrgent" color="success" name="star-outline"></ion-icon>
+        <ion-icon *ngIf="itemObject.isUrgent" name="star"></ion-icon>
+        <ion-icon *ngIf="!itemObject.isUrgent" name="star-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen>
 
   <div *ngIf="!itemObject.itemName">
     <ion-card>
@@ -42,35 +48,33 @@
   </div>
 
   <div *ngIf="itemObject.itemName">
-    <ion-avatar class="item-image" *ngIf="itemObject.itemImage">
+    <!-- <ion-avatar class="item-image" *ngIf="itemObject.itemImage">
       <ion-img [src]="itemObject.itemImage" class="item-image"></ion-img>
-    </ion-avatar>
+    </ion-avatar> -->
 
-    <ion-card no-margin class="card-center">
-      <ion-card-header>
-        <!-- <ion-card-subtitle></ion-card-subtitle> -->
-        <ion-card-title>{{ itemObject.itemName }}</ion-card-title>
+    <ion-card>
+      <ion-img *ngIf="itemObject.itemImage" [src]="itemObject.itemImage"></ion-img>
+      <ion-card-header *ngIf="itemObject.itemDescription">
+        <ion-card-subtitle>{{ itemObject.itemDescription }}</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <p>{{ itemObject.itemDescription }}</p>
+        <ion-chip *ngIf="itemObject.borrowingDate">
+          <ion-icon name="time"></ion-icon>
+          <ion-label>{{ itemObject.borrowingDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
+        </ion-chip>
+        <ion-chip *ngIf="itemObject.lendeeName">
+          <ion-icon name="person"></ion-icon>
+          <ion-label>{{ itemObject.lendeeName }}</ion-label>
+        </ion-chip>
+        <ion-chip *ngIf="itemObject.lendeeContact">
+          <ion-icon name="call"></ion-icon>
+          <ion-label>{{ itemObject.lendeeContact }}</ion-label>
+        </ion-chip>
+        <ion-chip *ngIf="itemObject.lendeeEmail">
+          <ion-icon name="mail"></ion-icon>
+          <ion-label>{{ itemObject.lendeeEmail }}</ion-label>
+        </ion-chip>
       </ion-card-content>
-    </ion-card>
-
-    <ion-card class="card-center">
-      <ion-list lines="none">
-        <ion-item *ngIf="itemObject.borrowingDate" >
-          <ion-chip color="primary">Lent on : </ion-chip>
-          <ion-chip color="success">{{ itemObject.borrowingDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-chip>
-        </ion-item>
-        <ion-item *ngIf="itemObject.lendeeName" >
-          <ion-chip color="primary">Lent To : </ion-chip>
-          <ion-chip color="success">{{ itemObject.lendeeName }}</ion-chip>
-        </ion-item>
-        <ion-item *ngIf="itemObject.lendeeContact" >
-          <ion-chip color="primary">Lendee Contact : </ion-chip>
-          <ion-chip color="success">{{ itemObject.lendeeContact }}</ion-chip>
-        </ion-item>
-      </ion-list>
     </ion-card>
   </div>
 
