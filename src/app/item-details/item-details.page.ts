@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { Item, WhatsAppAttributes, EmailAttributes } from '../types';
 import { ItemsService } from '../services/items.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,12 +10,14 @@ import { SocialNetworksService } from '../services/social-networks.service';
   templateUrl: './item-details.page.html',
   styleUrls: ['./item-details.page.scss'],
 })
-export class ItemDetailsPage {
+export class ItemDetailsPage implements OnDestroy {
 
   itemId: string;
   itemObject: Item;
 
   parentURL: string;
+
+  itemDetailsSubscription: Subscription;
 
   constructor(
     private _itemService: ItemsService,
@@ -29,7 +31,7 @@ export class ItemDetailsPage {
       isUrgent: false
     }
     this.itemId = activatedRoute.snapshot.params["itemId"];
-    this._itemService.getItem(this.itemId)
+    this.itemDetailsSubscription = this._itemService.getItem(this.itemId)
       .subscribe((item) => {
         console.log("item details", item);
         if (item) {
@@ -75,6 +77,11 @@ export class ItemDetailsPage {
     return "Hi "+ this.itemObject.lendeeName + ",\
     I have lent you "+ this.itemObject.itemName + " on " + this.itemObject.borrowingDate + ".\
     Please try to return it as soon as possible.";
+  }
+
+  ngOnDestroy() {
+    this.itemDetailsSubscription.unsubscribe();
+    this.itemDetailsSubscription = null;
   }
 
 }

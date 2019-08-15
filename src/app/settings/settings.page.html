@@ -1,0 +1,49 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Settings
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="share()">
+        <ion-icon color="primary" name="share"></ion-icon>
+      </ion-button>
+      <ion-button (click)="logOut()">
+        <ion-icon name="power" color="danger"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list lines="none">
+    <ion-button *ngFor="let theme of themes" (click)="setTheme(theme.name)" 
+    margin-top expand="full"> {{ theme.name }} </ion-button>
+  </ion-list>
+
+  <ion-label>Observe Changes</ion-label>
+  <ion-list lines="none">
+  <ion-button color="primary" 
+    margin-top expand="full">primary</ion-button>
+    <ion-button color="secondary" 
+    margin-top expand="full">secondary</ion-button>
+    <ion-button color="tertiary" 
+    margin-top expand="full">tertiary</ion-button>
+    <ion-button color="success" 
+    margin-top expand="full">success</ion-button>
+    <ion-button color="warning" 
+    margin-top expand="full">warning</ion-button>
+    <ion-button color="danger" 
+    margin-top expand="full">danger</ion-button>
+    <ion-button color="dark" 
+    margin-top expand="full">dark</ion-button>
+    <ion-button color="medium" 
+    margin-top expand="full">medium</ion-button>
+    <ion-button color="light" 
+    margin-top expand="full">light</ion-button>
+  </ion-list>
+
+</ion-content>

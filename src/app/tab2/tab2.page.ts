@@ -16,9 +16,9 @@ export class Tab2Page implements OnInit{
     private _itemsService: ItemsService
   ) {
     this.urgentMissingItems = this._itemsService.getUrgentItems();
-    this.urgentMissingItems.subscribe((data) => {
-      console.log("urgent items: ", data);
-    });
+    // this.urgentMissingItems.subscribe((data) => {
+    //   console.log("urgent items: ", data);
+    // });
   }
 
   ngOnInit() {

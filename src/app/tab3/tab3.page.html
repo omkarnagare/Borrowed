@@ -1,16 +1,19 @@
 <ion-header translucent>
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <!-- <ion-buttons slot="start">
       <ion-button (click)="shareToSocialNetworks()">
         <ion-icon color="primary" name="share"></ion-icon>
       </ion-button>
-    </ion-buttons>
+    </ion-buttons> -->
     <ion-title>
       Profile
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logOut()">
+      <!-- <ion-button (click)="logOut()">
         <ion-icon name="power" color="danger"></ion-icon>
+      </ion-button> -->
+      <ion-button routerLink="settings">
+        <ion-icon color="primary" name="settings"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -43,14 +46,5 @@
     <ion-label>Urgent Items</ion-label>
     <ion-badge color="danger" slot="end">{{ (urgentMissingItems | async)?.length }}</ion-badge>
   </ion-item>
-
-  <!-- <ion-card>
-    <ion-card-header>
-      <ion-card-title>Omkar Nagare</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>Ekach chhava...</p>
-    </ion-card-content>
-  </ion-card> -->
 
 </ion-content>
