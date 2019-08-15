@@ -27,3 +27,10 @@ export interface WhatsAppAttributes {
     image?: string;
     url?: string;
 }
+
+export interface GenericShare {
+    message?: string;
+    subject?: string;
+    file?: string | string[];
+    url?: string
+}

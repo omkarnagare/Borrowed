@@ -124,7 +124,8 @@ export class Tab1Page implements OnInit, OnDestroy, AfterViewInit {
   toggleFiltering() {
     this.enableSearchBar = !this.enableSearchBar;
     if (!this.enableSearchBar) {
-      this.setFilteredItems("");
+      this.searching = true;
+      this.searchFromGroup.get("searchControl").setValue("");
     }
   }
 

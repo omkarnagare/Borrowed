@@ -1,4 +1,8 @@
 export class BorrowedAppConstants {
+
+    public static APP_NAME = "Borrowed";
+    public static APP_VERSION = "1.0";
+
     // firestore
     public static USER_COLLECTION = "users";
     public static ITEMS_COLLECTION = "items";

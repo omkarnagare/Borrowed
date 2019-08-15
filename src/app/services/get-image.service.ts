@@ -46,11 +46,11 @@ export class GetImageService {
     let imageOptions: CameraOptions;
     switch (sourceType) {
       case ImageSourceType.FRONT_CAMERA:
-          imageOptions = this.cameraOptions;
+          imageOptions = {...this.cameraOptions};
           imageOptions.cameraDirection = this._camera.Direction.FRONT;
           break;
       case ImageSourceType.BACK_CAMERA:
-        imageOptions = this.cameraOptions;
+        imageOptions = {...this.cameraOptions};
         imageOptions.cameraDirection = this._camera.Direction.BACK;
         break;
       case ImageSourceType.GALLERY:

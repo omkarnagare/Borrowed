@@ -9,7 +9,7 @@
       Borrowed.
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="(lentItems | async)?.length !== 0" (click)="toggleFiltering()">
+      <ion-button (click)="toggleFiltering()">
         <ion-icon *ngIf="!enableSearchBar" name="search" color="primary"></ion-icon>
         <ion-icon *ngIf="enableSearchBar" name="search" color="danger"></ion-icon>
       </ion-button>
@@ -19,14 +19,21 @@
 
 <ion-content fullscreen>
 
-  <div *ngIf="enableSearchBar && (lentItems | async)?.length !== 0">
+  <div *ngIf="enableSearchBar">
     <form [formGroup]="searchFromGroup">
       <ion-searchbar formControlName="searchControl" (ionChange)="onSearchInput()"></ion-searchbar>
     </form>
   </div>
 
-  <div *ngIf="searching" class="spinner-container">
+  <!-- <div *ngIf="searching" class="spinner-container">
     <ion-spinner></ion-spinner>
+  </div> -->
+
+  <div *ngIf="searching" class="spinner-container">
+    <div class="spinner">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
+    </div>
   </div>
 
   <div *ngIf="!lentItems">

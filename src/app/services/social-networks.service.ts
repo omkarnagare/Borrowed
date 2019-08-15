@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { WhatsAppAttributes, EmailAttributes } from '../types';
+import { WhatsAppAttributes, EmailAttributes, GenericShare } from '../types';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +11,12 @@ export class SocialNetworksService {
     private _socialSharing: SocialSharing
   ) { }
 
-  shareToSocialNetworks(data: any) {
+  share(data: GenericShare) {
     this._socialSharing.share(
-      "I found this on Borrowed.",
-      "",
-      "",
-      "https://github.com/omkarnagare"
+      data.message,
+      data.subject,
+      data.file,
+      data.url
     );
   }
 

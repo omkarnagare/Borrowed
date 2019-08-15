@@ -11,6 +11,9 @@ import { NetworkService } from './services/network.service';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
+
+  showSplashAnimation:boolean = true;
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -24,6 +27,9 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
+      setTimeout(()=> {
+        this.showSplashAnimation = false;
+      }, 3000);
       // no need to check for internet connection as data persistence is enabled
       // this._networkService.initializeNetworkEvents();
     });

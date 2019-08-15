@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
 import { ActionSheetController } from '@ionic/angular';
+import { AppInfoService } from '../services/app-info.service';
 
 @Component({
   selector: 'app-tab3',
@@ -27,6 +28,7 @@ export class Tab3Page implements OnInit {
     private _authenticationService: AuthenticationService,
     private _getImageService: GetImageService,
     private _itemsService: ItemsService,
+    private _appInfoService: AppInfoService,
     private _actionSheetController: ActionSheetController
   ) {
     this.storedUserProfile = _usersService.getUserProfile();
@@ -45,7 +47,7 @@ export class Tab3Page implements OnInit {
           text: "Camera",
           icon: 'camera',
           handler: () => {
-            this.getProfileImage(ImageSourceType.BACK_CAMERA);
+            this.getProfileImage(ImageSourceType.FRONT_CAMERA);
           }
         },
         {
@@ -80,7 +82,13 @@ export class Tab3Page implements OnInit {
   }
 
   shareToSocialNetworks() {
-    this._socialNetworkService.shareToSocialNetworks({});
+    console.log(this._appInfoService.getAppName() +": v"+ this._appInfoService.getAppVersion());
+    this._socialNetworkService.share({
+      message: "Hello there!! I am using Borrowed to help me Un-Forget. It's simply amazing and very easy to use. To install, click on the link below",
+      subject: this._appInfoService.getAppName() +": v"+ this._appInfoService.getAppVersion(),
+      // file: "",
+      url: "https://github.com/omkarnagare/Borrowed"
+    });
   }
 
   logOut() {
