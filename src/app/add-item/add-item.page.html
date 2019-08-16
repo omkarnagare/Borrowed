@@ -11,7 +11,7 @@
         </ion-item>
         <ion-item lines="none">
           <ion-chip (click)="selectImageSource()" class="center-chip">
-            <ion-icon name="camera" color="primary"></ion-icon>
+            <ion-icon name="camera"></ion-icon>
             <ion-label> {{ itemImage ? "Change Image" : "Add Image (Optional)" }}</ion-label>
           </ion-chip>
         </ion-item>
@@ -33,7 +33,7 @@
             <ion-item *ngFor="let contact of contactsFound" lines="none">
               <div class="scroll" scrollX="true">
                 <ion-chip>{{ contact?.displayName }}</ion-chip>
-                <ion-chip color="primary" *ngFor="let number of contact?.phoneNumbers"
+                <ion-chip *ngFor="let number of contact?.phoneNumbers"
                   (click)="assignContactDetails(contact, number.value)">
                   {{ number.value }}
                 </ion-chip>
@@ -52,7 +52,7 @@
         </ion-item>
         <ion-item lines="none">
           <ion-label>Urgent</ion-label>
-          <ion-toggle color="danger" formControlName="isUrgent" checked="false"></ion-toggle>
+          <ion-toggle formControlName="isUrgent" checked="false"></ion-toggle>
         </ion-item>
         <ion-item>
           <ion-textarea placeholder="more about the lent item ..." formControlName="itemDescription">
@@ -61,21 +61,10 @@
 
         <ion-button (click)="addItem()" [disabled]="itemDetailsFormGroup.invalid" margin-top expand="full">
           Add</ion-button>
-        <ion-button (click)="closeModal()" color="danger" margin-top expand="full">
+        <ion-button (click)="closeModal()" margin-top expand="full">
           Cancel</ion-button>
       </form>
     </ion-card-content>
   </ion-card>
-
-  <!-- <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button>
-      <ion-icon color="success" name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
-      <ion-icon color="danger" name="close"></ion-icon>
-    </ion-fab-button>
-  </ion-fab> -->
 
 </ion-content>

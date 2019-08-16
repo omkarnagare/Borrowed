@@ -15,7 +15,8 @@ export class AppInfoService {
   constructor(
     private _appVersion: AppVersion
   ) { 
-    this.getAppInfo();
+    //TODO: uncomment in production
+    // this.getAppInfo();
   }
 
   getAppInfo() {

@@ -13,7 +13,7 @@
         <ion-icon name="power" color="danger"></ion-icon>
       </ion-button> -->
       <ion-button routerLink="settings">
-        <ion-icon color="primary" name="settings"></ion-icon>
+        <ion-icon slot="icon-only" name="settings"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -27,12 +27,12 @@
   </ion-avatar>
 
   <ion-item *ngIf="(storedUserProfile | async)?.name">
-    <ion-chip color="primary" class="center-chip"> {{ (storedUserProfile | async)?.name }} </ion-chip>
+    <ion-chip class="center-chip"> {{ (storedUserProfile | async)?.name }} </ion-chip>
   </ion-item>
 
   <ion-item>
     <ion-chip (click)="selectImageSource()" class="center-chip">
-      <ion-icon name="camera" color="primary"></ion-icon>
+      <ion-icon name="camera"></ion-icon>
       <ion-label>{{ (storedUserProfile | async)?.profile_image ? "Change Picture" : "Add Picture" }}</ion-label>
     </ion-chip>
   </ion-item>

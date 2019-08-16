@@ -41,6 +41,13 @@ export class ThemingService {
 
   private CSSTextGenrator(colors) {
     const themeColors = { ...this.defaults, ...colors };
+
+    // if (Color(themeColors.primary).isDark()) {
+    //   const temp = themeColors.dark;
+    //   themeColors.dark = themeColors.light
+    //   themeColors.light = temp;
+    // }
+
     const {
       primary,
       secondary,
@@ -57,103 +64,68 @@ export class ThemingService {
     const tintRatio = 0.1;
 
     return `
-      --ion-color-base: ${light};
-      --ion-color-contrast: ${dark};
-      --ion-backgroud-color: ${light};
-      --ion-text-color: ${dark};
-      --ion-toolbar-backgroud-color: ${this.contrast(light, 0.1)};
-      --ion-toolbar-text-color: ${this.contrast(dark, 0.1)};
-      --ion-item-backgroud-color: ${this.contrast(light, 0.3)};
-      --ion-item-text-color: ${this.contrast(dark, 0.3)};
-
       --ion-color-primary: ${primary};
-      --ion-color-primary-rgb: 89,46,90;
+      --ion-color-primary-rgb: ${Color(primary).red()}, ${Color(primary).green()}, ${Color(primary).blue()};
       --ion-color-primary-contrast: ${this.contrast(primary)};
-      --ion-color-primary-contrast-rgb: 255,255,255;
+      --ion-color-primary-contrast-rgb: ${Color(this.contrast(primary)).red()}, ${Color(this.contrast(primary)).green()}, ${Color(this.contrast(primary)).blue()};
       --ion-color-primary-shade: ${Color(primary).darken(shadeRatio)};
       --ion-color-primary-tint: ${Color(primary).lighten(tintRatio)};
 
       --ion-color-secondary: ${secondary};
-      --ion-color-secondary-rgb: 7,7,235;
+      --ion-color-secondary-rgb: ${Color(secondary).red()}, ${Color(secondary).green()}, ${Color(secondary).blue()};
       --ion-color-secondary-contrast: ${this.contrast(secondary)};
-      --ion-color-secondary-contrast-rgb: 255,255,255;
+      --ion-color-secondary-contrast-rgb: ${Color(this.contrast(secondary)).red()}, ${Color(this.contrast(secondary)).green()}, ${Color(this.contrast(secondary)).blue()};
       --ion-color-secondary-shade: ${Color(secondary).darken(shadeRatio)};
       --ion-color-secondary-tint: ${Color(secondary).lighten(tintRatio)};
 
       --ion-color-tertiary: ${tertiary};
-      --ion-color-tertiary-rgb: 166,136,255;
+      --ion-color-tertiary-rgb: ${Color(tertiary).red()}, ${Color(tertiary).green()}, ${Color(tertiary).blue()};
       --ion-color-tertiary-contrast: ${this.contrast(tertiary)};
-      --ion-color-tertiary-contrast-rgb: 0,0,0;
+      --ion-color-tertiary-contrast-rgb: ${Color(this.contrast(tertiary)).red()}, ${Color(this.contrast(tertiary)).green()}, ${Color(this.contrast(tertiary)).blue()};
       --ion-color-tertiary-shade: ${Color(tertiary).darken(shadeRatio)};
       --ion-color-tertiary-tint: ${Color(tertiary).lighten(tintRatio)};
 
       --ion-color-success: ${success};
-      --ion-color-success-rgb: 68,162,36;
+      --ion-color-success-rgb: ${Color(success).red()}, ${Color(success).green()}, ${Color(success).blue()};
       --ion-color-success-contrast: ${this.contrast(success)};
-      --ion-color-success-contrast-rgb: 255,255,255;
+      --ion-color-success-contrast-rgb: ${Color(this.contrast(success)).red()}, ${Color(this.contrast(success)).green()}, ${Color(this.contrast(success)).blue()};
       --ion-color-success-shade: ${Color(success).darken(shadeRatio)};
       --ion-color-success-tint: ${Color(success).lighten(tintRatio)};
 
       --ion-color-warning: ${warning};
-      --ion-color-warning-rgb: 213,170,0;
+      --ion-color-warning-rgb: ${Color(warning).red()}, ${Color(warning).green()}, ${Color(warning).blue()};
       --ion-color-warning-contrast: ${this.contrast(warning)};
-      --ion-color-warning-contrast-rgb: 0,0,0;
+      --ion-color-warning-contrast-rgb: ${Color(this.contrast(warning)).red()}, ${Color(this.contrast(warning)).green()}, ${Color(this.contrast(warning)).blue()};
       --ion-color-warning-shade: ${Color(warning).darken(shadeRatio)};
       --ion-color-warning-tint: ${Color(warning).lighten(tintRatio)};
 
       --ion-color-danger: ${danger};
-      --ion-color-danger-rgb: 245,61,61;
+      --ion-color-danger-rgb: ${Color(danger).red()}, ${Color(danger).green()}, ${Color(danger).blue()};
       --ion-color-danger-contrast: ${this.contrast(danger)};
-      --ion-color-danger-contrast-rgb: 255,255,255;
+      --ion-color-danger-contrast-rgb: ${Color(this.contrast(danger)).red()}, ${Color(this.contrast(danger)).green()}, ${Color(this.contrast(danger)).blue()};
       --ion-color-danger-shade: ${Color(danger).darken(shadeRatio)};
       --ion-color-danger-tint: ${Color(danger).lighten(tintRatio)};
 
       --ion-color-dark: ${dark};
-      --ion-color-dark-rgb: 73,78,86;
+      --ion-color-dark-rgb: ${Color(dark).red()}, ${Color(dark).green()}, ${Color(dark).blue()};
       --ion-color-dark-contrast: ${this.contrast(dark)};
-      --ion-color-dark-contrast-rgb: 255,255,255;
+      --ion-color-dark-contrast-rgb: ${Color(this.contrast(dark)).red()}, ${Color(this.contrast(dark)).green()}, ${Color(this.contrast(dark)).blue()};
       --ion-color-dark-shade: ${Color(dark).darken(shadeRatio)};
       --ion-color-dark-tint: ${Color(dark).lighten(tintRatio)};
 
       --ion-color-medium: ${medium};
-      --ion-color-medium-rgb: 205,206,209;
+      --ion-color-medium-rgb: ${Color(medium).red()}, ${Color(medium).green()}, ${Color(medium).blue()};
       --ion-color-medium-contrast: ${this.contrast(medium)};
-      --ion-color-medium-contrast-rgb: 0,0,0;
+      --ion-color-medium-contrast-rgb: ${Color(this.contrast(medium)).red()}, ${Color(this.contrast(medium)).green()}, ${Color(this.contrast(medium)).blue()};
       --ion-color-medium-shade: ${Color(medium).darken(shadeRatio)};
       --ion-color-medium-tint: ${Color(medium).lighten(tintRatio)};
 
       --ion-color-light: ${light};
-      --ion-color-light-rgb: 240,243,244;
+      --ion-color-light-rgb: ${Color(light).red()}, ${Color(light).green()}, ${Color(light).blue()};
       --ion-color-light-contrast: ${this.contrast(light)};
-      --ion-color-light-contrast-rgb: 0,0,0;
+      --ion-color-light-contrast-rgb: ${Color(this.contrast(light)).red()}, ${Color(this.contrast(light)).green()}, ${Color(this.contrast(light)).blue()};
       --ion-color-light-shade: ${Color(light).darken(shadeRatio)};
       --ion-color-light-tint: ${Color(light).lighten(tintRatio)};
-
-      --ion-background-color: color(--ion-color-primary-shade);//	Background color of entire app
-      --ion-background-color-rgb: color(--ion-color-primary-shade); //	Background color of entire app, rgb format
-      --ion-text-color: color(--ion-color-primary-shade);//	Text color of entire app
-      --ion-text-color-rgb: color(--ion-color-primary-shade);//	Text color of entire app, rgb format
-      --ion-backdrop-color: color(--ion-color-primary-shade);//	Color of the Backdrop component
-      --ion-overlay-background-color: color(--ion-color-primary-shade);//	Background color of the overlays
-      --ion-border-color: color(--ion-color-primary-shade);//	Border color
-      --ion-box-shadow-color: color(--ion-color-primary-shade);//	Box shadow color
-      --ion-tab-bar-background: color(--ion-color-primary-shade);//	Background of the Tab bar
-      --ion-tab-bar-background-focused: color(--ion-color-primary-shade);//	Background of the focused Tab bar
-      --ion-tab-bar-border-color: color(--ion-color-primary-shade);//	Border color of the Tab bar
-      --ion-tab-bar-color: color(--ion-color-primary-shade);//	Color of the Tab bar
-      --ion-tab-bar-color-activated: color(--ion-color-primary-shade);//	Color of the activated Tab
-      --ion-toolbar-background: color(--ion-color-primary-shade);//	Background of the Toolbar
-      --ion-toolbar-border-color: color(--ion-color-primary-shade);//	Border color of the Toolbar
-      --ion-toolbar-color: color(--ion-color-primary-shade);//	Color of the components in the Toolbar
-      --ion-toolbar-color-activated: color(--ion-color-primary-shade);//Color of the activated components in the Toolbar
-      --ion-toolbar-color-unchecked: color(--ion-color-primary-shade);//	Color of the unchecked components in the Toolbar
-      --ion-toolbar-color-checked: color(--ion-color-primary-shade);//	Color of the checked components in the Toolbar
-      --ion-item-background: color(--ion-color-primary-shade);//	Background of the Item
-      --ion-item-background-activated: color(--ion-color-primary-shade);//	Background of the activated Item
-      --ion-item-border-color: color(--ion-color-primary-shade);//	Border color of the Item
-      --ion-item-color: color(--ion-color-primary-shade);//	Color of the components in the Item
-      --ion-placeholder-color: color(--ion-color-primary-shade);//	Color of the placeholder in inputs
-
     `;
   }
 
