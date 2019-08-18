@@ -1,20 +1,20 @@
 <ion-header translucent>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <!-- <ion-buttons slot="start">
       <ion-button (click)="shareToSocialNetworks()">
-        <ion-icon color="primary" name="share"></ion-icon>
+        <ion-icon slot="icon-only" color="primary" name="share"></ion-icon>
       </ion-button>
     </ion-buttons> -->
     <ion-title>
-      Profile
+      Account
     </ion-title>
     <ion-buttons slot="end">
-      <!-- <ion-button (click)="logOut()">
-        <ion-icon name="power" color="danger"></ion-icon>
-      </ion-button> -->
-      <ion-button routerLink="settings">
-        <ion-icon slot="icon-only" name="settings"></ion-icon>
+      <ion-button (click)="logOut()">
+        <ion-icon slot="icon-only" name="power" color="danger"></ion-icon>
       </ion-button>
+      <!-- <ion-button routerLink="settings">
+        <ion-icon slot="icon-only" name="settings"></ion-icon>
+      </ion-button> -->
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

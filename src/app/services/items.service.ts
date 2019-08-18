@@ -81,13 +81,15 @@ export class ItemsService {
     );
   }
 
-  showToast(errorMessage: any) {
+  showToast(message: any) {
     const toast = this._toastController.create({
-      message: errorMessage,
+      message: message,
       duration: 4000,
-      position: "top",
+      position: "bottom",
       showCloseButton: true,
-      closeButtonText: "dismiss"
+      closeButtonText: "dismiss",
+      color: "primary",
+      translucent: true
     });
     toast.then((toastMessage) => {
       toastMessage.present();

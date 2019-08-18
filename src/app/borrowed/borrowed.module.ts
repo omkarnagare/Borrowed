@@ -3,17 +3,15 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Tab1Page } from './tab1.page';
-import { AddItemPageModule } from '../add-item/add-item.module';
+import { BorrowedPage } from './borrowed.page';
 
 @NgModule({
   imports: [
-    AddItemPageModule,
     IonicModule,
     CommonModule,
     ReactiveFormsModule,
-    RouterModule.forChild([{ path: '', component: Tab1Page }])
+    RouterModule.forChild([{ path: '', component: BorrowedPage }])
   ],
-  declarations: [Tab1Page]
+  declarations: [BorrowedPage]
 })
-export class Tab1PageModule {}
+export class BorrowedPageModule {}

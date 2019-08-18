@@ -6,13 +6,15 @@ import { ImageSourceType } from '../constants';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
 import { ActionSheetController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
-  selector: 'app-tab3',
-  templateUrl: 'tab3.page.html',
-  styleUrls: ['tab3.page.scss']
+  selector: 'app-account',
+  templateUrl: 'account.page.html',
+  styleUrls: ['account.page.scss']
 })
-export class Tab3Page implements OnInit {
+export class AccountPage implements OnInit {
   storedUserProfile: Observable<any>;
   lentItems: Observable<Item[]>;
   urgentMissingItems: Observable<Item[]>;
@@ -21,7 +23,9 @@ export class Tab3Page implements OnInit {
     private _usersService: UsersService,
     private _getImageService: GetImageService,
     private _itemsService: ItemsService,
-    private _actionSheetController: ActionSheetController
+    private _actionSheetController: ActionSheetController,
+    private _router: Router,
+    private _authenticationService: AuthenticationService,
   ) {
     this.storedUserProfile = _usersService.getUserProfile();
     this.lentItems = this._itemsService.getItems();
@@ -71,6 +75,16 @@ export class Tab3Page implements OnInit {
         (error) => {
           console.log("error occurred while getting Profile Image: ", error);
         });
+  }
+
+  logOut() {
+    this._authenticationService.logOut().then(() => {
+      this._router.navigate(['']);
+      console.log("User logged out successfully");
+    }).catch((error) => {
+      console.log("Log Out Error :", error);
+      this._authenticationService.showToast(error);
+    });
   }
 
 }

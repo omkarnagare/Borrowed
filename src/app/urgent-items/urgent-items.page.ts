@@ -4,11 +4,11 @@ import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+  selector: 'app-urgent-items',
+  templateUrl: 'urgent-items.page.html',
+  styleUrls: ['urgent-items.page.scss']
 })
-export class Tab2Page implements OnInit{
+export class UrgentItemsPage implements OnInit{
 
   urgentMissingItems: Observable<Item[]>;
 

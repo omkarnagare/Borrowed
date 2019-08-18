@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, ActionSheetController } from '@ionic/angular';
+import { ActionSheetController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ItemsService } from '../services/items.service';
 import { BorrowedAppConstants, ImageSourceType } from '../constants';
@@ -7,6 +7,7 @@ import { Item } from '../types';
 import { GetImageService } from '../services/get-image.service';
 import { PlatformInfoService } from '../services/platform-info.service';
 import { ContactsService } from '../services/contacts.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-item',
@@ -26,9 +27,8 @@ export class AddItemPage implements OnInit {
     private _getImageService: GetImageService,
     private _platformInfoService: PlatformInfoService,
     private _contactsService: ContactsService,
-    private _modalController: ModalController,
     private _actionSheetController: ActionSheetController,
-
+    private _router: Router,
     formBuilder: FormBuilder
   ) {
 
@@ -51,6 +51,11 @@ export class AddItemPage implements OnInit {
   ngOnInit() {
   }
 
+  ionViewDidEnter() {
+    this.itemDetailsFormGroup.reset();
+    this.itemDetailsFormGroup.markAsUntouched();
+  }
+
   searchForContacts() {
     const searchQuery = this.itemDetailsFormGroup.get("searchQuery").value;
     this._contactsService.getContacts(searchQuery).then(
@@ -63,7 +68,7 @@ export class AddItemPage implements OnInit {
     });
   }
 
-  assignContactDetails(contact, number) {
+  assignContactDetails(contact: any, number: any) {
     this.itemDetailsFormGroup.get("lendeeName").setValue(contact.displayName);
     this.itemDetailsFormGroup.get("lendeeContact").setValue(number);
     this.itemDetailsFormGroup.get("searchQuery").setValue(null);
@@ -118,15 +123,10 @@ export class AddItemPage implements OnInit {
       .addItem(itemObject)
       .then((result) => {
         this._itemService.showToast("Item " + itemObject.itemName + " added successfully.");
-        this._modalController.dismiss(itemObject);
+        this._router.navigate(["/"]);
       }).catch((error) => {
         this._itemService.showToast(error);
-        this._modalController.dismiss();
       });
-  }
-
-  closeModal() {
-    this._modalController.dismiss();
   }
 
 }

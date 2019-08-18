@@ -1,3 +1,11 @@
+<ion-header translucent>
+  <ion-toolbar color="primary">
+    <ion-title>
+      Add Lent Item
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content fullscreen>
 
   <ion-card no-margin>
@@ -61,8 +69,8 @@
 
         <ion-button (click)="addItem()" [disabled]="itemDetailsFormGroup.invalid" margin-top expand="full">
           Add</ion-button>
-        <ion-button (click)="closeModal()" margin-top expand="full">
-          Cancel</ion-button>
+        <!-- <ion-button (click)="closeModal()" margin-top expand="full">
+          Cancel</ion-button> -->
       </form>
     </ion-card-content>
   </ion-card>

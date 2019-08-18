@@ -18,12 +18,12 @@ export class BorrowedAppConstants {
     // themes
     public static THEMES = {
         "purple" : {
-            primary : "#655A7C",
-            secondary: "#AB92BF",
-            tertiary: "#AFC1D6",
-            light: "#CEF9F2",
-            medium: "#D6CA98",
-            dark: "#B89876"
+            primary : "rgb(66, 5, 197)",
+            secondary: "rgb(144, 30, 236)",
+            tertiary: "rgb(18, 117, 231)",
+            light: "rgb(138, 209, 197)",
+            medium: "rgb(74, 122, 150)",
+            dark: "rgb(3, 20, 95)"
         }, 
         "autumn" : {
             primary : "#F78154",

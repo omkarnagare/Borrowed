@@ -60,8 +60,8 @@ export class ThemingService {
       light
     } = themeColors;
 
-    const shadeRatio = 0.1;
-    const tintRatio = 0.1;
+    const shadeRatio = 0.2;
+    const tintRatio = 0.2;
 
     return `
       --ion-color-primary: ${primary};
@@ -131,6 +131,7 @@ export class ThemingService {
 
   private contrast(colorVal, ratio = 0.8) {
     const color = Color(colorVal);
-    return color.isDark() ? color.lighten(ratio) : color.darken(ratio);
+    // return color.isDark() ? color.lighten(ratio) : color.darken(ratio);
+    return color.isDark() ? Color("#ffffff") : Color("#000000");
   }
 }

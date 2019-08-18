@@ -16,9 +16,7 @@ export class SettingsPage implements OnInit {
   themes: any;
 
   constructor(
-    private _router: Router,
     private _socialNetworkService: SocialNetworksService,
-    private _authenticationService: AuthenticationService,
     private _appInfoService: AppInfoService,
     private _themingService: ThemingService
   ) {
@@ -49,16 +47,6 @@ export class SettingsPage implements OnInit {
       subject: this._appInfoService.getAppName() + ": v" + this._appInfoService.getAppVersion(),
       // file: "",
       url: "https://github.com/omkarnagare/Borrowed"
-    });
-  }
-
-  logOut() {
-    this._authenticationService.logOut().then(() => {
-      this._router.navigate(['']);
-      console.log("User logged out successfully");
-    }).catch((error) => {
-      console.log("Log Out Error :", error);
-      this._authenticationService.showToast(error);
     });
   }
 

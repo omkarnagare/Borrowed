@@ -15,7 +15,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+              import('../borrowed/borrowed.module').then(m => m.BorrowedPageModule)
           },
           {
             path: 'item-details/:itemId',
@@ -30,7 +30,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+              import('../urgent-items/urgent-items.module').then(m => m.UrgentItemsPageModule)
           },
           {
             path: 'item-details/:itemId',
@@ -40,15 +40,30 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'profile',
+        path: 'add-item',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab3/tab3.module').then(m => m.Tab3PageModule)
-          },
+              import('../add-item/add-item.module').then(m => m.AddItemPageModule)
+          }
+        ]
+      },
+      {
+        path: 'account',
+        children: [
           {
-            path: 'settings',
+            path: '',
+            loadChildren: () =>
+              import('../account/account.module').then(m => m.AccountPageModule)
+          }
+        ]
+      },
+      {
+        path: 'settings',
+        children: [
+          {
+            path: '',
             loadChildren: () =>
               import('../settings/settings.module').then(m => m.SettingsPageModule)
           }

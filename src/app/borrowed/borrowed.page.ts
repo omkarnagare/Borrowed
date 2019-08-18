@@ -2,17 +2,16 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
-import { ModalController, ToastController, Platform } from '@ionic/angular';
-import { AddItemPage } from '../add-item/add-item.page';
+import { Platform } from '@ionic/angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime, map } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-tab1',
-  templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss']
+  selector: 'app-borrowed',
+  templateUrl: 'borrowed.page.html',
+  styleUrls: ['borrowed.page.scss']
 })
-export class Tab1Page implements OnInit, OnDestroy, AfterViewInit {
+export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
 
   backButtonSubscription$;
 
@@ -24,8 +23,6 @@ export class Tab1Page implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private _platform: Platform,
-    private _toastController: ToastController,
-    private _modalController: ModalController,
     private _itemsService: ItemsService,
     formBuilder: FormBuilder
   ) {
@@ -87,37 +84,6 @@ export class Tab1Page implements OnInit, OnDestroy, AfterViewInit {
       this._itemsService.showToast(message);
     }).catch((error) => {
       this._itemsService.showToast(error);
-    });
-  }
-
-  async openAddItemModal() {
-    const addItemModal = await this._modalController.create({
-      component: AddItemPage,
-      componentProps: {
-        // parameters to send to modal
-      }
-    });
-    addItemModal.onDidDismiss().then((modalData) => {
-      if (modalData.data) {
-        console.log("Item Added: ", modalData.data);
-        this.setFilteredItems("");
-      } else {
-        console.log("Modal dissmissed without adding any item");
-      }
-    });
-    return addItemModal.present();
-  }
-
-  showToast(itemDetails: Item) {
-    const toast = this._toastController.create({
-      message: "Item " + itemDetails.itemName + " added successfully",
-      duration: 2000,
-      position: "bottom",
-      showCloseButton: true,
-      closeButtonText: "dismiss"
-    });
-    toast.then((toastMessage) => {
-      toastMessage.present();
     });
   }
 

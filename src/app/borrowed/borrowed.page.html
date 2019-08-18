@@ -1,12 +1,7 @@
 <ion-header translucent>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="openAddItemModal()">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+  <ion-toolbar color="primary">
     <ion-title>
-      Borrowed.
+      Borrowed
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="toggleFiltering()">
@@ -39,13 +34,25 @@
     </ion-card>
   </div>
 
-  <ion-card *ngIf="(lentItems | async)?.length === 0" class="card-center">
+  <!-- <ion-card *ngIf="(lentItems | async)?.length === 0" class="card-center">
     <ion-card-content>
       <ion-img src="/assets/empty-box.svg" class="image-med"></ion-img>
       <p>No Lent Items Present !!</p>
       <p>Use "+" button to add your lent Items to the List.</p>
     </ion-card-content>
-  </ion-card>
+  </ion-card> -->
+
+  <div *ngIf="(lentItems | async)?.length === 0">
+      <ion-card class="card-center" routerLink="/tabs/add-item">
+        <ion-img src="/assets/empty-box.svg" class="center-image"></ion-img>
+        <ion-card-header>
+          <ion-card-title>No Lent Items Present Currently!!!</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <h2>Click here to Add</h2>
+        </ion-card-content>
+      </ion-card>
+    </div>
 
   <div *ngIf="(lentItems | async) as loadedItems">
     <ion-list *ngIf="loadedItems.length > 0">

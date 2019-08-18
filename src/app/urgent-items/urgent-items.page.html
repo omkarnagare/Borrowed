@@ -1,5 +1,5 @@
 <ion-header translucent>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
       Urgent Items
     </ion-title>
@@ -15,14 +15,19 @@
     </ion-card>
   </div>
 
-  <ion-card *ngIf="(urgentMissingItems | async)?.length === 0" class="card-center">
-    <ion-card-content>
-      <ion-img src="/assets/empty-box.svg" class="image-med"></ion-img>
-      <p>No Urgent items present yet.</p>
-      <p>Use star button from the toolbar in the item details or
-        that from the left-sliding of item on the home page to mark your important Lent items as urgent.</p>
-    </ion-card-content>
-  </ion-card>
+  <div *ngIf="(urgentMissingItems | async)?.length === 0">
+    <ion-card class="card-center">
+      <ion-img src="/assets/empty-box.svg" class="center-image"></ion-img>
+      <ion-card-header>
+        <ion-card-title>No Urgent items present yet!!!</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>To mark your items as urgent : </h2>
+        <p>Use "Star" icon present at the top in the item details or Click on "Star" icon which will be shown after
+          left-sliding the item on the home page.</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
   <div *ngIf="(urgentMissingItems | async) as loadedItems">
     <ion-list *ngIf="loadedItems.length > 0">
