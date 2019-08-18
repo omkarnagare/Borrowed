@@ -26,11 +26,23 @@
         <ion-item>
           <ion-input placeholder="Item Name/Category" formControlName="itemName" type="text"></ion-input>
         </ion-item>
+        <div *ngFor="let validation of validationMessages.itemName" class="validation-errors">
+          <ion-item class="error-message" *ngIf="isError('itemName', validation.type)">
+            <ion-icon name="alert"></ion-icon>
+            <ion-label>{{ validation.message }}</ion-label>
+          </ion-item>
+        </div>
         <ion-item>
           <ion-label>Borrowing Date</ion-label>
           <ion-datetime displayFormat="DD MMM YYYY" formControlName="borrowingDate" placeholder="Date Given">
           </ion-datetime>
         </ion-item>
+        <div *ngFor="let validation of validationMessages.borrowingDate" class="validation-errors">
+          <ion-item class="error-message" *ngIf="isError('borrowingDate', validation.type)">
+            <ion-icon name="alert"></ion-icon>
+            <ion-label>{{ validation.message }}</ion-label>
+          </ion-item>
+        </div>
         <ion-item *ngIf="showSearchBarForContacts" lines="none">
           <ion-searchbar formControlName="searchQuery" (ionChange)="searchForContacts()" searchIcon="contacts"
             placeholder="browse from contact list" autocomplete="on" debounce="700">
@@ -52,12 +64,30 @@
         <ion-item>
           <ion-input placeholder="Lendee" formControlName="lendeeName" type="text"></ion-input>
         </ion-item>
+        <div *ngFor="let validation of validationMessages.lendeeName" class="validation-errors">
+          <ion-item class="error-message" *ngIf="isError('lendeeName', validation.type)">
+            <ion-icon name="alert"></ion-icon>
+            <ion-label>{{ validation.message }}</ion-label>
+          </ion-item>
+        </div>
         <ion-item>
           <ion-input placeholder="Contact Number For Lendee" formControlName="lendeeContact" type="text"></ion-input>
         </ion-item>
+        <div *ngFor="let validation of validationMessages.lendeeContact" class="validation-errors">
+          <ion-item class="error-message" *ngIf="isError('lendeeContact', validation.type)">
+            <ion-icon name="alert"></ion-icon>
+            <ion-label>{{ validation.message }}</ion-label>
+          </ion-item>
+        </div>
         <ion-item>
           <ion-input placeholder="Email For Lendee" formControlName="lendeeEmail" type="text"></ion-input>
         </ion-item>
+        <div *ngFor="let validation of validationMessages.lendeeEmail" class="validation-errors">
+          <ion-item class="error-message" *ngIf="isError('lendeeEmail', validation.type)">
+            <ion-icon name="alert"></ion-icon>
+            <ion-label>{{ validation.message }}</ion-label>
+          </ion-item>
+        </div>
         <ion-item lines="none">
           <ion-label>Urgent</ion-label>
           <ion-toggle formControlName="isUrgent" checked="false"></ion-toggle>

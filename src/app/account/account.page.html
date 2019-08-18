@@ -8,14 +8,14 @@
     <ion-title>
       Account
     </ion-title>
-    <ion-buttons slot="end">
+    <!-- <ion-buttons slot="end">
       <ion-button (click)="logOut()">
         <ion-icon slot="icon-only" name="power" color="danger"></ion-icon>
       </ion-button>
-      <!-- <ion-button routerLink="settings">
+      <ion-button routerLink="settings">
         <ion-icon slot="icon-only" name="settings"></ion-icon>
-      </ion-button> -->
-    </ion-buttons>
+      </ion-button>
+    </ion-buttons> -->
   </ion-toolbar>
 </ion-header>
 
@@ -46,5 +46,7 @@
     <ion-label>Urgent Items</ion-label>
     <ion-badge color="danger" slot="end">{{ (urgentMissingItems | async)?.length }}</ion-badge>
   </ion-item>
+
+  <ion-button (click)="logOut()" margin-top expand="full" color="danger"> Log Out </ion-button>
 
 </ion-content>

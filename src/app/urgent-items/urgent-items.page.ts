@@ -10,13 +10,13 @@ import { ItemsService } from '../services/items.service';
 })
 export class UrgentItemsPage implements OnInit{
 
-  urgentMissingItems: Observable<Item[]>;
+  urgentLentItems: Observable<Item[]>;
 
   constructor(
     private _itemsService: ItemsService
   ) {
-    this.urgentMissingItems = this._itemsService.getUrgentItems();
-    // this.urgentMissingItems.subscribe((data) => {
+    this.urgentLentItems = this._itemsService.getUrgentItems();
+    // this.urgentLentItems.subscribe((data) => {
     //   console.log("urgent items: ", data);
     // });
   }

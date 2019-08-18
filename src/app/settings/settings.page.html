@@ -17,29 +17,49 @@
 <ion-content>
 
   <ion-list lines="none">
-    <ion-button *ngFor="let theme of themes" (click)="setTheme(theme.name)" 
-    margin-top expand="full"> {{ theme.name }} </ion-button>
+    <ion-button *ngFor="let theme of themes" (click)="setTheme(theme.name)" margin-top expand="full"> {{ theme.name }}
+    </ion-button>
   </ion-list>
 
-  <ion-list lines="none">
-  <ion-chip color="primary" 
-    margin-top expand="full">primary</ion-chip>
-    <ion-chip color="secondary" 
-    margin-top expand="full">secondary</ion-chip>
-    <ion-chip color="tertiary" 
-    margin-top expand="full">tertiary</ion-chip>
-    <ion-chip color="success" 
-    margin-top expand="full">success</ion-chip>
-    <ion-chip color="warning" 
-    margin-top expand="full">warning</ion-chip>
-    <ion-chip color="danger" 
-    margin-top expand="full">danger</ion-chip>
-    <ion-chip color="dark" 
-    margin-top expand="full">dark</ion-chip>
-    <ion-chip color="medium" 
-    margin-top expand="full">medium</ion-chip>
-    <ion-chip color="light" 
-    margin-top expand="full">light</ion-chip>
+  <ion-list>
+    <ion-list-header>
+      Color Items
+    </ion-list-header>
+    <ion-item color="primary">
+      <ion-label>Primary</ion-label>
+    </ion-item>
+
+    <ion-item color="secondary">
+      <ion-label>Secondary</ion-label>
+    </ion-item>
+
+    <ion-item color="tertiary">
+      <ion-label>Tertiary</ion-label>
+    </ion-item>
+
+    <ion-item color="dark">
+      <ion-label>Dark</ion-label>
+    </ion-item>
+
+    <ion-item color="medium">
+      <ion-label>Medium</ion-label>
+    </ion-item>
+
+    <ion-item color="light">
+      <ion-label>Light</ion-label>
+    </ion-item>
+
+    <ion-item color="success">
+      <ion-label>Success</ion-label>
+    </ion-item>
+
+    <ion-item color="warning">
+      <ion-label>Warning</ion-label>
+    </ion-item>
+
+    <ion-item color="danger">
+      <ion-label>Danger</ion-label>
+    </ion-item>
   </ion-list>
 
 </ion-content>

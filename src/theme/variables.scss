@@ -110,7 +110,7 @@
   --ion-font-family: 'Montserrat';
 
   ion-tab-bar {
-    --border: 1px solid var(--ion-color-dark);
+    --border: 2px solid var(--ion-color-dark) !important;
   }
 
   .center-image{
@@ -129,6 +129,32 @@
       ion-card-content > h2 {
         font-weight: bold;
       }
+  }
+
+  .item-grid-content {
+    ion-grid > ion-row {
+      padding: 0px;
+    }
+    ion-grid > ion-row > ion-col {
+      text-align: center;
+      padding: 0px;
+    }
+    ion-grid > ion-row > ion-col.bold-heading > ion-label > h2 {
+      font-weight: bold;
+    }
+    ion-grid > ion-row > ion-col > ion-label > * {
+      white-space: initial;
+    }
+  }
+
+  .validation-errors > ion-item {
+    ion-label {
+      white-space: initial;
+      color: var(--ion-color-danger);
+    }
+    ion-icon {
+      color: var(--ion-color-danger);
+    }
   }
 
   // .temp {

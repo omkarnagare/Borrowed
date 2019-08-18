@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LogInCredentials } from '../types';
 import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
-import { ToastController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-log-in',
@@ -15,6 +15,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   backButtonSubscription$;
 
   logInFormGroup: FormGroup;
+  validationMessages: any;
 
   constructor(
     private _platform: Platform,
@@ -24,8 +25,21 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.logInFormGroup = formBuilder.group({
       email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required]]
+      password: ["", [Validators.required, Validators.minLength(6)]]
     });
+
+    this.validationMessages = {
+      'email': [
+        { type: 'required', message: 'User email cannot be left blank.' },
+        { type: 'email', message: 'Not a valid Email address.' }],
+      'password': [
+        { type: 'minlength', message: 'Password should be atleast 6 charcters.' },
+        { type: 'required', message: 'Password cannot be left blank.' }]
+    };
+  }
+
+  isError(name: string, validationType: string): boolean {
+    return this.logInFormGroup.get(name).hasError(validationType) && (this.logInFormGroup.get(name).dirty || this.logInFormGroup.get(name).touched)
   }
 
   ngOnInit() {
@@ -38,7 +52,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
       navigator['app'].exitApp();
     });
   }
- 
+
   ngOnDestroy() {
     this.backButtonSubscription$.unsubscribe();
   }

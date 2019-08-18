@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 export class AddItemPage implements OnInit {
 
   itemDetailsFormGroup: FormGroup;
+  validationMessages: any;
   itemImage: any;
 
   showSearchBarForContacts: boolean = false;
@@ -39,13 +40,28 @@ export class AddItemPage implements OnInit {
       itemDescription: "",
       borrowingDate: ["", [Validators.required]],
       isUrgent: false,
-      lendeeName: ["", [Validators.pattern("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")]],
+      lendeeName: ["", [Validators.required, Validators.pattern("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")]],
       lendeeContact: ["", [Validators.pattern("^[+]*[ (]{0,1}[0-9 ]{1,4}[) ]{0,1}[-\s\./0-9 ]*$")]],
       lendeeEmail: ["", [Validators.email]],
       // query related
       searchQuery: ""
     });
 
+    this.validationMessages = {
+      'itemName': [{ type: 'required', message: 'Item Name/Category cannot be left blank.' }],
+      'borrowingDate': [{ type: 'required', message: 'Borrowing date cannot be left blank.' }],
+      'lendeeName': [
+        { type: 'required', message: 'Lendee name cannot be left blank.' },
+        { type: 'pattern', message: 'Not a valid name.' }],
+      'lendeeContact': [
+        { type: 'pattern', message: 'Not a valid contact number.' }],
+      'lendeeEmail': [
+        { type: 'email', message: 'Not a valid Email address.' }],
+    };
+  }
+
+  isError(name: string, validationType: string): boolean {
+    return this.itemDetailsFormGroup.get(name).hasError(validationType) && (this.itemDetailsFormGroup.get(name).dirty || this.itemDetailsFormGroup.get(name).touched)
   }
 
   ngOnInit() {

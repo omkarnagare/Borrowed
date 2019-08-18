@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
 import { Platform } from '@ionic/angular';
@@ -13,7 +13,7 @@ import { debounceTime, map } from 'rxjs/operators';
 })
 export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
 
-  backButtonSubscription$;
+  backButtonSubscription$: Subscription;
 
   lentItems: Observable<Item[]>;
 
@@ -43,7 +43,8 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ionViewDidEnter() {
-    this.setFilteredItems("");
+    this.searching = true;
+    this.searchFromGroup.get("searchControl").setValue("");
   }
 
   ngAfterViewInit() {

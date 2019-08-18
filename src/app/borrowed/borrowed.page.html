@@ -34,25 +34,18 @@
     </ion-card>
   </div>
 
-  <!-- <ion-card *ngIf="(lentItems | async)?.length === 0" class="card-center">
-    <ion-card-content>
-      <ion-img src="/assets/empty-box.svg" class="image-med"></ion-img>
-      <p>No Lent Items Present !!</p>
-      <p>Use "+" button to add your lent Items to the List.</p>
-    </ion-card-content>
-  </ion-card> -->
-
   <div *ngIf="(lentItems | async)?.length === 0">
-      <ion-card class="card-center" routerLink="/tabs/add-item">
-        <ion-img src="/assets/empty-box.svg" class="center-image"></ion-img>
-        <ion-card-header>
-          <ion-card-title>No Lent Items Present Currently!!!</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <h2>Click here to Add</h2>
-        </ion-card-content>
-      </ion-card>
-    </div>
+    <ion-card class="card-center" routerLink="/tabs/add-item">
+      <ion-img src="/assets/empty-box.svg" class="center-image"></ion-img>
+      <ion-card-header>
+        <ion-card-title>No Lent Items Present !!</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>Click here to Add</h2>
+        <p>Before you forget.</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
   <div *ngIf="(lentItems | async) as loadedItems">
     <ion-list *ngIf="loadedItems.length > 0">
@@ -64,17 +57,28 @@
           </ion-item-option>
         </ion-item-options>
 
-        <ion-item [routerLink]="['item-details', lentItem.itemId]">
-          <ion-thumbnail slot="start">
-            <img [src]="lentItem.itemImage">
-          </ion-thumbnail>
-          <ion-label>
-            <h1>{{ lentItem.itemName }}</h1>
-            <ion-chip *ngIf="lentItem.borrowingDate">
-              <ion-icon name="time"></ion-icon>
-              <ion-label>{{ lentItem.borrowingDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
-            </ion-chip>
-          </ion-label>
+        <ion-item [routerLink]="['item-details', lentItem.itemId]" class="item-grid-content">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="2">
+                <ion-thumbnail>
+                  <img [src]="lentItem.itemImage">
+                </ion-thumbnail>
+              </ion-col>
+              <ion-col size="7" class="bold-heading">
+                <ion-label>
+                  <h2 text-uppercase>{{ lentItem.itemName }}</h2>
+                  <p> Lent to : <b>{{ lentItem.lendeeName }}</b></p>
+                </ion-label>
+              </ion-col>
+              <ion-col size="3">
+                <ion-label>
+                  <p><b>{{ lentItem.borrowingDate  | date: 'MMM dd' }}</b></p>
+                  <p>{{ lentItem.borrowingDate  | date: "HH:mm" }}</p>
+                </ion-label>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </ion-item>
 
         <ion-item-options side="end" (click)="toggleUrgentStatus( lentItem.itemId, lentItem )">

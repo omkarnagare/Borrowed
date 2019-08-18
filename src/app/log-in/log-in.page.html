@@ -9,25 +9,33 @@
     <ion-card-content>
       <form [formGroup]="logInFormGroup">
         <ion-item>
-          <!-- <ion-label>Email: </ion-label> -->
           <ion-icon slot="start" name="person"></ion-icon>
           <ion-input placeholder="Enter Email" formControlName="email" type="email"></ion-input>
         </ion-item>
 
+        <div *ngFor="let validation of validationMessages.email" class="validation-errors">
+          <ion-item class="error-message" *ngIf="isError('email', validation.type)">
+            <ion-icon name="alert"></ion-icon>
+            <ion-label>{{ validation.message }}</ion-label>
+          </ion-item>
+        </div>
+
         <ion-item>
-          <!-- <ion-label>Password: </ion-label> -->
           <ion-icon slot="start" name="unlock"></ion-icon>
           <ion-input placeholder="Enter Password" formControlName="password" type="password"></ion-input>
         </ion-item>
 
-        <ion-button 
-        (click)="logIn()"
-        [disabled]="logInFormGroup.invalid" margin-top expand="full">
+        <div *ngFor="let validation of validationMessages.password" class="validation-errors">
+          <ion-item class="error-message" *ngIf="isError('password', validation.type)">
+            <ion-icon name="alert"></ion-icon>
+            <ion-label>{{ validation.message }}</ion-label>
+          </ion-item>
+        </div>
+
+        <ion-button (click)="logIn()" [disabled]="logInFormGroup.invalid" margin-top expand="full">
           LogIn</ion-button>
 
-          <ion-button 
-        (click)="signUp()"
-        [disabled]="logInFormGroup.invalid" margin-top expand="full">
+        <ion-button (click)="signUp()" [disabled]="logInFormGroup.invalid" margin-top expand="full">
           Sign Up</ion-button>
       </form>
     </ion-card-content>
