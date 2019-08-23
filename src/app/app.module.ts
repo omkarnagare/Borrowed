@@ -6,6 +6,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { IonicStorageModule } from '@ionic/storage';
 
 import { environment } from '../environments/environment'
 
@@ -32,8 +33,12 @@ import { AppComponent } from './app.component';
     AngularFirestoreModule.enablePersistence(),
     AngularFireStorageModule,
     HttpClientModule,
-    BrowserModule, 
+    BrowserModule,
     IonicModule.forRoot(),
+    IonicStorageModule.forRoot({
+      name: 'borrowedDB',
+      driverOrder: ['indexeddb', 'sqlite', 'websql']
+    }),
     AppRoutingModule],
   providers: [
     AppVersion,
@@ -47,4 +52,4 @@ import { AppComponent } from './app.component';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

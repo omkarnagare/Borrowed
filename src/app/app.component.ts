@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { NetworkService } from './services/network.service';
 import { ThemingService } from './services/theming.service';
 
 @Component({
@@ -19,9 +18,8 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private _themingService: ThemingService
+    private _themingService: ThemingService // this is needed to set the theme via constructor
   ) {
-    this._themingService.setTheme("purple");
     this.initializeApp();
   }
 

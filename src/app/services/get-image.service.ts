@@ -16,7 +16,7 @@ export class GetImageService {
   ) {
 
     this.cameraOptions = {
-      quality: 50,
+      quality: 100,
       destinationType: this._camera.DestinationType.DATA_URL,
       encodingType: this._camera.EncodingType.JPEG,
       mediaType: this._camera.MediaType.PICTURE,

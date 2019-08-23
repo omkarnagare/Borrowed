@@ -12,13 +12,15 @@
 	display: flex;
 	align-items: center;
     justify-content: center;
-    background: var(--ion-color-primary);
+	// background: var(--ion-color-primary);
+	background: #DCDDEE;
 }
 
 .spinner {
 	width: 50px;
 	height: 50px;
-	background-color: var(--ion-color-primary-contrast);
+	// background-color: var(--ion-color-primary-contrast);
+	background-color: #291B37;
 	margin: 100px auto;
 	-webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
 	animation: sk-rotateplane 1.2s infinite ease-in-out;

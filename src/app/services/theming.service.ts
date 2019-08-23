@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import * as Color from 'color';
 import { DOCUMENT } from '@angular/common';
 import { BorrowedAppConstants } from '../constants';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class ThemingService {
   defaults: any;
 
   constructor(
-    @Inject(DOCUMENT) private _document: Document
+    @Inject(DOCUMENT) private _document: Document,
+    private _storage: Storage
   ) {
     this.defaults = {
       primary: "#3880FF",
@@ -24,14 +26,27 @@ export class ThemingService {
       medium: "#989AA2",
       light: "#F4F5F8",
     }
+
+    this._storage.get(BorrowedAppConstants.APP_THEME).then(theme => {
+      console.log("AppTheme", theme);
+      if (!theme) {
+        theme = BorrowedAppConstants.DEFAULT_APP_THEME;
+        this._storage.set(BorrowedAppConstants.APP_THEME, theme);
+      }
+      this.applyTheme(theme);
+    }).catch(error => {
+      console.log("AppTheme", error);
+    });
   }
 
   setTheme(name: string) {
-    const cssText = this.CSSTextGenrator(BorrowedAppConstants.THEMES[name]);
-    this.setGlobalCSS(cssText);
+    this._storage.set(BorrowedAppConstants.APP_THEME, name).then(data => {
+      this.applyTheme(name);
+    });
   }
 
-  private setGlobalCSS(cssText) {
+  private applyTheme(theme) {
+    const cssText = this.CSSTextGenrator(BorrowedAppConstants.THEMES[theme]);
     this._document.documentElement.style.cssText = cssText;
   }
 
