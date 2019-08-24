@@ -157,6 +157,18 @@
     }
   }
 
+  ion-searchbar{
+    .searchbar-input-container{
+      .searchbar-input{
+          border-radius: 16px;
+      }
+    }
+  }
+
+  ion-thumbnail > img {
+    border-radius: 12px;
+  }
+
   // .temp {
   //   primary : rgb(66, 5, 197);
   //   secondary : rgb(144, 30, 236);

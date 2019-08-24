@@ -5,6 +5,7 @@ import { ItemsService } from '../services/items.service';
 import { Platform } from '@ionic/angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime, map } from 'rxjs/operators';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 @Component({
   selector: 'app-borrowed',
@@ -22,6 +23,7 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
   enableSearchBar: boolean;
 
   constructor(
+    private _splashScreen: SplashScreen,
     private _platform: Platform,
     private _itemsService: ItemsService,
     formBuilder: FormBuilder
@@ -43,6 +45,7 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ionViewDidEnter() {
+    this._splashScreen.hide();
     this.searching = true;
     this.searchFromGroup.get("searchControl").setValue("");
   }

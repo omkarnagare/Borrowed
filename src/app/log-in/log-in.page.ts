@@ -4,6 +4,7 @@ import { LogInCredentials } from '../types';
 import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 @Component({
   selector: 'app-log-in',
@@ -18,6 +19,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   validationMessages: any;
 
   constructor(
+    private _splashScreen: SplashScreen,
     private _platform: Platform,
     private _router: Router,
     private _authenticationService: AuthenticationService,
@@ -40,6 +42,10 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
 
   isError(name: string, validationType: string): boolean {
     return this.logInFormGroup.get(name).hasError(validationType) && (this.logInFormGroup.get(name).dirty || this.logInFormGroup.get(name).touched)
+  }
+
+  ionViewDidEnter() {
+    this._splashScreen.hide();
   }
 
   ngOnInit() {

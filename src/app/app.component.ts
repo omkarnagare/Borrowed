@@ -12,8 +12,6 @@ import { ThemingService } from './services/theming.service';
 })
 export class AppComponent {
 
-  showSplashAnimation:boolean = true;
-
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -26,11 +24,8 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      // this.splashScreen.hide(); // hiding it in respective components
 
-      setTimeout(()=> {
-        this.showSplashAnimation = false;
-      }, 3000);
       // no need to check for internet connection as data persistence is enabled
       // this._networkService.initializeNetworkEvents();
     });
