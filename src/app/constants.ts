@@ -69,3 +69,9 @@ export enum ImageType {
     USER_PROFILE = 200,
     ITEM = 201
 }
+
+export enum UserState {
+    LOG_IN = 300,
+    SIGN_UP = 301,
+    FORGOT_PASSWORD = 302
+}

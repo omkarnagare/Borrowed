@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { BorrowedAppConstants, ImageType } from '../constants';
 import { Observable } from 'rxjs';
 import { CloudFilesStorageService } from './cloud-files-storage.service';
-import { UserInfo } from '../types';
+import { UserInfo, GooglePlusUserInfo } from '../types';
 
 
 @Injectable({
@@ -29,7 +29,7 @@ export class UsersService {
     return this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
       .doc(this._angualrFireAuth.auth.currentUser.uid)
       .update({
-        profile_image: image
+        profileImage: image
       });
     // this._cloudService.uploadImage(ImageType.USER_PROFILE, imageData, {});
   }
@@ -37,10 +37,20 @@ export class UsersService {
   setUserInfo(userInfo: UserInfo) {
     return this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
       .doc(this._angualrFireAuth.auth.currentUser.uid)
-      .update({
+      .set({
         name: userInfo.name,
         email: userInfo.email,
-        profile_image: "/assets/person.svg"
+        profileImage: "/assets/person.svg"
+      });
+  }
+
+  setUserInfoFromGooglePlus(userInfo: GooglePlusUserInfo) {
+    return this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
+      .doc(this._angualrFireAuth.auth.currentUser.uid)
+      .set({
+        name: userInfo.displayName,
+        email: userInfo.email,
+        profileImage: userInfo.photoURL
       });
   }
 }

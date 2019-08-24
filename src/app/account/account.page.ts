@@ -94,7 +94,7 @@ export class AccountPage implements OnInit, OnDestroy {
   }
 
   async confirmLogOut() {
-    let alert = await  this._alertController.create({
+    const alert = await  this._alertController.create({
       message: 'Are you sure you want to log out?',
       buttons: [
         {

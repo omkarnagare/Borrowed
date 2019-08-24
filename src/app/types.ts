@@ -10,9 +10,19 @@ export interface Item {
     lendeeEmail?: string;
 }
 
+export interface GooglePlusUserInfo {
+    uid?: string;
+    displayName: string;
+    email: string;
+    emailVerified?: boolean;
+    phoneNumber?: string;
+    photoURL: string;
+}
+
 export interface UserInfo {
     name: string;
     email: string;
+    profileImage?: string;
 }
 export interface LogInCredentials {
     email: string;
