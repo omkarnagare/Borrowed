@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { UsersService } from '../services/users.service';
 import { GetImageService } from '../services/get-image.service';
-import { ImageSourceType } from '../constants';
+import { ImageSourceType, BorrowedAppConstants } from '../constants';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 
@@ -14,10 +14,14 @@ import { AuthenticationService } from '../services/authentication.service';
   templateUrl: 'account.page.html',
   styleUrls: ['account.page.scss']
 })
-export class AccountPage implements OnInit {
+export class AccountPage implements OnInit, OnDestroy {
   storedUserProfile: Observable<any>;
   lentItems: Observable<Item[]>;
   urgentMissingItems: Observable<Item[]>;
+
+  lentItems$: Subscription;
+  urgentMissingItems$: Subscription;
+  storedUserProfile$: Subscription;
 
   constructor(
     private _usersService: UsersService,
@@ -26,14 +30,37 @@ export class AccountPage implements OnInit {
     private _actionSheetController: ActionSheetController,
     private _router: Router,
     private _authenticationService: AuthenticationService,
+    private _alertController: AlertController
   ) {
     this.storedUserProfile = _usersService.getUserProfile();
     this.lentItems = this._itemsService.getItems();
     this.urgentMissingItems = this._itemsService.getUrgentItems();
+
+    this.storedUserProfile$ = this.storedUserProfile.subscribe(data => {
+      console.log(data);
+    });
+    this.lentItems$ = this.lentItems.subscribe(data => {
+      console.log(data);
+    });
+    this.urgentMissingItems$ = this.urgentMissingItems.subscribe(data => {
+      console.log(data);
+    });
   }
 
   ngOnInit() {
 
+  }
+
+  ngOnDestroy() {
+    this.storedUserProfile$.unsubscribe();
+    this.lentItems$.unsubscribe();
+    this.urgentMissingItems$.unsubscribe();
+    this.storedUserProfile$ = null;
+    this.lentItems$ = null;
+    this.urgentMissingItems$ = null;
+    this.storedUserProfile = null;
+    this.lentItems = null;
+    this.urgentMissingItems = null;
   }
 
   async selectImageSource() {
@@ -66,11 +93,34 @@ export class AccountPage implements OnInit {
     await alert.present();
   }
 
+  async confirmLogOut() {
+    let alert = await  this._alertController.create({
+      message: 'Are you sure you want to log out?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel'
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.logOut();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   getProfileImage(sourceType: ImageSourceType) {
     this._getImageService.getImage(sourceType)
       .then((imageData) => {
         // console.log(imageData);
-        this._usersService.setUserProfileImage(imageData);
+        this._usersService.setUserProfileImage(imageData).then(data=> {
+          this._authenticationService.showToast(BorrowedAppConstants.USER_IMAGE_SUCCESS_MESSAGE);
+        }).catch(error => {
+          this._authenticationService.showToast(BorrowedAppConstants.ERROR_MESSAGE);
+        });
       },
         (error) => {
           console.log("error occurred while getting Profile Image: ", error);
@@ -79,8 +129,9 @@ export class AccountPage implements OnInit {
 
   logOut() {
     this._authenticationService.logOut().then(() => {
-      this._router.navigate(['']);
+      // this._router.navigate(['']);
       console.log("User logged out successfully");
+      window.location.reload();
     }).catch((error) => {
       console.log("Log Out Error :", error);
       this._authenticationService.showToast(error);

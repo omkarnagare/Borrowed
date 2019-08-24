@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { Observable, of } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { ToastController } from '@ionic/angular';
 @Injectable({
   providedIn: 'root'
 })
-export class ItemsService {
+export class ItemsService implements OnDestroy {
   collectionRef: AngularFirestoreCollection;
 
   constructor(
@@ -87,13 +87,16 @@ export class ItemsService {
       duration: 4000,
       position: "bottom",
       showCloseButton: true,
-      closeButtonText: "dismiss",
+      closeButtonText: "Dismiss",
       color: "primary",
-      translucent: true
     });
     toast.then((toastMessage) => {
       toastMessage.present();
     });
+  }
+
+  ngOnDestroy() {
+    this.collectionRef = null;
   }
 
 }

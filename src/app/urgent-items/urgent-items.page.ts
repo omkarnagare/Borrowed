@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
 
@@ -8,17 +8,18 @@ import { ItemsService } from '../services/items.service';
   templateUrl: 'urgent-items.page.html',
   styleUrls: ['urgent-items.page.scss']
 })
-export class UrgentItemsPage implements OnInit{
+export class UrgentItemsPage implements OnInit, OnDestroy{
 
   urgentLentItems: Observable<Item[]>;
+  urgentItems$: Subscription;
 
   constructor(
     private _itemsService: ItemsService
   ) {
     this.urgentLentItems = this._itemsService.getUrgentItems();
-    // this.urgentLentItems.subscribe((data) => {
-    //   console.log("urgent items: ", data);
-    // });
+    this.urgentItems$ = this.urgentLentItems.subscribe((data) => {
+      console.log("urgent items: ", data);
+    });
   }
 
   ngOnInit() {
@@ -26,7 +27,12 @@ export class UrgentItemsPage implements OnInit{
   }
 
   removeItem(id: string) {
-    this._itemsService.deleteItem(id);
+    this._itemsService.deleteItem(id).then(data => {
+      console.log("Item deleted successfully");
+    }).catch(error => {
+      console.error(error);
+      this._itemsService.showToast(error);
+    });
   }
 
   toggleUrgentStatus(id: string, lentItem: Item) {
@@ -39,6 +45,12 @@ export class UrgentItemsPage implements OnInit{
     }).catch((error) => {
       this._itemsService.showToast(error);
     });
+  }
+
+  ngOnDestroy() {
+    this.urgentItems$.unsubscribe();
+    this.urgentItems$ = null;
+    this.urgentLentItems = null;
   }
 
 }

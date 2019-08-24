@@ -1,8 +1,18 @@
 .profile-picture {
-    width: 200px;
-    height: 200px;
-    border: gray solid 3px;
-    margin: 10px auto;
+    padding: 5px; 
+    width:128px;
+    height:128px;
+    position: relative;
+}
+
+.camera-button {
+    z-index: 2; 
+    width: 36px; 
+    height: 36px; 
+    position: absolute; 
+    left: 65%; 
+    bottom: 10%; 
+    margin: auto;
 }
 
 .center-chip {

@@ -9,6 +9,11 @@ export interface Item {
     lendeeContact?: string;
     lendeeEmail?: string;
 }
+
+export interface UserInfo {
+    name: string;
+    email: string;
+}
 export interface LogInCredentials {
     email: string;
     password: string;

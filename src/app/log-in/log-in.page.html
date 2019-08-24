@@ -5,39 +5,92 @@
 </ion-header>
 
 <ion-content fullscreen>
-  <ion-card>
-    <ion-card-content>
-      <form [formGroup]="logInFormGroup">
-        <ion-item>
-          <ion-icon slot="start" name="person"></ion-icon>
-          <ion-input placeholder="Enter Email" formControlName="email" type="email"></ion-input>
-        </ion-item>
-
-        <div *ngFor="let validation of validationMessages.email" class="validation-errors">
-          <ion-item class="error-message" *ngIf="isError('email', validation.type)">
-            <ion-icon name="alert"></ion-icon>
-            <ion-label>{{ validation.message }}</ion-label>
+  <form [formGroup]="userInfoFormGroup">
+    <ion-card>
+      <ion-card-content>
+        <div *ngIf="isSigningUp">
+          <ion-item>
+            <ion-icon slot="start" name="person"></ion-icon>
+            <ion-input placeholder="Enter Full Name" formControlName="name" type="text"></ion-input>
           </ion-item>
+
+          <div *ngFor="let validation of validationMessages.name" class="validation-errors">
+            <ion-item class="error-message" *ngIf="isError('name', validation.type)">
+              <ion-icon name="alert"></ion-icon>
+              <ion-label>{{ validation.message }}</ion-label>
+            </ion-item>
+          </div>
+        </div>
+        <div>
+          <ion-item>
+            <ion-icon slot="start" name="mail"></ion-icon>
+            <ion-input placeholder="Enter Email" formControlName="email" type="email"></ion-input>
+          </ion-item>
+
+          <div *ngFor="let validation of validationMessages.email" class="validation-errors">
+            <ion-item class="error-message" *ngIf="isError('email', validation.type)">
+              <ion-icon name="alert"></ion-icon>
+              <ion-label>{{ validation.message }}</ion-label>
+            </ion-item>
+          </div>
+        </div>
+        <div>
+          <ion-item>
+            <ion-icon slot="start" name="lock"></ion-icon>
+            <ion-input placeholder="Enter Password" formControlName="password"
+              [type]="showPassword ? 'text' : 'password'"></ion-input>
+            <ion-icon *ngIf="showPassword" name="eye-off" (click)="togglePasswordVisibility()"></ion-icon>
+            <ion-icon *ngIf="!showPassword" name="eye" (click)="togglePasswordVisibility()"></ion-icon>
+          </ion-item>
+
+          <div *ngFor="let validation of validationMessages.password" class="validation-errors">
+            <ion-item class="error-message" *ngIf="isError('password', validation.type)">
+              <ion-icon name="alert"></ion-icon>
+              <ion-label>{{ validation.message }}</ion-label>
+            </ion-item>
+          </div>
         </div>
 
-        <ion-item>
-          <ion-icon slot="start" name="unlock"></ion-icon>
-          <ion-input placeholder="Enter Password" formControlName="password" type="password"></ion-input>
-        </ion-item>
-
-        <div *ngFor="let validation of validationMessages.password" class="validation-errors">
-          <ion-item class="error-message" *ngIf="isError('password', validation.type)">
-            <ion-icon name="alert"></ion-icon>
-            <ion-label>{{ validation.message }}</ion-label>
+        <div *ngIf="isSigningUp">
+          <ion-item>
+            <ion-icon slot="start" name="lock"></ion-icon>
+            <ion-input placeholder="Confirm Password" formControlName="confirmPassword" type="password"></ion-input>
           </ion-item>
+
+          <div *ngFor="let validation of validationMessages.confirmPassword" class="validation-errors">
+            <ion-item class="error-message" *ngIf="isError('confirmPassword', validation.type)">
+              <ion-icon name="alert"></ion-icon>
+              <ion-label>{{ validation.message }}</ion-label>
+            </ion-item>
+          </div>
         </div>
 
-        <ion-button (click)="logIn()" [disabled]="logInFormGroup.invalid" margin-top expand="full">
-          LogIn</ion-button>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <ion-button (click)="signUp()" class="expand-button">
+                Sign Up</ion-button>
+            </ion-col>
+            <ion-col size="6">
+              <ion-button (click)="logInWithEmailAndPassword()" class="expand-button">
+                LogIn</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
 
-        <ion-button (click)="signUp()" [disabled]="logInFormGroup.invalid" margin-top expand="full">
-          Sign Up</ion-button>
-      </form>
-    </ion-card-content>
-  </ion-card>
+    <ion-card class="text-center">
+      <ion-card-header>
+        <p>OR</p>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-button class="facebook expand-button" (click)="logInWithFacebook()">
+          Log In With Facebook</ion-button>
+        <ion-button class="google expand-button" (click)="logInWithGoogle()">
+          Log In With Google</ion-button>
+
+      </ion-card-content>
+    </ion-card>
+  </form>
 </ion-content>

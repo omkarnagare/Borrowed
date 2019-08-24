@@ -17,6 +17,7 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
   backButtonSubscription$: Subscription;
 
   lentItems: Observable<Item[]>;
+  lentItems$: Subscription;
 
   searchFromGroup: FormGroup;
   searching: boolean;
@@ -58,6 +59,9 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.backButtonSubscription$.unsubscribe();
+    this.lentItems$.unsubscribe();
+    this.lentItems$ = null;
+    this.lentItems = null;
   }
 
   setFilteredItems(searchTerm: string) {
@@ -69,6 +73,9 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
         });
       })
     );
+    this.lentItems$ = this.lentItems.subscribe(data => {
+      console.log(data);
+    });
   }
 
   onSearchInput() {
@@ -76,7 +83,12 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   removeItem(id: string) {
-    this._itemsService.deleteItem(id);
+    this._itemsService.deleteItem(id).then(data => {
+      console.log("Item deleted successfully");
+    }).catch(error => {
+      console.error(error);
+      this._itemsService.showToast(error);
+    });
   }
 
   toggleUrgentStatus(id: string, lentItem: Item) {

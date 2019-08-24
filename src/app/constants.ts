@@ -16,7 +16,11 @@ export class BorrowedAppConstants {
     public static APP_THEME = "borrowed-theme";
 
     public static BASE64_IMAGE_PREFIX_DATA = "data:image/jpeg;base64,";
-    public static DEVICE_OFFLINE_MESSAGE = "Your device seems to be Offline. Borrowed may not work correctly. App will exit now.";
+    public static USER_IMAGE_SUCCESS_MESSAGE = "Profile Image set successfully.";
+    public static DEVICE_OFFLINE_MESSAGE = "Your device seems to be Offline. Borrowed may not work correctly. The app will exit now.";
+    public static ERROR_MESSAGE = "Some Error Occurred. Please try again.";
+    public static INVALID_FIELDS_MESSAGE = "Please fill all the fields with appropriate values.";
+    public static PASSWORD_MISSMATCH_MESSAGE = "Passwords did not match. Please try again.";
 
     // themes
     public static THEMES = {

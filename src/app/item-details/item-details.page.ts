@@ -17,7 +17,7 @@ export class ItemDetailsPage implements OnDestroy {
 
   parentURL: string;
 
-  itemDetailsSubscription: Subscription;
+  itemDetails$: Subscription;
 
   constructor(
     private _itemService: ItemsService,
@@ -31,7 +31,7 @@ export class ItemDetailsPage implements OnDestroy {
       isUrgent: false
     }
     this.itemId = activatedRoute.snapshot.params["itemId"];
-    this.itemDetailsSubscription = this._itemService.getItem(this.itemId)
+    this.itemDetails$ = this._itemService.getItem(this.itemId)
       .subscribe((item) => {
         console.log("item details", item);
         if (item) {
@@ -80,8 +80,8 @@ export class ItemDetailsPage implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.itemDetailsSubscription.unsubscribe();
-    this.itemDetailsSubscription = null;
+    this.itemDetails$.unsubscribe();
+    this.itemDetails$ = null;
   }
 
 }

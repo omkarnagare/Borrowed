@@ -15,7 +15,7 @@ export class AuthenticationService {
     private _toastController: ToastController
   ) { }
 
-  logIn(credentials: LogInCredentials): Promise<any> {
+  logInWithEmailAndPassword(credentials: LogInCredentials): Promise<any> {
     return this._angularFireAuth.auth.signInWithEmailAndPassword(
       credentials.email,
       credentials.password
@@ -48,8 +48,7 @@ export class AuthenticationService {
       position: "bottom",
       showCloseButton: true,
       closeButtonText: "dismiss",
-      color: "primary",
-      translucent: true
+      color: "primary"
     });
     toast.then((toastMessage) => {
       toastMessage.present();
