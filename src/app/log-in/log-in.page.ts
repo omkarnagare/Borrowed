@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { LogInCredentials, UserInfo, GooglePlusUserInfo } from '../types';
+import { LogInCredentials, UserInfo, SocialUserInfo } from '../types';
 import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
 import { Platform, AlertController } from '@ionic/angular';
@@ -113,17 +113,28 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
     this.userInfoFormGroup.removeControl('confirmPassword');
   }
 
+  handleError(error: any) {
+    console.error(error);
+    this._authenticationService.stopLoader();
+    this._authenticationService.showToast(error);
+  }
+
+  handleSuccess(response: any) {
+    console.log(response);
+    this._authenticationService.stopLoader();
+    this._router.navigate(["/tabs"]);
+  }
+
   logInWithEmailAndPassword() {
     if (this.userState === UserState.LOG_IN) {
       if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
+        this._authenticationService.presentLoader();
         const credentials: LogInCredentials = this.userInfoFormGroup.value;
         this._authenticationService.logInWithEmailAndPassword(credentials)
           .then((authData) => {
-            // console.log(authData);
-            this._router.navigate(["/tabs"]);
+            this.handleSuccess(authData);
           }).catch((authDataError) => {
-            console.log("Auth Error :", authDataError)
-            this._authenticationService.showToast(authDataError);
+            this.handleError(authDataError);
           });
       } else {
         this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
@@ -143,18 +154,18 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
           return;
         }
 
+        this._authenticationService.presentLoader();
         const credentials: LogInCredentials = this.userInfoFormGroup.value;
         const userInfo: UserInfo = this.userInfoFormGroup.value;
         this._authenticationService.signUp(credentials)
           .then((authData) => {
             this._userService.setUserInfo(userInfo).then(response => {
-              this._router.navigate(["/tabs"]);
+              this.handleSuccess(response);
             }).catch(error => {
-              this._authenticationService.showToast(error);
+              this.handleError(error);
             });
           }).catch((authDataError) => {
-            console.log("Auth Error :", authDataError);
-            this._authenticationService.showToast(authDataError);
+            this.handleError(authDataError);
           });
       } else {
         this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
@@ -168,11 +179,15 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   forgotPassword() {
     if (this.userState === UserState.FORGOT_PASSWORD) {
       if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
+
+        this._authenticationService.presentLoader();
         this._authenticationService.resetPassword(this.userInfoFormGroup.get('email').value)
         .then(response => {
+          console.log(response);
+          this._authenticationService.stopLoader();
           this.showAlertForResetPassword();
         }).catch(error => {
-          this._authenticationService.showToast(error);
+          this.handleError(error);
         });
       } else {
         this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
@@ -197,35 +212,44 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   logInWithFacebook() {
-
-  }
-
-  logInWithGoogle() {
-    this._authenticationService.logInWithGooglePlus().then(response => {
+    this._authenticationService.logInWithFacebook().then(response => {
       console.log(response);
-      this._authenticationService.getAuth().onAuthStateChanged(user => {
-        if (user) {
-          const userInfo: GooglePlusUserInfo = {
-            // uid: user.uid,
-            displayName: user.displayName,
-            email: user.email,
-            // emailVerified: user.emailVerified,
-            // phoneNumber: user.phoneNumber,
-            photoURL: user.photoURL
-          };
-          this._userService.setUserInfoFromGooglePlus(userInfo).then(response => {
-            this._router.navigate(["/tabs"]);
-          }).catch(error => {
-            this._authenticationService.showToast(error);
-          }).finally(()=> {
-            this._authenticationService.stopLoader();
-          });
-        }
-      });
+      this.setUserInfoInFirebase();
     }).catch(error => {
-      console.error(error);
-      this._authenticationService.showToast(error);
+      this.handleError(error);
     });
   }
+
+  logInWithGooglePlus() {
+    this._authenticationService.logInWithGooglePlus().then(response => {
+      console.log(response);
+      this.setUserInfoInFirebase();
+    }).catch(error => {
+      this.handleError(error);
+    });
+  }
+
+  setUserInfoInFirebase(){
+    this._authenticationService.getAuth().onAuthStateChanged(user => {
+      if (user) {
+        const userInfo: SocialUserInfo = {
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          emailVerified: user.emailVerified,
+          phoneNumber: user.phoneNumber,
+          photoURL: user.photoURL
+        };
+        this._userService.setUserInfoFromGooglePlus(userInfo).then(response => {
+          this._router.navigate(["/tabs"]);
+        }).catch(error => {
+          this._authenticationService.showToast(error);
+        }).finally(()=> {
+          this._authenticationService.stopLoader();
+        });
+      }
+    });
+  }
+
 
 }

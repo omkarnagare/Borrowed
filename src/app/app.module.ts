@@ -21,6 +21,7 @@ import { Network } from '@ionic-native/network/ngx';
 import { Contacts } from '@ionic-native/contacts/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
+import { Facebook } from '@ionic-native/facebook/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -43,6 +44,7 @@ import { AppComponent } from './app.component';
     AppRoutingModule],
   providers: [
     GooglePlus,
+    Facebook,
     AppVersion,
     Contacts,
     Network,

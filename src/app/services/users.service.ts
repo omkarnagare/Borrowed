@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { BorrowedAppConstants, ImageType } from '../constants';
 import { Observable } from 'rxjs';
 import { CloudFilesStorageService } from './cloud-files-storage.service';
-import { UserInfo, GooglePlusUserInfo } from '../types';
+import { UserInfo, SocialUserInfo } from '../types';
 
 
 @Injectable({
@@ -44,7 +44,7 @@ export class UsersService {
       });
   }
 
-  setUserInfoFromGooglePlus(userInfo: GooglePlusUserInfo) {
+  setUserInfoFromGooglePlus(userInfo: SocialUserInfo) {
     return this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
       .doc(this._angualrFireAuth.auth.currentUser.uid)
       .set({

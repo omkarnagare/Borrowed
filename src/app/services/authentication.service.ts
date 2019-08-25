@@ -1,22 +1,24 @@
 import { Injectable, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { LogInCredentials, GooglePlusUserInfo } from '../types';
+import { LogInCredentials, SocialUserInfo } from '../types';
 import { Observable } from 'rxjs';
 import { User, auth } from 'firebase/app';
 import { ToastController, LoadingController, Platform } from '@ionic/angular';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { environment } from 'src/environments/environment';
 import * as firebase from 'firebase';
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  loader: any;
+  loader: any = null;
 
   constructor(
     private _angularFireAuth: AngularFireAuth,
     private _googlePlus: GooglePlus,
+    private _facebook: Facebook,
     private _toastController: ToastController,
     private _platform: Platform,
     private _loadingController: LoadingController
@@ -27,14 +29,35 @@ export class AuthenticationService {
   }
 
   async presentLoader() {
-    this.loader = await this._loadingController.create({
-      message: 'Connecting to the Network ...'
-    });
-    await this.loader.present();
+    if (!this.loader) {
+      this.loader = await this._loadingController.create({
+        message: 'Processing your request ...'
+      });
+      await this.loader.present();
+    }
   }
 
   async stopLoader() {
-    await this.loader.dismiss();
+    if (this.loader) {
+      await this.loader.dismiss();
+      this.loader = null;
+    }
+  }
+
+  async logInWithFacebook() {
+    this.presentLoader();
+    return this._facebook.login(['email'])
+      .then((response: FacebookLoginResponse) => {
+        this.onLoginSuccessForFacebook(response);
+        console.log(response.authResponse.accessToken);
+      }).catch((error) => {
+        this.onLoginError(error);
+      });
+  }
+
+  onLoginSuccessForFacebook(response: any) {
+    const credential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
+    return this._angularFireAuth.auth.signInWithCredential(credential);
   }
 
   async logInWithGooglePlus() {
@@ -48,8 +71,7 @@ export class AuthenticationService {
         const { idToken, accessToken } = response;
         this.onLoginSuccessWithGooglePlus(idToken, accessToken);
       }).catch((error) => {
-        this.onLoginErrorWithGooglePlus(error);
-        this.stopLoader();
+        this.onLoginError(error);
       });
   }
 
@@ -60,9 +82,10 @@ export class AuthenticationService {
     return this._angularFireAuth.auth.signInWithCredential(credential);
   }
 
-  onLoginErrorWithGooglePlus(error: any) {
+  onLoginError(error: any) {
     console.error(error)
     this.showToast(error);
+    this.stopLoader();
   }
 
   logInWithEmailAndPassword(credentials: LogInCredentials): Promise<any> {

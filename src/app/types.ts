@@ -10,7 +10,7 @@ export interface Item {
     lendeeEmail?: string;
 }
 
-export interface GooglePlusUserInfo {
+export interface SocialUserInfo {
     uid?: string;
     displayName: string;
     email: string;
