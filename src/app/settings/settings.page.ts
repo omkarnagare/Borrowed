@@ -5,6 +5,8 @@ import { SocialNetworksService } from '../services/social-networks.service';
 import { Router } from '@angular/router';
 import { BorrowedAppConstants } from '../constants';
 import { ThemingService } from '../services/theming.service';
+import { PlatformInfoService } from '../services/platform-info.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
@@ -13,31 +15,19 @@ import { ThemingService } from '../services/theming.service';
 })
 export class SettingsPage implements OnInit {
 
-  themes: any;
+  isMobilePlatform: boolean = false;
 
   constructor(
     private _socialNetworkService: SocialNetworksService,
     private _appInfoService: AppInfoService,
-    private _themingService: ThemingService
+    private _platformInfoService: PlatformInfoService,
+    private _authenticationService: AuthenticationService,
+    private _alertController: AlertController
   ) {
-
-    // this.themes = [];
-    const themes = [];
-    Object.keys(BorrowedAppConstants.THEMES).forEach(function (key) {
-      themes.push({
-        name: key,
-        color: BorrowedAppConstants.THEMES[key]["primary"]
-      });
-    });
-
-    this.themes = [...themes];
+    this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
   }
 
   ngOnInit() {
-  }
-
-  setTheme(name) {
-    this._themingService.setTheme(name);
   }
 
   share() {
@@ -47,6 +37,36 @@ export class SettingsPage implements OnInit {
       subject: this._appInfoService.getAppName() + ": v" + this._appInfoService.getAppVersion(),
       // file: "",
       url: "https://github.com/omkarnagare/Borrowed"
+    });
+  }
+
+  async confirmLogOut() {
+    const alert = await  this._alertController.create({
+      message: 'Are you sure you want to log out?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel'
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.logOut();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  logOut() {
+    this._authenticationService.logOut().then(() => {
+      // this._router.navigate(['']);
+      console.log("User logged out successfully");
+      window.location.reload();
+    }).catch((error) => {
+      console.log("Log Out Error :", error);
+      this._authenticationService.showToast(error);
     });
   }
 

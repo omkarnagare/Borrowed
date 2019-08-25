@@ -66,6 +66,21 @@ const routes: Routes = [
             path: '',
             loadChildren: () =>
               import('../settings/settings.module').then(m => m.SettingsPageModule)
+          },
+          {
+            path: 'privacy-policy',
+            loadChildren: () =>
+              import('../privacy-policy/privacy-policy.module').then(m => m.PrivacyPolicyPageModule)
+          },
+          {
+            path: 'terms-and-conditions',
+            loadChildren: () =>
+              import('../terms-and-conditions/terms-and-conditions.module').then(m => m.TermsAndConditionsPageModule)
+          },
+          {
+            path: 'theme-controller',
+            loadChildren: () =>
+              import('../theme-controller/theme-controller.module').then(m => m.ThemeControllerPageModule)
           }
         ]
       },

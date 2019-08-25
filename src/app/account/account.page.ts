@@ -27,10 +27,7 @@ export class AccountPage implements OnInit, OnDestroy {
     private _usersService: UsersService,
     private _getImageService: GetImageService,
     private _itemsService: ItemsService,
-    private _actionSheetController: ActionSheetController,
-    private _router: Router,
-    private _authenticationService: AuthenticationService,
-    private _alertController: AlertController
+    private _actionSheetController: ActionSheetController
   ) {
     this.storedUserProfile = _usersService.getUserProfile();
     this.lentItems = this._itemsService.getItems();
@@ -93,49 +90,19 @@ export class AccountPage implements OnInit, OnDestroy {
     await alert.present();
   }
 
-  async confirmLogOut() {
-    const alert = await  this._alertController.create({
-      message: 'Are you sure you want to log out?',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel'
-        },
-        {
-          text: 'Yes',
-          handler: () => {
-            this.logOut();
-          }
-        }
-      ]
-    });
-    await alert.present();
-  }
-
   getProfileImage(sourceType: ImageSourceType) {
     this._getImageService.getImage(sourceType)
       .then((imageData) => {
         // console.log(imageData);
         this._usersService.setUserProfileImage(imageData).then(data=> {
-          this._authenticationService.showToast(BorrowedAppConstants.USER_IMAGE_SUCCESS_MESSAGE);
+          this._itemsService.showToast(BorrowedAppConstants.USER_IMAGE_SUCCESS_MESSAGE);
         }).catch(error => {
-          this._authenticationService.showToast(BorrowedAppConstants.ERROR_MESSAGE);
+          this._itemsService.showToast(BorrowedAppConstants.ERROR_MESSAGE);
         });
       },
         (error) => {
           console.log("error occurred while getting Profile Image: ", error);
         });
-  }
-
-  logOut() {
-    this._authenticationService.logOut().then(() => {
-      // this._router.navigate(['']);
-      console.log("User logged out successfully");
-      window.location.reload();
-    }).catch((error) => {
-      console.log("Log Out Error :", error);
-      this._authenticationService.showToast(error);
-    });
   }
 
 }

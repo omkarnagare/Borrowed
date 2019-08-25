@@ -1,0 +1,16 @@
+.theme-circles {
+    height: 48px;
+    width: 48px;
+    box-shadow: 2px 4px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 8px;
+}
+
+.themes-container {
+    text-align: center;
+}
+
+.preview-theme > ion-item > ion-label {
+    text-align: center;
+}
