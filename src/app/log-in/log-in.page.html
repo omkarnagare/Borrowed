@@ -97,8 +97,12 @@
         <ion-button [disabled]="!enableSocialSignInMethods" class="facebook expand-button"
           (click)="logInWithFacebook()">
           Log In With Facebook</ion-button>
-        <ion-button [disabled]="!enableSocialSignInMethods" class="google expand-button" (click)="logInWithGooglePlus()">
+        <ion-button [disabled]="!enableSocialSignInMethods" class="google expand-button"
+          (click)="logInWithGooglePlus()">
           Log In With Google</ion-button>
+        <ion-button [disabled]="!enableSocialSignInMethods" class="twitter expand-button"
+          (click)="logInWithTwitter()">
+          Log In With Twitter</ion-button>
 
       </ion-card-content>
     </ion-card>

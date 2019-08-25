@@ -229,6 +229,15 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  logInWithTwitter() {
+    this._authenticationService.logInWithTwitter().then(response => {
+      console.log(response);
+      this.setUserInfoInFirebase();
+    }).catch(error => {
+      this.handleError(error);
+    });
+  }
+
   setUserInfoInFirebase(){
     this._authenticationService.getAuth().onAuthStateChanged(user => {
       if (user) {
@@ -250,6 +259,4 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
       }
     });
   }
-
-
 }

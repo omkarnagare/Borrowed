@@ -8,6 +8,7 @@ import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { environment } from 'src/environments/environment';
 import * as firebase from 'firebase';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
+import { TwitterConnect } from '@ionic-native/twitter-connect/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class AuthenticationService {
     private _angularFireAuth: AngularFireAuth,
     private _googlePlus: GooglePlus,
     private _facebook: Facebook,
+    private _twitter: TwitterConnect,
     private _toastController: ToastController,
     private _platform: Platform,
     private _loadingController: LoadingController
@@ -57,6 +59,22 @@ export class AuthenticationService {
 
   onLoginSuccessForFacebook(response: any) {
     const credential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
+    return this._angularFireAuth.auth.signInWithCredential(credential);
+  }
+
+  async logInWithTwitter() {
+    this.presentLoader();
+    return this._twitter.login()
+      .then((response) => {
+        this.onLoginSuccessWithTwitter(response);
+      }).catch((error) => {
+        this.onLoginError(error);
+      });
+  }
+
+  onLoginSuccessWithTwitter(response: any) {
+    const { token, secret } = response;
+    const credential = firebase.auth.TwitterAuthProvider.credential(token, secret);
     return this._angularFireAuth.auth.signInWithCredential(credential);
   }
 
