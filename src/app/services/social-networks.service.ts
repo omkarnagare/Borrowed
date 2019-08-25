@@ -29,7 +29,7 @@ export class SocialNetworksService {
   }
 
   sendEmail(attr: EmailAttributes) {
-    this._socialSharing.shareViaEmail(
+    return this._socialSharing.shareViaEmail(
       attr.message,
       attr.subject,
       attr.to,

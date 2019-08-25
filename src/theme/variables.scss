@@ -188,6 +188,10 @@
     background: var(--ion-color-primary);
   }
 
+  ion-textarea > textarea {
+    height: 150px;
+  }
+
   // .temp {
   //   primary : rgb(66, 5, 197);
   //   secondary : rgb(144, 30, 236);

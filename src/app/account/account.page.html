@@ -72,13 +72,13 @@
       <ion-item routerLink="/tabs/borrowed">
         <ion-label>Items Given</ion-label>
         <ion-badge color="success" slot="end">{{ (lentItems | async)?.length }}</ion-badge>
-        <ion-icon slot="end" name="arrow-dropright"></ion-icon>
+        <ion-icon slot="start" name="arrow-dropleft"></ion-icon>
       </ion-item>
 
       <ion-item routerLink="/tabs/urgent-items">
         <ion-label>Urgent Items</ion-label>
         <ion-badge color="danger" slot="end">{{ (urgentMissingItems | async)?.length }}</ion-badge>
-        <ion-icon slot="end" name="arrow-dropright"></ion-icon>
+        <ion-icon slot="start" name="arrow-dropleft"></ion-icon>
       </ion-item>
 
     </ion-card-content>

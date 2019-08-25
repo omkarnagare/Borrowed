@@ -81,6 +81,16 @@ const routes: Routes = [
             path: 'theme-controller',
             loadChildren: () =>
               import('../theme-controller/theme-controller.module').then(m => m.ThemeControllerPageModule)
+          },
+          {
+            path: 'contact-us',
+            loadChildren: () =>
+              import('../contact-us/contact-us.module').then(m => m.ContactUsPageModule)
+          },
+          {
+            path: 'about-dev',
+            loadChildren: () =>
+              import('../about-dev/about-dev.module').then(m => m.AboutDevPageModule)
           }
         ]
       },

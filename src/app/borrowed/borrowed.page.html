@@ -83,8 +83,8 @@
 
         <ion-item-options side="end" (click)="toggleUrgentStatus( lentItem.itemId, lentItem )">
           <ion-item-option color="success">
-            <ion-icon *ngIf="lentItem.isUrgent" name="star" slot="icon-only"></ion-icon>
-            <ion-icon *ngIf="!lentItem.isUrgent" name="star-outline" slot="icon-only"></ion-icon>
+            <ion-icon *ngIf="lentItem.isUrgent" name="heart" slot="icon-only"></ion-icon>
+            <ion-icon *ngIf="!lentItem.isUrgent" name="heart-empty" slot="icon-only"></ion-icon>
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>

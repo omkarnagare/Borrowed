@@ -12,8 +12,8 @@
         <ion-icon slot="icon-only" name="mail"></ion-icon>
       </ion-button>
       <ion-button (click)="toggleUrgentStatus()">
-        <ion-icon slot="icon-only" *ngIf="itemObject.isUrgent" name="star"></ion-icon>
-        <ion-icon slot="icon-only" *ngIf="!itemObject.isUrgent" name="star-outline"></ion-icon>
+        <ion-icon slot="icon-only" *ngIf="itemObject.isUrgent" name="heart"></ion-icon>
+        <ion-icon slot="icon-only" *ngIf="!itemObject.isUrgent" name="heart-empty"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -37,14 +37,6 @@
         <ion-skeleton-text animated></ion-skeleton-text>
       </ion-card-content>
     </ion-card>
-
-    <ion-card>
-      <ion-list lines="none">
-        <ion-item *ngFor="let x of [1]">
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-item>
-      </ion-list>
-    </ion-card>
   </div>
 
   <div *ngIf="itemObject.itemName">
@@ -53,7 +45,7 @@
     </ion-avatar> -->
 
     <ion-card>
-      <ion-img *ngIf="itemObject.itemImage" [src]="itemObject.itemImage"></ion-img>
+      <ion-img class="item-image" *ngIf="itemObject.itemImage" [src]="itemObject.itemImage"></ion-img>
       <ion-card-header *ngIf="itemObject.itemDescription">
         <ion-card-subtitle>{{ itemObject.itemDescription }}</ion-card-subtitle>
       </ion-card-header>
