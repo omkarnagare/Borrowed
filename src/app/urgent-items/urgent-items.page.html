@@ -23,7 +23,7 @@
       </ion-card-header>
       <ion-card-content>
         <h2>If you forgot to mark your items as urgent : </h2>
-        <p>Use "Star" icon present at the top in the item details or Click on "Star" icon which will be shown after
+        <p>Use "Heart" icon present at the top in the item details or Click on "Heart" icon which will be shown after
           left-sliding the item on the home page.</p>
       </ion-card-content>
     </ion-card>
@@ -50,7 +50,7 @@
                 <ion-col size="9" class="bold-heading">
                   <ion-label>
                     <h2 text-uppercase>{{ urgentLentItem.itemName }}</h2>
-                    <p> Lent to <b>{{ urgentLentItem.lendeeName }}</b> on <b>{{ urgentLentItem.borrowingDate  | date: 'dd-MMM' }}</b></p>
+                    <p> Lent to <b>{{ urgentLentItem.lendeeName }}</b> on <b>{{ urgentLentItem.borrowingDate  | date: 'dd MMM, yyyy' }}</b></p>
                   </ion-label>
                 </ion-col>
               </ion-row>

@@ -93,11 +93,11 @@
           <ion-toggle formControlName="isUrgent" checked="false"></ion-toggle>
         </ion-item>
         <ion-item>
-          <ion-textarea placeholder="more about the lent item ..." formControlName="itemDescription">
+          <ion-textarea placeholder="write something more about the item here" formControlName="itemDescription">
           </ion-textarea>
         </ion-item>
 
-        <ion-button (click)="addItem()" [disabled]="itemDetailsFormGroup.invalid" class="expand-button">
+        <ion-button (click)="addItem()" [disabled]="itemDetailsFormGroup.invalid" class="expand-button add-item-button">
           Add</ion-button>
         <!-- <ion-button (click)="closeModal()" class="expand-button">
           Cancel</ion-button> -->
