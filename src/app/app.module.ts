@@ -28,6 +28,7 @@ import { TwitterConnect } from '@ionic-native/twitter-connect/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DatePipe } from '@angular/common';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [AppComponent],
@@ -44,7 +45,8 @@ import { DatePipe } from '@angular/common';
       name: 'borrowedDB',
       driverOrder: ['indexeddb', 'sqlite', 'websql']
     }),
-    AppRoutingModule],
+    AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     GooglePlus,
     Facebook,
