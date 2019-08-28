@@ -124,10 +124,7 @@ export class ItemDetailsPage implements OnDestroy {
   }
 
   constructMessage(): string {
-    return "Hi " + this.itemObject.lendeeName + ",\
-    It's been a while that \
-    I have lent you \"" + this.itemObject.itemName + "\" on " + this._datePipe.transform(this.itemObject.borrowingDate, 'dd MMM yyyy') + ".\
-    Please try to return it as soon as possible.";
+    return "Hi " + this.itemObject.lendeeName + ", It's been a while that We have discussed about \"" + this.itemObject.itemName + "\". The borrowing date was " + this._datePipe.transform(this.itemObject.borrowingDate, 'dd MMM yyyy') + ". Please try to return it as soon as possible.";
   }
 
   ngOnDestroy() {

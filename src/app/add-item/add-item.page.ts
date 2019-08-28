@@ -135,14 +135,18 @@ export class AddItemPage implements OnInit {
     const itemObject: Item = { ... this.itemDetailsFormGroup.value };
     itemObject["itemImage"] = this.itemImage ? this.itemImage : "/assets/unknown-item.svg";
 
-    this._itemService
+    this._itemService.presentLoader().then(()=> {
+      this._itemService
       .addItem(itemObject)
       .then((result) => {
         this._itemService.showToast("Item " + itemObject.itemName + " added successfully.");
         this._router.navigate(["/"]);
       }).catch((error) => {
         this._itemService.showToast(error);
+      }).finally(() => {
+        this._itemService.stopLoader();
       });
+    });
   }
 
 }

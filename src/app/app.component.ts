@@ -4,6 +4,8 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { ThemingService } from './services/theming.service';
+import { AuthenticationService } from './services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +15,12 @@ import { ThemingService } from './services/theming.service';
 export class AppComponent {
 
   constructor(
+    private _themingService: ThemingService, // this is needed to set the theme via constructor
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private _themingService: ThemingService // this is needed to set the theme via constructor
+    private _authenticationService: AuthenticationService,
+    private _router: Router
   ) {
     this.initializeApp();
   }
@@ -28,6 +32,17 @@ export class AppComponent {
 
       // no need to check for internet connection as data persistence is enabled
       // this._networkService.initializeNetworkEvents();
+
+
+      // this._authenticationService.getAuth().onAuthStateChanged(user => {
+      //   if (user) {
+      //     this._router.navigate(["/tabs"]);
+      //   }
+      //   else {
+      //     this._router.navigate(["/log-in"]);
+      //   }
+      // })
+
     });
   }
 }

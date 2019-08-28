@@ -47,14 +47,16 @@ export class AuthenticationService {
   }
 
   async logInWithFacebook() {
-    this.presentLoader();
-    return this._facebook.login(['email'])
+    this.presentLoader().then(() => {
+      return this._facebook.login(['email'])
       .then((response: FacebookLoginResponse) => {
+        console.log(response);
         this.onLoginSuccessForFacebook(response);
         console.log(response.authResponse.accessToken);
       }).catch((error) => {
         this.onLoginError(error);
       });
+    });
   }
 
   onLoginSuccessForFacebook(response: any) {
@@ -63,13 +65,15 @@ export class AuthenticationService {
   }
 
   async logInWithTwitter() {
-    this.presentLoader();
-    return this._twitter.login()
+    this.presentLoader().then(() => {
+      return this._twitter.login()
       .then((response) => {
+        console.log(response);
         this.onLoginSuccessWithTwitter(response);
       }).catch((error) => {
         this.onLoginError(error);
       });
+    });
   }
 
   onLoginSuccessWithTwitter(response: any) {
@@ -79,18 +83,20 @@ export class AuthenticationService {
   }
 
   async logInWithGooglePlus() {
-    this.presentLoader();
     let params = {};
     if (this._platform.is('android')) {
       params = environment.googlePlusConfig;
     }
-    return this._googlePlus.login(params)
+    this.presentLoader().then(() => {
+      return this._googlePlus.login(params)
       .then((response) => {
+        console.log(response);
         const { idToken, accessToken } = response;
         this.onLoginSuccessWithGooglePlus(idToken, accessToken);
       }).catch((error) => {
         this.onLoginError(error);
       });
+    });
   }
 
   onLoginSuccessWithGooglePlus(accessToken: string, accessSecret: string) {

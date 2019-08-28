@@ -106,7 +106,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
     this.userInfoFormGroup.updateValueAndValidity();
   }
 
-  removeAllControls(){
+  removeAllControls() {
     this.userInfoFormGroup.removeControl('name');
     this.userInfoFormGroup.removeControl('email');
     this.userInfoFormGroup.removeControl('password');
@@ -128,14 +128,15 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   logInWithEmailAndPassword() {
     if (this.userState === UserState.LOG_IN) {
       if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
-        this._authenticationService.presentLoader();
-        const credentials: LogInCredentials = this.userInfoFormGroup.value;
-        this._authenticationService.logInWithEmailAndPassword(credentials)
-          .then((authData) => {
-            this.handleSuccess(authData);
-          }).catch((authDataError) => {
-            this.handleError(authDataError);
-          });
+        this._authenticationService.presentLoader().then(() => {
+          const credentials: LogInCredentials = this.userInfoFormGroup.value;
+          this._authenticationService.logInWithEmailAndPassword(credentials)
+            .then((authData) => {
+              this.handleSuccess(authData);
+            }).catch((authDataError) => {
+              this.handleError(authDataError);
+            });
+        });
       } else {
         this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
       }
@@ -154,19 +155,20 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
           return;
         }
 
-        this._authenticationService.presentLoader();
-        const credentials: LogInCredentials = this.userInfoFormGroup.value;
-        const userInfo: UserInfo = this.userInfoFormGroup.value;
-        this._authenticationService.signUp(credentials)
-          .then((authData) => {
-            this._userService.setUserInfo(userInfo).then(response => {
-              this.handleSuccess(response);
-            }).catch(error => {
-              this.handleError(error);
+        this._authenticationService.presentLoader().then(() => {
+          const credentials: LogInCredentials = this.userInfoFormGroup.value;
+          const userInfo: UserInfo = this.userInfoFormGroup.value;
+          this._authenticationService.signUp(credentials)
+            .then((authData) => {
+              this._userService.setUserInfo(userInfo).then(response => {
+                this.handleSuccess(response);
+              }).catch(error => {
+                this.handleError(error);
+              });
+            }).catch((authDataError) => {
+              this.handleError(authDataError);
             });
-          }).catch((authDataError) => {
-            this.handleError(authDataError);
-          });
+        });
       } else {
         this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
       }
@@ -180,14 +182,15 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
     if (this.userState === UserState.FORGOT_PASSWORD) {
       if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
 
-        this._authenticationService.presentLoader();
-        this._authenticationService.resetPassword(this.userInfoFormGroup.get('email').value)
-        .then(response => {
-          console.log(response);
-          this._authenticationService.stopLoader();
-          this.showAlertForResetPassword();
-        }).catch(error => {
-          this.handleError(error);
+        this._authenticationService.presentLoader().then(() => {
+          this._authenticationService.resetPassword(this.userInfoFormGroup.get('email').value)
+            .then(response => {
+              console.log(response);
+              this._authenticationService.stopLoader();
+              this.showAlertForResetPassword();
+            }).catch(error => {
+              this.handleError(error);
+            });
         });
       } else {
         this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
@@ -199,7 +202,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async showAlertForResetPassword() {
-    const alert = await  this._alertController.create({
+    const alert = await this._alertController.create({
       message: 'Please check your email inbox for a password reset link',
       buttons: [
         {
@@ -238,7 +241,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  setUserInfoInFirebase(){
+  setUserInfoInFirebase() {
     this._authenticationService.getAuth().onAuthStateChanged(user => {
       if (user) {
         const userInfo: SocialUserInfo = {
@@ -253,7 +256,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
           this._router.navigate(["/tabs"]);
         }).catch(error => {
           this._authenticationService.showToast(error);
-        }).finally(()=> {
+        }).finally(() => {
           this._authenticationService.stopLoader();
         });
       }
