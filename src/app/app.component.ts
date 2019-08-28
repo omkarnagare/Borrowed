@@ -34,14 +34,14 @@ export class AppComponent {
       // this._networkService.initializeNetworkEvents();
 
 
-      // this._authenticationService.getAuth().onAuthStateChanged(user => {
-      //   if (user) {
-      //     this._router.navigate(["/tabs"]);
-      //   }
-      //   else {
-      //     this._router.navigate(["/log-in"]);
-      //   }
-      // })
+      this._authenticationService.getAuth().onAuthStateChanged(user => {
+        if (user) {
+          this._router.navigate(["/tabs"]);
+        }
+        else {
+          this._router.navigate(["/log-in"]);
+        }
+      })
 
     });
   }
