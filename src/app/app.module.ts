@@ -27,6 +27,7 @@ import { TwitterConnect } from '@ionic-native/twitter-connect/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [AppComponent],
@@ -53,6 +54,7 @@ import { AppComponent } from './app.component';
     Network,
     SocialSharing,
     Camera,
+    DatePipe,
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }

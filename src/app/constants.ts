@@ -13,8 +13,10 @@ export class BorrowedAppConstants {
 
     //sqlite storage keys
     public static DEFAULT_APP_THEME ="purple";
-    public static APP_THEME = "borrowed-theme";
+    public static APP_THEME = "settings.borrowedTheme";
+    public static VIEW_TRANSACTION_COMPLETE_ITEMS = "settings.canViewTransactionCompleteItems";
 
+    // general constants
     public static BASE64_IMAGE_PREFIX_DATA = "data:image/jpeg;base64,";
     public static USER_IMAGE_SUCCESS_MESSAGE = "Profile Image set successfully.";
     public static DEVICE_OFFLINE_MESSAGE = "Your device seems to be Offline. Borrowed may not work correctly. The app will exit now.";

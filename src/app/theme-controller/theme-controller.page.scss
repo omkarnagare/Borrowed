@@ -1,8 +1,9 @@
 .theme-circles {
     height: 48px;
     width: 48px;
-    box-shadow: 2px 4px;
-    border-radius: 50%;
+    box-shadow: 2px 2px;
+    border-radius: 4px;
+    // border-radius: 50%; // to make it circle
     display: inline-block;
     margin: 8px;
 }

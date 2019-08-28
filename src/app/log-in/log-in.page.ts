@@ -22,7 +22,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   validationMessages: any;
 
   showPassword: boolean = false;
-  userState: UserState = UserState.LOG_IN;
+  userState: UserState;
   enableSocialSignInMethods: boolean = false;
 
   constructor(
@@ -37,8 +37,10 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.enableSocialSignInMethods = this._platformInfoService.isMobilePlatform()
     this.userInfoFormGroup = formBuilder.group({
+      name: ["", [Validators.required, Validators.pattern("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")]],
       email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required, Validators.minLength(6)]]
+      password: ["", [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ["", [Validators.required, Validators.minLength(6)]]
     });
 
     this.validationMessages = {
@@ -70,8 +72,6 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    // TODO: remove test email
-    this.userInfoFormGroup.get('email').setValue("omkar.nagare@borrowed.com");
   }
 
   ngAfterViewInit() {

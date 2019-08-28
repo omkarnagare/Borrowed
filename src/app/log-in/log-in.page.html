@@ -8,7 +8,7 @@
   <form [formGroup]="userInfoFormGroup">
     <ion-card>
       <ion-card-content>
-        <div *ngIf="userState === 301">
+        <div *ngIf="userState && userState === 301">
           <ion-item>
             <ion-icon slot="start" name="person"></ion-icon>
             <ion-input placeholder="Enter Full Name" formControlName="name" type="text"></ion-input>
@@ -21,7 +21,7 @@
             </ion-item>
           </div>
         </div>
-        <div>
+        <div *ngIf="userState">
           <ion-item>
             <ion-icon slot="start" name="mail"></ion-icon>
             <ion-input placeholder="Enter Email" formControlName="email" type="email"></ion-input>
@@ -34,7 +34,7 @@
             </ion-item>
           </div>
         </div>
-        <div *ngIf="userState !== 302">
+        <div *ngIf="userState && userState !== 302">
           <ion-item>
             <ion-icon slot="start" name="lock"></ion-icon>
             <ion-input placeholder="Enter Password" formControlName="password"
@@ -51,7 +51,7 @@
           </div>
         </div>
 
-        <div *ngIf="userState === 301">
+        <div *ngIf="userState && userState === 301">
           <ion-item>
             <ion-icon slot="start" name="lock"></ion-icon>
             <ion-input placeholder="Confirm Password" formControlName="confirmPassword" type="password"></ion-input>
@@ -66,26 +66,33 @@
         </div>
 
         <ion-grid>
-          <ion-row *ngIf="userState === 302">
+          <ion-row *ngIf="userState && userState === 300">
+            <ion-col size="12">
+              <ion-button (click)="logInWithEmailAndPassword()" class="expand-button">
+                Log In</ion-button>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="!userState || userState === 301">
+            <ion-col size="12">
+              <ion-button (click)="signUp()" class="expand-button">
+                Sign Up</ion-button>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="userState && userState === 302">
             <ion-col size="12">
               <ion-button (click)="forgotPassword()" class="expand-button">
                 Reset Password</ion-button>
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="6">
-              <ion-button (click)="signUp()" class="expand-button">
-                Sign Up</ion-button>
-            </ion-col>
-            <ion-col size="6">
-              <ion-button (click)="logInWithEmailAndPassword()" class="expand-button">
-                LogIn</ion-button>
+            <ion-col size="12" class="account-actions">
+              <p *ngIf="userState !== 300">Already have an account? <a (click)="logInWithEmailAndPassword()">Login
+                  here</a>.</p>
+              <p *ngIf="userState && userState !== 301">New User? <a (click)="signUp()">Sign Up today</a>.</p>
+              <p *ngIf="userState !== 302">Forgot Password? <a (click)="forgotPassword()">Reset it here</a>.</p>
             </ion-col>
           </ion-row>
         </ion-grid>
-        <ion-item *ngIf="userState !== 302">
-          <ion-note (click)="forgotPassword()" slot="end" color="primary">Forgot Password</ion-note>
-        </ion-item>
       </ion-card-content>
     </ion-card>
 
@@ -96,14 +103,28 @@
       <ion-card-content>
         <ion-button [disabled]="!enableSocialSignInMethods" class="facebook expand-button"
           (click)="logInWithFacebook()">
-          Log In With Facebook</ion-button>
+          <ion-icon slot="start" name="logo-facebook"></ion-icon>
+          Log In With Facebook
+        </ion-button>
         <ion-button [disabled]="!enableSocialSignInMethods" class="google expand-button"
           (click)="logInWithGooglePlus()">
-          Log In With Google</ion-button>
-        <ion-button [disabled]="!enableSocialSignInMethods" class="twitter expand-button"
-          (click)="logInWithTwitter()">
-          Log In With Twitter</ion-button>
+          <ion-icon slot="start" name="logo-google"></ion-icon>
+          Log In With Google
+        </ion-button>
+        <ion-button [disabled]="!enableSocialSignInMethods" class="twitter expand-button" (click)="logInWithTwitter()">
+          <ion-icon slot="start" name="logo-twitter"></ion-icon>
+          Log In With Twitter
+        </ion-button>
 
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="text-center">
+      <ion-card-content>
+        <ion-note> By Signing Up or Logging In, you agree to our <a
+            href="https://www.dropbox.com/s/x2lsmlnfiouzqol/borrowed_terms_and_conditions.md?dl=0" target="_blank">Terms
+            & Conditions</a> and <a href="https://www.dropbox.com/s/20l3opvfo47naeg/borrowed_privacy_policy.md?dl=0"
+            target="_blank"> Privacy Policy</a> </ion-note>
       </ion-card-content>
     </ion-card>
   </form>

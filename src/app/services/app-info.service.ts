@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { BorrowedAppConstants } from '../constants';
+import { PlatformInfoService } from './platform-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,12 @@ export class AppInfoService {
   versionCode: string;
 
   constructor(
-    private _appVersion: AppVersion
+    private _appVersion: AppVersion,
+    private _platformInfoService: PlatformInfoService
   ) { 
-    //TODO: uncomment in production
-    // this.getAppInfo();
+    if (this._platformInfoService.isMobilePlatform()) {
+      this.getAppInfo();
+    }
   }
 
   getAppInfo() {

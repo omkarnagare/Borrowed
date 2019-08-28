@@ -136,10 +136,10 @@ export class AuthenticationService {
     return this._angularFireAuth.auth;
   }
 
-  showToast(message: any) {
+  showToast(message: any, duration = 2000) {
     const toast = this._toastController.create({
       message: message,
-      duration: 4000,
+      duration: duration,
       position: "bottom",
       showCloseButton: true,
       closeButtonText: "dismiss",

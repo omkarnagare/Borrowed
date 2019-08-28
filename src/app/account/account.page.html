@@ -65,20 +65,20 @@
       </div>
 
       <ion-item *ngIf="(storedUserProfile | async)?.email as email">
-        <ion-icon slot="start" name="mail"></ion-icon>
-        <ion-label>{{ email }}</ion-label>
+        <ion-chip>
+            <ion-icon name="mail"></ion-icon>
+            <ion-label>{{ email }}</ion-label>
+          </ion-chip>
       </ion-item>
 
       <ion-item routerLink="/tabs/borrowed">
-        <ion-label>Items Given</ion-label>
+        <ion-label><ion-icon name="arrow-dropleft"></ion-icon> Items Logged</ion-label>
         <ion-badge color="success" slot="end">{{ (lentItems | async)?.length }}</ion-badge>
-        <ion-icon slot="start" name="arrow-dropleft"></ion-icon>
       </ion-item>
 
       <ion-item routerLink="/tabs/urgent-items">
-        <ion-label>Urgent Items</ion-label>
+        <ion-label><ion-icon name="arrow-dropleft"></ion-icon> Urgent Items</ion-label>
         <ion-badge color="danger" slot="end">{{ (urgentMissingItems | async)?.length }}</ion-badge>
-        <ion-icon slot="start" name="arrow-dropleft"></ion-icon>
       </ion-item>
 
     </ion-card-content>

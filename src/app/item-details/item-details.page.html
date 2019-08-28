@@ -5,14 +5,9 @@
     </ion-buttons>
     <ion-title> {{ itemObject.itemName }} </ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="itemObject.lendeeContact" (click)="sendNotificationOnWhatsapp()">
-        <ion-icon slot="icon-only" name="logo-whatsapp"></ion-icon>
-      </ion-button>
-      <ion-button *ngIf="itemObject.lendeeEmail" (click)="sendNotificationOnEmail()">
-        <ion-icon slot="icon-only" name="mail"></ion-icon>
-      </ion-button>
-      <ion-button (click)="toggleUrgentStatus()">
-        <ion-icon slot="icon-only" *ngIf="itemObject.isUrgent" name="heart"></ion-icon>
+      <ion-button [disabled]="!itemObject.isActive" (click)="toggleUrgentStatus()">
+        <ion-icon slot="icon-only" style="color: var(--ion-color-tertiary)" *ngIf="itemObject.isUrgent" name="heart">
+        </ion-icon>
         <ion-icon slot="icon-only" *ngIf="!itemObject.isUrgent" name="heart-empty"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -25,9 +20,6 @@
     <ion-card>
       <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
       <ion-card-header>
-        <!-- <ion-card-subtitle>
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-card-subtitle> -->
         <ion-card-title>
           <ion-skeleton-text animated></ion-skeleton-text>
         </ion-card-title>
@@ -39,11 +31,7 @@
     </ion-card>
   </div>
 
-  <div *ngIf="itemObject.itemName">
-    <!-- <ion-avatar class="item-image" *ngIf="itemObject.itemImage">
-      <ion-img [src]="itemObject.itemImage" class="item-image"></ion-img>
-    </ion-avatar> -->
-
+  <div *ngIf="itemObject.itemName" [style.opacity]="itemObject.isActive ? 1 : 0.5">
     <ion-card>
       <ion-img class="item-image" *ngIf="itemObject.itemImage" [src]="itemObject.itemImage"></ion-img>
       <ion-card-header *ngIf="itemObject.itemDescription">
@@ -66,6 +54,31 @@
           <ion-icon name="mail"></ion-icon>
           <ion-label>{{ itemObject.lendeeEmail }}</ion-label>
         </ion-chip>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="isMobilePlatform && itemObject.isActive">
+      <ion-card-content class="social-icon-container">
+        <p>Everyone is busy nowdays.</p>
+        <p>Remind {{ itemObject.lendeeName }} about {{ itemObject.itemName }} with</p>
+        <a (click)="sendReminderOnWhatsapp()">
+          <ion-icon style="color:#25D366" name="logo-whatsapp"></ion-icon>
+        </a>
+        <a (click)="sendReminderOnFacebook()">
+          <ion-icon style="color:#3b5998" name="logo-facebook"></ion-icon>
+        </a>
+        <a (click)="sendReminderOnInstagram()">
+          <ion-icon style="color:#8a3ab9" name="logo-instagram"></ion-icon>
+        </a>
+        <a (click)="sendReminderOnTwitter()">
+          <ion-icon style="color:#1da1f2" name="logo-twitter"></ion-icon>
+        </a>
+        <a (click)="sendReminderOnEmail()">
+          <ion-icon style="color:rgb(126, 6, 6)" name="mail"></ion-icon>
+        </a>
+        <a (click)="sendReminder()">
+          <ion-icon style="color:rgb(0, 0, 0)" name="share"></ion-icon>
+        </a>
       </ion-card-content>
     </ion-card>
   </div>

@@ -22,3 +22,24 @@
     --background-activated: #005386;
     --color: white;
 }
+
+.account-actions {
+    p {
+        text-align: right;
+    }
+}
+
+ion-button.expand-button {
+    border-radius: 8px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    display: block;
+    width: 100%;
+    contain: content;
+    ion-icon {
+        position: fixed;
+        left: 16px;
+    }
+  }

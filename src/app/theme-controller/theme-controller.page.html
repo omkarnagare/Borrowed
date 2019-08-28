@@ -13,7 +13,7 @@
 
   <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>Choose Theme</ion-card-subtitle>
+      <ion-card-subtitle>Pick a Theme by clicking on one of the Theme-box below : </ion-card-subtitle>
     </ion-card-header>
     <ion-card-content class="themes-container">
         <span class="theme-circles" [style.background-color]="theme.color" *ngFor="let theme of themes"
@@ -24,7 +24,7 @@
 
   <ion-list class="preview-theme">
     <ion-list-header>
-      Theme Preview
+      Theme Colors (Read Only)
     </ion-list-header>
     <ion-item color="primary">
       <ion-label>Primary</ion-label>
