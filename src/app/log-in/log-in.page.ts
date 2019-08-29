@@ -23,7 +23,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
 
   showPassword: boolean = false;
   userState: UserState;
-  enableSocialSignInMethods: boolean = false;
+  isMobilePlatform: boolean = false;
 
   constructor(
     private _splashScreen: SplashScreen,
@@ -35,7 +35,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
     private _alertController: AlertController,
     formBuilder: FormBuilder
   ) {
-    this.enableSocialSignInMethods = this._platformInfoService.isMobilePlatform()
+    this.isMobilePlatform = this._platformInfoService.isMobilePlatform()
     this.userInfoFormGroup = formBuilder.group({
       name: ["", [Validators.required, Validators.pattern("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")]],
       email: ["", [Validators.required, Validators.email]],
@@ -150,12 +150,12 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
     if (this.userState === UserState.SIGN_UP) {
       if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
 
-        if (this.userInfoFormGroup.get('password').value !== this.userInfoFormGroup.get('confirmPassword').value) {
-          this._authenticationService.showToast(BorrowedAppConstants.PASSWORD_MISSMATCH_MESSAGE);
-          return;
-        }
-
         this._authenticationService.presentLoader().then(() => {
+          if (this.userInfoFormGroup.get('password').value !== this.userInfoFormGroup.get('confirmPassword').value) {
+            this._authenticationService.showToast(BorrowedAppConstants.PASSWORD_MISSMATCH_MESSAGE);
+            this._authenticationService.stopLoader();
+            return;
+          }
           const credentials: LogInCredentials = this.userInfoFormGroup.value;
           const userInfo: UserInfo = this.userInfoFormGroup.value;
           this._authenticationService.signUp(credentials)

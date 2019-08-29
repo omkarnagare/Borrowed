@@ -20,7 +20,7 @@ export class AddItemPage implements OnInit {
   validationMessages: any;
   itemImage: any;
 
-  showSearchBarForContacts: boolean = false;
+  isMobilePlatform: boolean = false;
   contactsFound: any;
 
   constructor(
@@ -33,7 +33,7 @@ export class AddItemPage implements OnInit {
     formBuilder: FormBuilder
   ) {
 
-    this.showSearchBarForContacts = this._platformInfoService.isMobilePlatform();
+    this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
     this.itemDetailsFormGroup = formBuilder.group({
       // item related
       itemName: ["", [Validators.required]],
@@ -41,7 +41,7 @@ export class AddItemPage implements OnInit {
       borrowingDate: ["", [Validators.required]],
       isUrgent: false,
       lendeeName: ["", [Validators.required, Validators.pattern("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")]],
-      lendeeContact: ["", [Validators.pattern("^[+]*[ (]{0,1}[0-9 ]{1,4}[) ]{0,1}[-\s\./0-9 ]*$")]],
+      lendeeContact: ["", [Validators.pattern("^([+][0-9]{0,4}\-?)?[0-9]{10}$")]],
       lendeeEmail: ["", [Validators.email]],
       // query related
       searchQuery: ""
@@ -54,7 +54,7 @@ export class AddItemPage implements OnInit {
         { type: 'required', message: 'Lendee name cannot be left blank.' },
         { type: 'pattern', message: 'Not a valid name.' }],
       'lendeeContact': [
-        { type: 'pattern', message: 'Not a valid contact number.' }],
+        { type: 'pattern', message: 'Valid Examples:  +91-1234567890, 1234567890' }],
       'lendeeEmail': [
         { type: 'email', message: 'Not a valid Email address.' }],
     };
@@ -132,21 +132,24 @@ export class AddItemPage implements OnInit {
   }
 
   addItem() {
-    const itemObject: Item = { ... this.itemDetailsFormGroup.value };
-    itemObject["itemImage"] = this.itemImage ? this.itemImage : "/assets/unknown-item.svg";
-
-    this._itemService.presentLoader().then(()=> {
+    this._itemService.presentLoader().then(() => {
+      const itemObject: Item = { ... this.itemDetailsFormGroup.value };
+      itemObject["itemImage"] = this.itemImage ? this.itemImage : "/assets/unknown-item.svg";
       this._itemService
-      .addItem(itemObject)
-      .then((result) => {
-        this._itemService.showToast("Item " + itemObject.itemName + " added successfully.");
-        this._router.navigate(["/"]);
-      }).catch((error) => {
-        this._itemService.showToast(error);
-      }).finally(() => {
-        this._itemService.stopLoader();
-      });
+        .addItem(itemObject)
+        .then((result) => {
+          this._itemService.showToast("Item " + itemObject.itemName + " added successfully.");
+          this._router.navigate(["/"]);
+        }).catch((error) => {
+          this._itemService.showToast(error);
+        }).finally(() => {
+          this._itemService.stopLoader();
+        });
     });
+  }
+
+  redirectToHomePage() {
+    this._router.navigate(["/"]);
   }
 
 }

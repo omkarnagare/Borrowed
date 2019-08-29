@@ -3,6 +3,11 @@
     <ion-title>
       Add Lent Item
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="redirectToHomePage()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -11,18 +16,20 @@
   <ion-card no-margin>
     <ion-card-content>
       <form [formGroup]="itemDetailsFormGroup">
-        <ion-item lines="none">
-          <ion-avatar class="item-picture">
-            <ion-img [src]="itemImage">
-            </ion-img>
-          </ion-avatar>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-chip (click)="selectImageSource()" class="center-chip">
-            <ion-icon name="camera"></ion-icon>
-            <ion-label> {{ itemImage ? "Change Image" : "Add Image (Optional)" }}</ion-label>
-          </ion-chip>
-        </ion-item>
+        <div *ngIf="isMobilePlatform">
+          <ion-item lines="none">
+            <ion-avatar class="item-picture">
+              <ion-img [src]="itemImage">
+              </ion-img>
+            </ion-avatar>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-chip (click)="selectImageSource()" class="center-chip">
+              <ion-icon name="camera"></ion-icon>
+              <ion-label> {{ itemImage ? "Change Image" : "Add Image (Optional)" }}</ion-label>
+            </ion-chip>
+          </ion-item>
+        </div>
         <ion-item>
           <ion-input placeholder="Item Name/Category" formControlName="itemName" type="text"></ion-input>
         </ion-item>
@@ -43,7 +50,7 @@
             <ion-label>{{ validation.message }}</ion-label>
           </ion-item>
         </div>
-        <ion-item *ngIf="showSearchBarForContacts" lines="none">
+        <ion-item *ngIf="isMobilePlatform" lines="none">
           <ion-searchbar formControlName="searchQuery" (ionChange)="searchForContacts()" searchIcon="contacts"
             placeholder="browse from contact list" autocomplete="on" debounce="700">
           </ion-searchbar>
@@ -93,7 +100,7 @@
           <ion-toggle formControlName="isUrgent" checked="false"></ion-toggle>
         </ion-item>
         <ion-item>
-          <ion-textarea placeholder="write something more about the item here" formControlName="itemDescription">
+          <ion-textarea placeholder="Add something more about the item here" formControlName="itemDescription">
           </ion-textarea>
         </ion-item>
 

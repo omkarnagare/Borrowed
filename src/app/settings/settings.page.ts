@@ -22,9 +22,7 @@ export class SettingsPage implements OnInit {
     private _socialNetworkService: SocialNetworksService,
     private _appInfoService: AppInfoService,
     private _platformInfoService: PlatformInfoService,
-    private _authenticationService: AuthenticationService,
     private _itemsService: ItemsService,
-    private _alertController: AlertController,
     private _storage: Storage
   ) {
     this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
@@ -57,37 +55,7 @@ export class SettingsPage implements OnInit {
       message: "Hello there!! I am using Borrowed to help me Un-Forget. It's simply amazing and very easy to use. To install, click on the link below",
       subject: this._appInfoService.getAppName() + ": v" + this._appInfoService.getAppVersion(),
       // file: "",
-      url: "https://github.com/omkarnagare/Borrowed"
-    });
-  }
-
-  async confirmLogOut() {
-    const alert = await  this._alertController.create({
-      message: 'Are you sure you want to log out?',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel'
-        },
-        {
-          text: 'Yes',
-          handler: () => {
-            this.logOut();
-          }
-        }
-      ]
-    });
-    await alert.present();
-  }
-
-  logOut() {
-    this._authenticationService.logOut().then(() => {
-      // this._router.navigate(['']);
-      console.log("User logged out successfully");
-      window.location.reload();
-    }).catch((error) => {
-      console.log("Log Out Error :", error);
-      this._authenticationService.showToast(error);
+      url: "https://borrowed-e20121991.firebaseapp.com/"
     });
   }
 

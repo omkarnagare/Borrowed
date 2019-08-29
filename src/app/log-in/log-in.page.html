@@ -65,7 +65,7 @@
           </div>
         </div>
 
-        <ion-grid>
+        <ion-grid fixed>
           <ion-row *ngIf="userState && userState === 300">
             <ion-col size="12">
               <ion-button (click)="logInWithEmailAndPassword()" class="expand-button">
@@ -96,22 +96,22 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card class="text-center">
+    <ion-card class="text-center" *ngIf="isMobilePlatform">
       <ion-card-header>
         <p>OR</p>
       </ion-card-header>
       <ion-card-content>
-        <ion-button [disabled]="!enableSocialSignInMethods" class="facebook expand-button"
+        <ion-button class="facebook expand-button"
           (click)="logInWithFacebook()">
           <ion-icon slot="start" name="logo-facebook"></ion-icon>
           Log In With Facebook
         </ion-button>
-        <ion-button [disabled]="!enableSocialSignInMethods" class="google expand-button"
+        <ion-button class="google expand-button"
           (click)="logInWithGooglePlus()">
           <ion-icon slot="start" name="logo-google"></ion-icon>
           Log In With Google
         </ion-button>
-        <ion-button [disabled]="!enableSocialSignInMethods" class="twitter expand-button" (click)="logInWithTwitter()">
+        <ion-button class="twitter expand-button" (click)="logInWithTwitter()">
           <ion-icon slot="start" name="logo-twitter"></ion-icon>
           Log In With Twitter
         </ion-button>

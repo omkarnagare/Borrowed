@@ -38,22 +38,22 @@
         <ion-card-subtitle>{{ itemObject.itemDescription }}</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <ion-chip *ngIf="itemObject.borrowingDate">
-          <ion-icon name="time"></ion-icon>
+        <ion-item *ngIf="itemObject.borrowingDate">
+          <ion-icon slot="start" name="time"></ion-icon>
           <ion-label>{{ itemObject.borrowingDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
-        </ion-chip>
-        <ion-chip *ngIf="itemObject.lendeeName">
-          <ion-icon name="person"></ion-icon>
+        </ion-item>
+        <ion-item *ngIf="itemObject.lendeeName">
+          <ion-icon slot="start" name="person"></ion-icon>
           <ion-label>{{ itemObject.lendeeName }}</ion-label>
-        </ion-chip>
-        <ion-chip *ngIf="itemObject.lendeeContact">
-          <ion-icon name="call"></ion-icon>
+        </ion-item>
+        <ion-item *ngIf="itemObject.lendeeContact">
+          <ion-icon slot="start" name="call"></ion-icon>
           <ion-label>{{ itemObject.lendeeContact }}</ion-label>
-        </ion-chip>
-        <ion-chip *ngIf="itemObject.lendeeEmail">
-          <ion-icon name="mail"></ion-icon>
+        </ion-item>
+        <ion-item *ngIf="itemObject.lendeeEmail">
+          <ion-icon slot="start" name="mail"></ion-icon>
           <ion-label>{{ itemObject.lendeeEmail }}</ion-label>
-        </ion-chip>
+        </ion-item>
       </ion-card-content>
     </ion-card>
 

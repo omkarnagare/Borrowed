@@ -8,6 +8,7 @@ import { ItemsService } from '../services/items.service';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
+import { PlatformInfoService } from '../services/platform-info.service';
 
 @Component({
   selector: 'app-account',
@@ -23,12 +24,19 @@ export class AccountPage implements OnInit, OnDestroy {
   urgentMissingItems$: Subscription;
   storedUserProfile$: Subscription;
 
+  isMobilePlatform: boolean = false;
+
   constructor(
     private _usersService: UsersService,
     private _getImageService: GetImageService,
     private _itemsService: ItemsService,
+    private _platformInfoService: PlatformInfoService,
+    private _authenticationService: AuthenticationService,
+    private _alertController: AlertController,
     private _actionSheetController: ActionSheetController
   ) {
+    this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
+
     this.storedUserProfile = _usersService.getUserProfile();
     this.lentItems = this._itemsService.getItems();
     this.urgentMissingItems = this._itemsService.getUrgentItems();
@@ -94,7 +102,7 @@ export class AccountPage implements OnInit, OnDestroy {
     this._getImageService.getImage(sourceType)
       .then((imageData) => {
         // console.log(imageData);
-        this._usersService.setUserProfileImage(imageData).then(data=> {
+        this._usersService.setUserProfileImage(imageData).then(data => {
           this._itemsService.showToast(BorrowedAppConstants.USER_IMAGE_SUCCESS_MESSAGE);
         }).catch(error => {
           this._itemsService.showToast(BorrowedAppConstants.ERROR_MESSAGE);
@@ -103,6 +111,36 @@ export class AccountPage implements OnInit, OnDestroy {
         (error) => {
           console.log("error occurred while getting Profile Image: ", error);
         });
+  }
+
+  async confirmLogOut() {
+    const alert = await this._alertController.create({
+      message: 'Are you sure you want to log out?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel'
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.logOut();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  logOut() {
+    this._authenticationService.logOut().then(() => {
+      // this._router.navigate(['']);
+      console.log("User logged out successfully");
+      window.location.reload();
+    }).catch((error) => {
+      console.log("Log Out Error :", error);
+      this._authenticationService.showToast(error);
+    });
   }
 
 }
