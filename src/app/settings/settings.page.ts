@@ -39,7 +39,7 @@ export class SettingsPage implements OnInit {
       if (this._platformInfoService.isAndroidDevice()) {
         return "https://play.google.com/store/apps/details?id=com.nagare.balkrishna.omkar.borrowed";
       } else if (this._platformInfoService.isIOSDevice()) {
-        return "https://borrowed-e20121991.firebaseapp.com/";
+        return "https://borrowed-o20121991.firebaseapp.com/";
       }
     }
     return null;
