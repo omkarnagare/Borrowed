@@ -8,6 +8,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { BorrowedAppConstants, UserState } from '../constants';
 import { UsersService } from '../services/users.service';
 import { PlatformInfoService } from '../services/platform-info.service';
+import { AdmobAdsService } from '../services/admob-ads.service';
 
 @Component({
   selector: 'app-log-in',
@@ -32,6 +33,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
     private _authenticationService: AuthenticationService,
     private _userService: UsersService,
     private _platformInfoService: PlatformInfoService,
+    private _admobService: AdmobAdsService,
     private _alertController: AlertController,
     formBuilder: FormBuilder
   ) {
@@ -64,6 +66,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ionViewDidEnter() {
+    this._admobService.showBannerAd();
     this._splashScreen.hide();
   }
 

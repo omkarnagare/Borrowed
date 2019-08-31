@@ -21,6 +21,8 @@ import { Network } from '@ionic-native/network/ngx';
 import { Contacts } from '@ionic-native/contacts/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 
+import { AdMobPro } from '@ionic-native/admob-pro/ngx';
+
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { TwitterConnect } from '@ionic-native/twitter-connect/ngx';
@@ -48,6 +50,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
+    AdMobPro,
     GooglePlus,
     Facebook,
     TwitterConnect,

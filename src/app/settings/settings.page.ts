@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppInfoService } from '../services/app-info.service';
-import { AuthenticationService } from '../services/authentication.service';
 import { SocialNetworksService } from '../services/social-networks.service';
-import { BorrowedAppConstants } from '../constants';
-import { Storage } from '@ionic/storage';
 import { PlatformInfoService } from '../services/platform-info.service';
-import { AlertController } from '@ionic/angular';
-import { ItemsService } from '../services/items.service';
 
 @Component({
   selector: 'app-settings',

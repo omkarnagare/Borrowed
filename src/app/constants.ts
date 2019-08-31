@@ -22,6 +22,7 @@ export class BorrowedAppConstants {
     public static ERROR_MESSAGE = "Some Error Occurred. Please try again.";
     public static INVALID_FIELDS_MESSAGE = "Please fill all the fields with appropriate values.";
     public static PASSWORD_MISSMATCH_MESSAGE = "Passwords did not match. Please try again.";
+    public static INTERSTITIAL_AD_TIMEOUT = 1000 * 60 * 2;
 
     // themes
     public static THEMES = {
