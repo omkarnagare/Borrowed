@@ -126,9 +126,10 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   logInWithEmailAndPassword() {
-    if (this.userState === UserState.LOG_IN) {
-      if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
-        this._authenticationService.presentLoader().then(() => {
+    this._authenticationService.presentLoader().then(() => {
+
+      if (this.userState === UserState.LOG_IN) {
+        if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
           const credentials: LogInCredentials = this.userInfoFormGroup.value;
           this._authenticationService.logInWithEmailAndPassword(credentials)
             .then((authData) => {
@@ -136,21 +137,24 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
             }).catch((authDataError) => {
               this.handleError(authDataError);
             });
-        });
+        } else {
+          this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
+          this._authenticationService.stopLoader();
+        }
       } else {
-        this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
+        this.userState = UserState.LOG_IN;
+        this.addValidatorsForLoginWithEmailAndPassword();
+        this._authenticationService.stopLoader();
       }
-    } else {
-      this.userState = UserState.LOG_IN;
-      this.addValidatorsForLoginWithEmailAndPassword();
-    }
+
+    });
   }
 
   signUp() {
-    if (this.userState === UserState.SIGN_UP) {
-      if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
+    this._authenticationService.presentLoader().then(() => {
 
-        this._authenticationService.presentLoader().then(() => {
+      if (this.userState === UserState.SIGN_UP) {
+        if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
           if (this.userInfoFormGroup.get('password').value !== this.userInfoFormGroup.get('confirmPassword').value) {
             this._authenticationService.showToast(BorrowedAppConstants.PASSWORD_MISSMATCH_MESSAGE);
             this._authenticationService.stopLoader();
@@ -168,21 +172,24 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
             }).catch((authDataError) => {
               this.handleError(authDataError);
             });
-        });
+        } else {
+          this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
+          this._authenticationService.stopLoader();
+        }
       } else {
-        this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
+        this.userState = UserState.SIGN_UP;
+        this.addValidatorsForSignUpWithEmailAndPassword();
+        this._authenticationService.stopLoader();
       }
-    } else {
-      this.userState = UserState.SIGN_UP;
-      this.addValidatorsForSignUpWithEmailAndPassword();
-    }
+
+    });
   }
 
   forgotPassword() {
-    if (this.userState === UserState.FORGOT_PASSWORD) {
-      if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
+    this._authenticationService.presentLoader().then(() => {
 
-        this._authenticationService.presentLoader().then(() => {
+      if (this.userState === UserState.FORGOT_PASSWORD) {
+        if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
           this._authenticationService.resetPassword(this.userInfoFormGroup.get('email').value)
             .then(response => {
               console.log(response);
@@ -191,14 +198,17 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
             }).catch(error => {
               this.handleError(error);
             });
-        });
+        } else {
+          this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
+          this._authenticationService.stopLoader();
+        }
       } else {
-        this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
+        this.userState = UserState.FORGOT_PASSWORD
+        this.addValidatorsForForgotPasswordWithEmailAndPassword();
+        this._authenticationService.stopLoader();
       }
-    } else {
-      this.userState = UserState.FORGOT_PASSWORD
-      this.addValidatorsForForgotPasswordWithEmailAndPassword();
-    }
+
+    });
   }
 
   async showAlertForResetPassword() {

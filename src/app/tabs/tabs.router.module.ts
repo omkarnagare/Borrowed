@@ -83,6 +83,11 @@ const routes: Routes = [
               import('../settings/settings.module').then(m => m.SettingsPageModule)
           },
           {
+            path: 'faqs',
+            loadChildren: () =>
+              import('../faqs/faqs.module').then(m => m.FAQsPageModule)
+          },
+          {
             path: 'privacy-policy',
             loadChildren: () =>
               import('../privacy-policy/privacy-policy.module').then(m => m.PrivacyPolicyPageModule)
