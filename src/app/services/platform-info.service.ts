@@ -20,11 +20,11 @@ export class PlatformInfoService {
   }
 
   isAndroidDevice(): boolean {
-    return this._platform.is('android');
+    return this._platform.is('android') && this.isMobilePlatform();
   }
 
   isIOSDevice(): boolean {
-    return this._platform.is('ios');
+    return this._platform.is('ios') && this.isMobilePlatform();
   }
 
 }

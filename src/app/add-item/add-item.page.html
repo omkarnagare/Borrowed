@@ -41,7 +41,7 @@
         </div>
         <ion-item>
           <ion-label>Borrowing Date</ion-label>
-          <ion-datetime displayFormat="DD MMM YYYY" formControlName="borrowingDate" placeholder="Date Given">
+          <ion-datetime [max]="today" displayFormat="DD MMM YYYY" formControlName="borrowingDate" placeholder="Date Given">
           </ion-datetime>
         </ion-item>
         <div *ngFor="let validation of validationMessages.borrowingDate" class="validation-errors">

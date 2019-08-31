@@ -23,6 +23,8 @@ export class AddItemPage implements OnInit {
   isMobilePlatform: boolean = false;
   contactsFound: any;
 
+  today: any;
+
   constructor(
     private _itemService: ItemsService,
     private _getImageService: GetImageService,
@@ -32,7 +34,7 @@ export class AddItemPage implements OnInit {
     private _router: Router,
     formBuilder: FormBuilder
   ) {
-
+    this.today = new Date().toISOString();
     this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
     this.itemDetailsFormGroup = formBuilder.group({
       // item related
