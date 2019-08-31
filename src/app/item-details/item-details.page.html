@@ -60,7 +60,7 @@
     <ion-card *ngIf="isMobilePlatform && itemObject.isActive">
       <ion-card-content class="social-icon-container">
         <p>Everyone is busy nowdays.</p>
-        <p>Remind {{ itemObject.lendeeName }} about {{ itemObject.itemName }} with</p>
+        <p>Remind "{{ itemObject.lendeeName }}" about "{{ itemObject.itemName }}" with</p>
         <a (click)="sendReminderOnWhatsapp()">
           <ion-icon style="color:#25D366" name="logo-whatsapp"></ion-icon>
         </a>

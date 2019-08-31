@@ -67,8 +67,7 @@ export class ItemDetailsPage implements OnDestroy {
   sendReminderOnWhatsapp() {
     const attr: WhatsAppAttributes = {
       message: this.constructMessage(),
-      image: this.itemObject.itemImage,
-      // url: ""
+      image: this.getItemImage(),
     };
     this._socialNetworksService.shareToWhatsApp(attr);
   }
@@ -76,8 +75,7 @@ export class ItemDetailsPage implements OnDestroy {
   sendReminderOnFacebook() {
     const attr: FacebookAttributes = {
       message: this.constructMessage(),
-      image: this.itemObject.itemImage,
-      // url: ""
+      image: this.getItemImage()
     };
     this._socialNetworksService.shareToFacebook(attr);
   }
@@ -85,7 +83,7 @@ export class ItemDetailsPage implements OnDestroy {
   sendReminderOnInstagram() {
     const attr: InstagramAttributes = {
       message: this.constructMessage(),
-      image: this.itemObject.itemImage,
+      image: this.getItemImage(),
     };
     this._socialNetworksService.shareToInstagram(attr);
   }
@@ -93,8 +91,7 @@ export class ItemDetailsPage implements OnDestroy {
   sendReminderOnTwitter() {
     const attr: TwitterAttributes = {
       message: this.constructMessage(),
-      image: this.itemObject.itemImage,
-      // url: ""
+      image: this.getItemImage(),
     };
     this._socialNetworksService.shareToTwitter(attr);
   }
@@ -108,13 +105,13 @@ export class ItemDetailsPage implements OnDestroy {
   }
 
   sendReminderOnEmail() {
+    const toEmail = this.itemObject.lendeeEmail ? [this.itemObject.lendeeEmail]: [];
     const attr: EmailAttributes = {
       subject: this.constructSubject(),
       message: this.constructMessage(),
-      to: [this.itemObject.lendeeEmail],
+      to: toEmail,
       cc: [],
-      bcc: [],
-      // files: this.itemObject.itemImage
+      bcc: []
     };
     this._socialNetworksService.sendEmail(attr);
   }
@@ -124,7 +121,15 @@ export class ItemDetailsPage implements OnDestroy {
   }
 
   constructMessage(): string {
-    return "Hi " + this.itemObject.lendeeName + ", It's been a while that We have discussed about \"" + this.itemObject.itemName + "\". The borrowing date was " + this._datePipe.transform(this.itemObject.borrowingDate, 'dd MMM yyyy') + ". Please try to return it as soon as possible.";
+    let message = "Hi " + this.itemObject.lendeeName + ", It's been a while since We last discussed about \"" + this.itemObject.itemName + "\". The borrowing day was " + this._datePipe.transform(this.itemObject.borrowingDate, 'EEEE, dd MMMM yyyy') + ".";
+    if (this.itemObject.isUrgent) {
+       message = message + " We should discuss about it as soon as possible.";
+    }
+    return message;
+  }
+
+  getItemImage() {
+    return this.itemObject.itemImage === "/assets/unknown-item.svg" ? null: this.itemObject.itemImage;
   }
 
   ngOnDestroy() {
