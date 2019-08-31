@@ -55,4 +55,8 @@ export class AppInfoService {
   getAppVersion(): string {
     return this.appVersion
   }
+
+  getAppDetails(): string {
+    return this.getAppName() + ": v" + this.getAppVersion();
+  }
 }

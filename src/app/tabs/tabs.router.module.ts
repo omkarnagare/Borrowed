@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: 'tabs',
     component: TabsPage,
-    canActivate: [ CanEnterTabsPagesGuard ],
+    canActivate: [CanEnterTabsPagesGuard],
     children: [
       {
         path: 'borrowed',
@@ -56,6 +56,21 @@ const routes: Routes = [
             path: '',
             loadChildren: () =>
               import('../account/account.module').then(m => m.AccountPageModule)
+          },
+          {
+            path: 'transaction-complete-items',
+            children: [
+              {
+                path: '',
+                loadChildren: () =>
+                  import('../transcation-complete-items/transcation-complete-items.module').then(m => m.TranscationCompleteItemsPageModule)
+              },
+              {
+                path: 'item-details/:itemId',
+                loadChildren: () =>
+                  import('../item-details/item-details.module').then(m => m.ItemDetailsPageModule)
+              }
+            ]
           }
         ]
       },
@@ -112,4 +127,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TabsPageRoutingModule {}
+export class TabsPageRoutingModule { }

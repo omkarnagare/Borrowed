@@ -1,7 +1,7 @@
 export class BorrowedAppConstants {
 
     public static APP_NAME = "Borrowed";
-    public static APP_VERSION = "1.0";
+    public static APP_VERSION = "1.0.0";
 
     // firestore
     public static USER_COLLECTION = "users";
@@ -14,7 +14,6 @@ export class BorrowedAppConstants {
     //sqlite storage keys
     public static DEFAULT_APP_THEME ="purple";
     public static APP_THEME = "settings.borrowedTheme";
-    public static VIEW_TRANSACTION_COMPLETE_ITEMS = "settings.canViewTransactionCompleteItems";
 
     // general constants
     public static BASE64_IMAGE_PREFIX_DATA = "data:image/jpeg;base64,";

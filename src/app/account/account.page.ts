@@ -18,11 +18,13 @@ import { PlatformInfoService } from '../services/platform-info.service';
 export class AccountPage implements OnInit, OnDestroy {
   storedUserProfile: Observable<any>;
   lentItems: Observable<Item[]>;
-  urgentMissingItems: Observable<Item[]>;
+  urgentLentItems: Observable<Item[]>;
+  transactionCompleteItems: Observable<Item[]>;
 
-  lentItems$: Subscription;
-  urgentMissingItems$: Subscription;
   storedUserProfile$: Subscription;
+  lentItems$: Subscription;
+  urgentLentItems$: Subscription;
+  transactionCompleteItems$: Subscription;
 
   isMobilePlatform: boolean = false;
 
@@ -38,17 +40,21 @@ export class AccountPage implements OnInit, OnDestroy {
     this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
 
     this.storedUserProfile = _usersService.getUserProfile();
-    this.lentItems = this._itemsService.getItems();
-    this.urgentMissingItems = this._itemsService.getUrgentItems();
+    this.lentItems = this._itemsService.getActiveItems();
+    this.urgentLentItems = this._itemsService.getUrgentItems();
+    this.transactionCompleteItems = this._itemsService.getTransactionCompleteItems();
 
     this.storedUserProfile$ = this.storedUserProfile.subscribe(data => {
-      console.log(data);
+      console.log("storedUserProfile", data);
     });
     this.lentItems$ = this.lentItems.subscribe(data => {
-      console.log(data);
+      console.log("lentItems", data);
     });
-    this.urgentMissingItems$ = this.urgentMissingItems.subscribe(data => {
-      console.log(data);
+    this.urgentLentItems$ = this.urgentLentItems.subscribe(data => {
+      console.log("urgentLentItems", data);
+    });
+    this.transactionCompleteItems$ = this.transactionCompleteItems.subscribe(data => {
+      console.log("transactionCompleteItems", data);
     });
   }
 
@@ -59,13 +65,16 @@ export class AccountPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.storedUserProfile$.unsubscribe();
     this.lentItems$.unsubscribe();
-    this.urgentMissingItems$.unsubscribe();
+    this.urgentLentItems$.unsubscribe();
+    this.transactionCompleteItems$.unsubscribe();
     this.storedUserProfile$ = null;
     this.lentItems$ = null;
-    this.urgentMissingItems$ = null;
+    this.urgentLentItems$ = null;
+    this.transactionCompleteItems$ = null;
     this.storedUserProfile = null;
     this.lentItems = null;
-    this.urgentMissingItems = null;
+    this.urgentLentItems = null;
+    this.transactionCompleteItems = null;
   }
 
   async selectImageSource() {

@@ -16,47 +16,38 @@ import { ItemsService } from '../services/items.service';
 export class SettingsPage implements OnInit {
 
   isMobilePlatform: boolean = false;
-  canViewTransactionCompleteItems: boolean = false;
+  appInfo: string;
 
   constructor(
     private _socialNetworkService: SocialNetworksService,
     private _appInfoService: AppInfoService,
-    private _platformInfoService: PlatformInfoService,
-    private _itemsService: ItemsService,
-    private _storage: Storage
+    private _platformInfoService: PlatformInfoService
   ) {
     this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
-    this._storage.get(BorrowedAppConstants.VIEW_TRANSACTION_COMPLETE_ITEMS).then(canViewTransactionCompleteItems => {
-      if (canViewTransactionCompleteItems !== null || canViewTransactionCompleteItems !== undefined) {
-        this.canViewTransactionCompleteItems = canViewTransactionCompleteItems;
-        this._itemsService.setCanViewTransactionCompleteItems(this.canViewTransactionCompleteItems);
-      }
-      console.log("canViewTransactionCompleteItems", this.canViewTransactionCompleteItems)
-    }).catch(error => {
-      console.log("canViewTransactionCompleteItems", error);
-    });
   }
 
   ngOnInit() {
-  }
-
-  toggleViewTransactionCompleteItemsSetting() {
-    this._storage.set(BorrowedAppConstants.VIEW_TRANSACTION_COMPLETE_ITEMS, !this.canViewTransactionCompleteItems).then(() => {
-      this.canViewTransactionCompleteItems = !this.canViewTransactionCompleteItems;
-      this._itemsService.setCanViewTransactionCompleteItems(this.canViewTransactionCompleteItems);
-      // const message = this.canViewTransactionCompleteItems ? "Enabled viewing transaction-complete items": "Disabled viewing transaction-complete items";
-      // this._itemsService.showToast(message, 4000);
-    });
   }
 
   share() {
     console.log(this._appInfoService.getAppName() + ": v" + this._appInfoService.getAppVersion());
     this._socialNetworkService.share({
       message: "Hello there!! I am using Borrowed to help me Un-Forget. It's simply amazing and very easy to use. To install, click on the link below",
-      subject: this._appInfoService.getAppName() + ": v" + this._appInfoService.getAppVersion(),
+      subject: this._appInfoService.getAppDetails(),
       // file: "",
-      url: "https://borrowed-e20121991.firebaseapp.com/"
+      url: this.getAppURL()
     });
+  }
+
+  getAppURL(): string {
+    if (this._platformInfoService.isMobilePlatform()) {
+      if (this._platformInfoService.isAndroidDevice()) {
+        return "https://play.google.com/store/apps/details?id=com.nagare.balkrishna.omkar.borrowed";
+      } else if (this._platformInfoService.isIOSDevice()) {
+        return "https://borrowed-e20121991.firebaseapp.com/";
+      }
+    }
+    return null;
   }
 
 }

@@ -104,13 +104,14 @@
 	}
 	.center-image {
 		height: 200px;
-		background: var(--ion-color-secondary);
+		// background: var(--ion-color-secondary);
 		border-radius: 16px 0px;
+		border: 4px solid var(--ion-color-secondary);
 	}
 	.card-center {
 		text-align: center;
-		padding: 8px 0px 0px 0px;
-		margin: 0px;
+		padding: 0px;
+		// margin: 0px;
 		ion-card-header>ion-card-title {
 			font-weight: bold;
 		}
@@ -177,6 +178,14 @@
 		a>ion-icon {
 			margin: 4px;
 			font-size: 2.5em;
+		}
+	}
+	ion-footer {
+		ion-toolbar {
+			ion-title{
+				text-align: center;
+				font-size: 1em
+			}
 		}
 	}
 }

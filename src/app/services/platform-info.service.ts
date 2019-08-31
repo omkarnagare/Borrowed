@@ -18,4 +18,13 @@ export class PlatformInfoService {
       || this._platform.is('desktop')
       || this._platform.is('capacitor'));
   }
+
+  isAndroidDevice(): boolean {
+    return this._platform.is('android');
+  }
+
+  isIOSDevice(): boolean {
+    return this._platform.is('ios');
+  }
+
 }

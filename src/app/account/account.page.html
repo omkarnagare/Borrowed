@@ -78,20 +78,31 @@
 
       <ion-item routerLink="/tabs/borrowed">
         <ion-label>
-          <ion-icon name="arrow-dropleft"></ion-icon> Items Logged
+          <!-- <ion-icon name="arrow-dropleft"></ion-icon> -->Items Logged 
         </ion-label>
         <ion-badge color="success" slot="end">{{ (lentItems | async)?.length }}</ion-badge>
       </ion-item>
 
       <ion-item routerLink="/tabs/urgent-items">
         <ion-label>
-          <ion-icon name="arrow-dropleft"></ion-icon> Urgent Items
+          <!-- <ion-icon name="arrow-dropleft"></ion-icon> -->Urgent Items 
         </ion-label>
-        <ion-badge color="danger" slot="end">{{ (urgentMissingItems | async)?.length }}</ion-badge>
+        <ion-badge color="danger" slot="end">{{ (urgentLentItems | async)?.length }}</ion-badge>
       </ion-item>
 
-      <ion-button (click)="confirmLogOut()" class="expand-button" color="danger"> Log Out </ion-button>
+      <ion-item routerLink="transaction-complete-items">
+        <ion-label>
+          <!-- <ion-icon name="arrow-dropleft"></ion-icon> -->Transaction Complete Items 
+        </ion-label>
+        <ion-badge color="danger" slot="end">{{ (transactionCompleteItems | async)?.length }}</ion-badge>
+      </ion-item>
 
     </ion-card-content>
   </ion-card>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button (click)="confirmLogOut()" class="expand-button" style="padding: 0px 8px 0px 8px" color="danger"> Log Out </ion-button>
+  </ion-toolbar>
+</ion-footer>

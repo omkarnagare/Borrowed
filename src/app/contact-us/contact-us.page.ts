@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SocialNetworksService } from '../services/social-networks.service';
 import { AlertController, LoadingController } from '@ionic/angular';
+import { AppInfoService } from '../services/app-info.service';
 
 @Component({
   selector: 'app-contact-us',
@@ -19,6 +20,7 @@ export class ContactUsPage implements OnInit {
     private _alertController: AlertController,
     private _loadingController: LoadingController,
     private _socialSharing: SocialNetworksService,
+    private _appInfoService: AppInfoService,
     formBuilder: FormBuilder
   ) {
     this.contactUsFormGroup = formBuilder.group({
@@ -101,7 +103,7 @@ export class ContactUsPage implements OnInit {
     const formValue = this.contactUsFormGroup.value;
     this._socialSharing.sendEmail({
       message: formValue.body,
-      subject: formValue.subject,
+      subject: formValue.subject + "::" + this._appInfoService.getAppDetails(),
       to: ["omtechnologies.apps@gmail.com"]
     }).then(response => {
       this.stopLoader().then(() => {

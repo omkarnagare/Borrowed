@@ -65,7 +65,7 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setFilteredItems(searchTerm: string) {
-    this.lentItems = this._itemsService.getItems().pipe(
+    this.lentItems = this._itemsService.getActiveItems().pipe(
       map((data) => {
         this.searching = false;
         return data.filter(item => {
