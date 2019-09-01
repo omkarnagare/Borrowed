@@ -13,6 +13,8 @@ export class SettingsPage implements OnInit {
   isMobilePlatform: boolean = false;
   appInfo: string;
 
+  appVersion: string;
+
   constructor(
     private _socialNetworkService: SocialNetworksService,
     private _appInfoService: AppInfoService,
@@ -24,8 +26,12 @@ export class SettingsPage implements OnInit {
   ngOnInit() {
   }
 
+  ionViewDidEnter() {
+    this.appVersion = this._appInfoService.getAppVersion();
+  }
+
   share() {
-    console.log(this._appInfoService.getAppName() + ": v" + this._appInfoService.getAppVersion());
+    console.log(this._appInfoService.getAppName() + ": v" + this.appVersion);
     this._socialNetworkService.share({
       message: "Hello there!! I am using Borrowed to help me Un-Forget. It's simply amazing and very easy to use. To install, click on the link below",
       subject: this._appInfoService.getAppDetails(),
