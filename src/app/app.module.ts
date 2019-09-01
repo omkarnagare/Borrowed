@@ -20,6 +20,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Contacts } from '@ionic-native/contacts/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
+import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 import { AdMobPro } from '@ionic-native/admob-pro/ngx';
 
@@ -62,6 +63,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     DatePipe,
     StatusBar,
     SplashScreen,
+    Clipboard,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

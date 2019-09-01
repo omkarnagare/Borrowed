@@ -15,6 +15,9 @@ export class BorrowedAppConstants {
     public static DEFAULT_APP_THEME = "blue";
     public static APP_THEME = "settings.borrowedTheme";
 
+    //google pay info
+    public static GOOGLE_PAY_ID = "omkar.balkrishan@okhdfcbank";
+
     // general constants
     public static BASE64_IMAGE_PREFIX_DATA = "data:image/jpeg;base64,";
     public static USER_IMAGE_SUCCESS_MESSAGE = "Profile Image set successfully.";

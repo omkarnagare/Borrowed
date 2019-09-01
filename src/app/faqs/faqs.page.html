@@ -75,6 +75,13 @@
           section of "Settings" tab to know about the Developer. And You can greet
           Or meet the developer on the social platforms, links for which are provided.</p>
 
+        <h2>I want to donate some money to the developer. I want more apps like this from the developer</h2>
+        <p>No help is small. You can donate appropriate amount using google pay id <b>{{ googlePayId }}</b>
+          <ion-icon *ngIf="isMobilePlatform" (click)="copyToClipboard()"
+            style="color:rgb(23, 26, 199); font-size: 1.5em" name="clipboard">
+          </ion-icon>
+        </p>
+
       </section>
     </ion-card-content>
   </ion-card>
