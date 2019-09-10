@@ -1,61 +1,46 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { LogInCredentials, SocialUserInfo } from '../types';
+import { LogInCredentials } from '../types';
 import { Observable } from 'rxjs';
-import { User, auth } from 'firebase/app';
-import { ToastController, LoadingController, Platform } from '@ionic/angular';
+import { User } from 'firebase/app';
+import { Platform } from '@ionic/angular';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { environment } from 'src/environments/environment';
 import * as firebase from 'firebase';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import { TwitterConnect } from '@ionic-native/twitter-connect/ngx';
+import { LoaderManagerService } from './loader-manager.service';
+import { ToastManagerService } from './toast-manager.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  loader: any = null;
 
   constructor(
     private _angularFireAuth: AngularFireAuth,
     private _googlePlus: GooglePlus,
     private _facebook: Facebook,
     private _twitter: TwitterConnect,
-    private _toastController: ToastController,
     private _platform: Platform,
-    private _loadingController: LoadingController
+    private _loader: LoaderManagerService,
+    private _toastManager: ToastManagerService
   ) { }
 
   resetPassword(email: string) {
     return this._angularFireAuth.auth.sendPasswordResetEmail(email);
   }
 
-  async presentLoader() {
-    if (!this.loader) {
-      this.loader = await this._loadingController.create({
-        message: 'Processing your request ...'
-      });
-      await this.loader.present();
-    }
-  }
-
-  async stopLoader() {
-    if (this.loader) {
-      await this.loader.dismiss();
-      this.loader = null;
-    }
-  }
-
   async logInWithFacebook() {
-    this.presentLoader().then(() => {
+    this._loader.presentLoader().then(() => {
       return this._facebook.login(['email'])
-      .then((response: FacebookLoginResponse) => {
-        console.log(response);
-        this.onLoginSuccessForFacebook(response);
-        console.log(response.authResponse.accessToken);
-      }).catch((error) => {
-        this.onLoginError(error);
-      });
+        .then((response: FacebookLoginResponse) => {
+          console.log(response);
+          this.onLoginSuccessForFacebook(response);
+          console.log(response.authResponse.accessToken);
+        }).catch((error) => {
+          this.onLoginError(error);
+        });
     });
   }
 
@@ -65,14 +50,14 @@ export class AuthenticationService {
   }
 
   async logInWithTwitter() {
-    this.presentLoader().then(() => {
+    this._loader.presentLoader().then(() => {
       return this._twitter.login()
-      .then((response) => {
-        console.log(response);
-        this.onLoginSuccessWithTwitter(response);
-      }).catch((error) => {
-        this.onLoginError(error);
-      });
+        .then((response) => {
+          console.log(response);
+          this.onLoginSuccessWithTwitter(response);
+        }).catch((error) => {
+          this.onLoginError(error);
+        });
     });
   }
 
@@ -87,15 +72,15 @@ export class AuthenticationService {
     if (this._platform.is('android')) {
       params = environment.googlePlusConfig;
     }
-    this.presentLoader().then(() => {
+    this._loader.presentLoader().then(() => {
       return this._googlePlus.login(params)
-      .then((response) => {
-        console.log(response);
-        const { idToken, accessToken } = response;
-        this.onLoginSuccessWithGooglePlus(idToken, accessToken);
-      }).catch((error) => {
-        this.onLoginError(error);
-      });
+        .then((response) => {
+          console.log(response);
+          const { idToken, accessToken } = response;
+          this.onLoginSuccessWithGooglePlus(idToken, accessToken);
+        }).catch((error) => {
+          this.onLoginError(error);
+        });
     });
   }
 
@@ -108,8 +93,8 @@ export class AuthenticationService {
 
   onLoginError(error: any) {
     console.error(error)
-    this.showToast(error);
-    this.stopLoader();
+    this._toastManager.showErrorToast(error);
+    this._loader.stopLoader();
   }
 
   logInWithEmailAndPassword(credentials: LogInCredentials): Promise<any> {
@@ -140,20 +125,6 @@ export class AuthenticationService {
 
   getAuth() {
     return this._angularFireAuth.auth;
-  }
-
-  showToast(message: any, duration = 2000) {
-    const toast = this._toastController.create({
-      message: message,
-      duration: duration,
-      position: "bottom",
-      showCloseButton: true,
-      closeButtonText: "dismiss",
-      color: "primary"
-    });
-    toast.then((toastMessage) => {
-      toastMessage.present();
-    });
   }
 
 }

@@ -23,25 +23,22 @@ export class AdmobAdsService implements OnDestroy {
       this._admob.createBanner(environment.bannerAdConfig).then((success) => {
         console.log(success);
         this._admob.showBanner(this._admob.AD_POSITION.BOTTOM_CENTER);
-
-        this.setUpInterstitialAds();
-
       }).catch(error => {
         console.error(error);
       });
     }
   }
   
-  setUpInterstitialAds() {
-    if (!this.adDissmissed$) {
-      this.showInterStitialAd();
-      this.adDissmissed$ = this._admob.onAdDismiss().subscribe((data) => {
-        setTimeout(()=> {
-          this.showInterStitialAd();
-        }, BorrowedAppConstants.INTERSTITIAL_AD_TIMEOUT);
-      });
-    }
-  }
+  // setUpInterstitialAd() {
+  //   if (!this.adDissmissed$) {
+  //     this.showInterStitialAd();
+  //     this.adDissmissed$ = this._admob.onAdDismiss().subscribe((data) => {
+  //       setTimeout(()=> {
+  //         this.showInterStitialAd();
+  //       }, BorrowedAppConstants.INTERSTITIAL_AD_TIMEOUT);
+  //     });
+  //   }
+  // }
 
   showInterStitialAd() {
     if (this._platformInfoService.isAndroidDevice()) {
@@ -52,6 +49,10 @@ export class AdmobAdsService implements OnDestroy {
         console.error(error);
       });
     }
+  }
+
+  removeBanner() {
+    this._admob.removeBanner();
   }
 
   ngOnDestroy() {

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ThemingService } from '../services/theming.service';
 import { BorrowedAppConstants } from '../constants';
-import { LoadingController } from '@ionic/angular';
+import { AdmobAdsService } from '../services/admob-ads.service';
+import { LoaderManagerService } from '../services/loader-manager.service';
 
 @Component({
   selector: 'app-theme-controller',
@@ -11,29 +12,17 @@ import { LoadingController } from '@ionic/angular';
 export class ThemeControllerPage implements OnInit {
 
   themes: any = [];
-  loader: any = null;
 
   constructor(
     private _themingService: ThemingService,
-    private _loadingController: LoadingController
+    private _loader: LoaderManagerService,
+    private _admobServices: AdmobAdsService
   ) {
     this.themes = this.processThemes();
   }
 
-  async presentLoader() {
-    if (!this.loader) {
-      this.loader = await this._loadingController.create({
-        message: 'Changing Theme ...'
-      });
-      await this.loader.present();
-    }
-  }
-
-  async stopLoader() {
-    if (this.loader) {
-      await this.loader.dismiss();
-      this.loader = null;
-    }
+  ionViewDidEnter() {
+    this._admobServices.showInterStitialAd();
   }
 
   processThemes() {
@@ -48,9 +37,9 @@ export class ThemeControllerPage implements OnInit {
   }
 
   setTheme(name) {
-    this.presentLoader().then(() => {
+    this._loader.presentLoader().then(() => {
       this._themingService.setTheme(name);
-      this.stopLoader();
+      this._loader.stopLoader();
     });
   }
 

@@ -9,6 +9,8 @@ import { BorrowedAppConstants, UserState } from '../constants';
 import { UsersService } from '../services/users.service';
 import { PlatformInfoService } from '../services/platform-info.service';
 import { AdmobAdsService } from '../services/admob-ads.service';
+import { LoaderManagerService } from '../services/loader-manager.service';
+import { ToastManagerService } from '../services/toast-manager.service';
 
 @Component({
   selector: 'app-log-in',
@@ -31,9 +33,10 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
     private _platform: Platform,
     private _router: Router,
     private _authenticationService: AuthenticationService,
+    private _loader: LoaderManagerService,
+    private _toastManager: ToastManagerService,
     private _userService: UsersService,
     private _platformInfoService: PlatformInfoService,
-    private _admobService: AdmobAdsService,
     private _alertController: AlertController,
     formBuilder: FormBuilder
   ) {
@@ -66,7 +69,6 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ionViewDidEnter() {
-    this._admobService.showBannerAd();
     this._splashScreen.hide();
   }
 
@@ -118,18 +120,18 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
 
   handleError(error: any) {
     console.error(error);
-    this._authenticationService.stopLoader();
-    this._authenticationService.showToast(error);
+    this._loader.stopLoader();
+    this._toastManager.showErrorToast(error);
   }
 
   handleSuccess(response: any) {
     console.log(response);
-    this._authenticationService.stopLoader();
+    this._loader.stopLoader();
     this._router.navigate(["/tabs"]);
   }
 
   logInWithEmailAndPassword() {
-    this._authenticationService.presentLoader().then(() => {
+    this._loader.presentLoader().then(() => {
 
       if (this.userState === UserState.LOG_IN) {
         if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
@@ -141,26 +143,26 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
               this.handleError(authDataError);
             });
         } else {
-          this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
-          this._authenticationService.stopLoader();
+          this._toastManager.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
+          this._loader.stopLoader();
         }
       } else {
         this.userState = UserState.LOG_IN;
         this.addValidatorsForLoginWithEmailAndPassword();
-        this._authenticationService.stopLoader();
+        this._loader.stopLoader();
       }
 
     });
   }
 
   signUp() {
-    this._authenticationService.presentLoader().then(() => {
+    this._loader.presentLoader().then(() => {
 
       if (this.userState === UserState.SIGN_UP) {
         if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
           if (this.userInfoFormGroup.get('password').value !== this.userInfoFormGroup.get('confirmPassword').value) {
-            this._authenticationService.showToast(BorrowedAppConstants.PASSWORD_MISSMATCH_MESSAGE);
-            this._authenticationService.stopLoader();
+            this._toastManager.showToast(BorrowedAppConstants.PASSWORD_MISSMATCH_MESSAGE);
+            this._loader.stopLoader();
             return;
           }
           const credentials: LogInCredentials = this.userInfoFormGroup.value;
@@ -176,39 +178,39 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
               this.handleError(authDataError);
             });
         } else {
-          this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
-          this._authenticationService.stopLoader();
+          this._toastManager.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
+          this._loader.stopLoader();
         }
       } else {
         this.userState = UserState.SIGN_UP;
         this.addValidatorsForSignUpWithEmailAndPassword();
-        this._authenticationService.stopLoader();
+        this._loader.stopLoader();
       }
 
     });
   }
 
   forgotPassword() {
-    this._authenticationService.presentLoader().then(() => {
+    this._loader.presentLoader().then(() => {
 
       if (this.userState === UserState.FORGOT_PASSWORD) {
         if (this.userInfoFormGroup.valid && this.userInfoFormGroup.dirty) {
           this._authenticationService.resetPassword(this.userInfoFormGroup.get('email').value)
             .then(response => {
               console.log(response);
-              this._authenticationService.stopLoader();
+              this._loader.stopLoader();
               this.showAlertForResetPassword();
             }).catch(error => {
               this.handleError(error);
             });
         } else {
-          this._authenticationService.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
-          this._authenticationService.stopLoader();
+          this._toastManager.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
+          this._loader.stopLoader();
         }
       } else {
         this.userState = UserState.FORGOT_PASSWORD
         this.addValidatorsForForgotPasswordWithEmailAndPassword();
-        this._authenticationService.stopLoader();
+        this._loader.stopLoader();
       }
 
     });
@@ -268,9 +270,9 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
         this._userService.setUserInfoFromGooglePlus(userInfo).then(response => {
           this._router.navigate(["/tabs"]);
         }).catch(error => {
-          this._authenticationService.showToast(error);
+          this._toastManager.showErrorToast(error);
         }).finally(() => {
-          this._authenticationService.stopLoader();
+          this._loader.stopLoader();
         });
       }
     });

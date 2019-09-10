@@ -1,21 +1,26 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { UsersService } from '../services/users.service';
 import { GetImageService } from '../services/get-image.service';
 import { ImageSourceType, BorrowedAppConstants } from '../constants';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
-import { ActionSheetController, AlertController } from '@ionic/angular';
+import { ActionSheetController, AlertController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { PlatformInfoService } from '../services/platform-info.service';
+import { ToastManagerService } from '../services/toast-manager.service';
+import { AdmobAdsService } from '../services/admob-ads.service';
 
 @Component({
   selector: 'app-account',
   templateUrl: 'account.page.html',
   styleUrls: ['account.page.scss']
 })
-export class AccountPage implements OnInit, OnDestroy {
+export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
+
+  backButtonSubscription$: Subscription;
+
   storedUserProfile: Observable<any>;
   lentItems: Observable<Item[]>;
   urgentLentItems: Observable<Item[]>;
@@ -29,9 +34,12 @@ export class AccountPage implements OnInit, OnDestroy {
   isMobilePlatform: boolean = false;
 
   constructor(
+    private _platform: Platform,
+    private _admobService: AdmobAdsService,
     private _usersService: UsersService,
     private _getImageService: GetImageService,
     private _itemsService: ItemsService,
+    private _toastManager: ToastManagerService,
     private _platformInfoService: PlatformInfoService,
     private _authenticationService: AuthenticationService,
     private _alertController: AlertController,
@@ -62,7 +70,14 @@ export class AccountPage implements OnInit, OnDestroy {
 
   }
 
+  ngAfterViewInit() {
+    this.backButtonSubscription$ = this._platform.backButton.subscribe(() => {
+      navigator['app'].exitApp();
+    });
+  }
+
   ngOnDestroy() {
+    this.backButtonSubscription$.unsubscribe();
     this.storedUserProfile$.unsubscribe();
     this.lentItems$.unsubscribe();
     this.urgentLentItems$.unsubscribe();
@@ -112,9 +127,9 @@ export class AccountPage implements OnInit, OnDestroy {
       .then((imageData) => {
         // console.log(imageData);
         this._usersService.setUserProfileImage(imageData).then(data => {
-          this._itemsService.showToast(BorrowedAppConstants.USER_IMAGE_SUCCESS_MESSAGE);
+          this._toastManager.showToast(BorrowedAppConstants.USER_IMAGE_SUCCESS_MESSAGE);
         }).catch(error => {
-          this._itemsService.showToast(BorrowedAppConstants.ERROR_MESSAGE);
+          this._toastManager.showToast(BorrowedAppConstants.ERROR_MESSAGE);
         });
       },
         (error) => {
@@ -142,13 +157,14 @@ export class AccountPage implements OnInit, OnDestroy {
   }
 
   logOut() {
+    this._admobService.removeBanner();
     this._authenticationService.logOut().then(() => {
       // this._router.navigate(['']);
       console.log("User logged out successfully");
       window.location.reload();
     }).catch((error) => {
       console.log("Log Out Error :", error);
-      this._authenticationService.showToast(error);
+      this._toastManager.showErrorToast(error);
     });
   }
 

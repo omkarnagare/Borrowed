@@ -11,7 +11,7 @@
 
 <ion-content fullscreen>
 
-  <form [formGroup]="contactUsFormGroup">
+  <form [formGroup]="contactUsFormGroup" *ngIf="isMobilePlatform">
     <ion-card>
         <ion-card-header>
             <ion-card-title>Facing issue with Borrowed??</ion-card-title>
@@ -21,19 +21,6 @@
             </ion-card-subtitle>
           </ion-card-header>
       <ion-card-content>
-        <!-- <div>
-          <ion-item>
-            <ion-icon slot="start" name="person"></ion-icon>
-            <ion-input placeholder="Enter Email" formControlName="from" type="email"></ion-input>
-          </ion-item>
-
-          <div *ngFor="let validation of validationMessages.from" class="validation-errors">
-            <ion-item class="error-message" *ngIf="isError('from', validation.type)">
-              <ion-icon name="alert"></ion-icon>
-              <ion-label>{{ validation.message }}</ion-label>
-            </ion-item>
-          </div>
-        </div> -->
         <div>
           <ion-item>
             <ion-input placeholder="What happened" formControlName="subject" type="text"></ion-input>
@@ -65,5 +52,18 @@
       </ion-card-content>
     </ion-card>
   </form>
+
+  <div *ngIf="!isMobilePlatform">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Facing issue with Todos??</ion-card-title>
+        <ion-card-subtitle>
+          <p>Don't worry, We are here to help you.</p>
+          <p> Support Email: <br> <b>{{ supportEmail }}</b>
+          </p>
+        </ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+  </div>
 
 </ion-content>

@@ -6,8 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SocialNetworksService } from '../services/social-networks.service';
 import { DatePipe } from '@angular/common';
 import { PlatformInfoService } from '../services/platform-info.service';
-import { FormBuilder } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
+import { LoaderManagerService } from '../services/loader-manager.service';
+import { ToastManagerService } from '../services/toast-manager.service';
 
 @Component({
   selector: 'app-item-details',
@@ -24,6 +24,8 @@ export class ItemDetailsPage implements OnDestroy {
 
   constructor(
     private _itemService: ItemsService,
+    private _loader: LoaderManagerService,
+    private _toastManager: ToastManagerService,
     private _socialNetworksService: SocialNetworksService,
     private _platformInfoService: PlatformInfoService,
     private _datePipe: DatePipe,
@@ -49,17 +51,17 @@ export class ItemDetailsPage implements OnDestroy {
   }
 
   toggleUrgentStatus() {
-    this._itemService.presentLoader().then(() => {
+    this._loader.presentLoader().then(() => {
       this.itemObject.isUrgent = !this.itemObject.isUrgent;
       this._itemService.updateItem(this.itemId, { isUrgent: this.itemObject.isUrgent }).then((result) => {
         const message = this.itemObject.isUrgent
           ? "Item \"" + this.itemObject.itemName + "\" added to urgent List"
           : "Item \"" + this.itemObject.itemName + "\" removed from urgent List"
-        this._itemService.showToast(message);
+        this._toastManager.showToast(message);
       }).catch((error) => {
-        this._itemService.showToast(error);
+        this._toastManager.showErrorToast(error);
       }).finally(() => {
-        this._itemService.stopLoader();
+        this._loader.stopLoader();
       });
     });
   }
@@ -105,7 +107,7 @@ export class ItemDetailsPage implements OnDestroy {
   }
 
   sendReminderOnEmail() {
-    const toEmail = this.itemObject.lendeeEmail ? [this.itemObject.lendeeEmail]: [];
+    const toEmail = this.itemObject.lendeeEmail ? [this.itemObject.lendeeEmail] : [];
     const attr: EmailAttributes = {
       subject: this.constructSubject(),
       message: this.constructMessage(),
@@ -123,13 +125,13 @@ export class ItemDetailsPage implements OnDestroy {
   constructMessage(): string {
     let message = "Hi " + this.itemObject.lendeeName + ", It's been a while since We last discussed about \"" + this.itemObject.itemName + "\". The borrowing day was " + this._datePipe.transform(this.itemObject.borrowingDate, 'EEEE, dd MMMM yyyy') + ".";
     if (this.itemObject.isUrgent) {
-       message = message + " We should discuss about it as soon as possible.";
+      message = message + " We should discuss about it as soon as possible.";
     }
     return message;
   }
 
   getItemImage() {
-    return this.itemObject.itemImage === "/assets/unknown-item.svg" ? null: this.itemObject.itemImage;
+    return this.itemObject.itemImage === "/assets/unknown-item.svg" ? null : this.itemObject.itemImage;
   }
 
   ngOnDestroy() {

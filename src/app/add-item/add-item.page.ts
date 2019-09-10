@@ -8,6 +8,9 @@ import { GetImageService } from '../services/get-image.service';
 import { PlatformInfoService } from '../services/platform-info.service';
 import { ContactsService } from '../services/contacts.service';
 import { Router } from '@angular/router';
+import { LoaderManagerService } from '../services/loader-manager.service';
+import { ToastManagerService } from '../services/toast-manager.service';
+import { AdmobAdsService } from '../services/admob-ads.service';
 
 @Component({
   selector: 'app-add-item',
@@ -27,6 +30,9 @@ export class AddItemPage implements OnInit {
 
   constructor(
     private _itemService: ItemsService,
+    private _admobService: AdmobAdsService,
+    private _loader: LoaderManagerService,
+    private _toastManager: ToastManagerService,
     private _getImageService: GetImageService,
     private _platformInfoService: PlatformInfoService,
     private _contactsService: ContactsService,
@@ -134,18 +140,19 @@ export class AddItemPage implements OnInit {
   }
 
   addItem() {
-    this._itemService.presentLoader().then(() => {
+    this._loader.presentLoader().then(() => {
       const itemObject: Item = { ... this.itemDetailsFormGroup.value };
       itemObject["itemImage"] = this.itemImage ? this.itemImage : "/assets/unknown-item.svg";
       this._itemService
         .addItem(itemObject)
         .then((result) => {
-          this._itemService.showToast("Item " + itemObject.itemName + " added successfully.");
+          this._toastManager.showToast("Item " + itemObject.itemName + " added successfully.");
           this._router.navigate(["/"]);
         }).catch((error) => {
-          this._itemService.showToast(error);
+          this._toastManager.showErrorToast(error);
         }).finally(() => {
-          this._itemService.stopLoader();
+          this._loader.stopLoader();
+          this._admobService.showInterStitialAd();
         });
     });
   }

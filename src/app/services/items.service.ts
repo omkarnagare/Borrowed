@@ -1,27 +1,26 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
 import { Observable, of } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Item } from '../types';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { BorrowedAppConstants } from '../constants';
 import { AuthenticationService } from './authentication.service';
-import { ToastController, LoadingController, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { LoaderManagerService } from './loader-manager.service';
+import { ToastManagerService } from './toast-manager.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemsService implements OnDestroy {
-  loader: any = null;
   collectionRef: AngularFirestoreCollection;
 
   constructor(
     private _angularFirestore: AngularFirestore,
     private _authenticationService: AuthenticationService,
-    private _toastController: ToastController,
-    private _loadingController: LoadingController,
+    private _toastManager: ToastManagerService,
+    private _loader: LoaderManagerService,
     private _alertController: AlertController,
     private _storage: Storage
   ) {
@@ -35,23 +34,7 @@ export class ItemsService implements OnDestroy {
         // this._networkService.presentAlert('Error occurred while connecting to database');
       });
     } else {
-      this.showToast("Couldn't connect to database. Please try again with healthy internet connection.");
-    }
-  }
-
-  async presentLoader() {
-    if (!this.loader) {
-      this.loader = await this._loadingController.create({
-        message: 'Processing your request ...'
-      });
-      await this.loader.present();
-    }
-  }
-
-  async stopLoader() {
-    if (this.loader) {
-      await this.loader.dismiss();
-      this.loader = null;
+      this._toastManager.showToast("Couldn't connect to database. Please try again with healthy internet connection.");
     }
   }
 
@@ -84,9 +67,9 @@ export class ItemsService implements OnDestroy {
 
   getTransactionCompleteItems(): Observable<any> {
     return this.getAllItems().pipe(
-        map((data) => {
-          return data.filter(item => item["isActive"] === false);
-        }));
+      map((data) => {
+        return data.filter(item => item["isActive"] === false);
+      }));
   }
 
   getAllItems(): Observable<any> {
@@ -131,20 +114,6 @@ export class ItemsService implements OnDestroy {
     );
   }
 
-  showToast(message: any, duration = 2000) {
-    const toast = this._toastController.create({
-      message: message,
-      duration: duration,
-      position: "bottom",
-      showCloseButton: true,
-      closeButtonText: "Dismiss",
-      color: "primary",
-    });
-    toast.then((toastMessage) => {
-      toastMessage.present();
-    });
-  }
-
   ngOnDestroy() {
     this.collectionRef = null;
   }
@@ -161,12 +130,12 @@ export class ItemsService implements OnDestroy {
         {
           text: 'Yes',
           handler: () => {
-            this.presentLoader().then(() => {
+            this._loader.presentLoader().then(() => {
               this.deleteItemPermanently(item.itemId).then(() => {
               }).catch(error => {
-                this.showToast(error);
+                this._toastManager.showErrorToast(error);
               }).finally(() => {
-                this.stopLoader();
+                this._loader.stopLoader();
               });
             });
           }
@@ -185,12 +154,12 @@ export class ItemsService implements OnDestroy {
           text: 'Ok',
           role: 'cancel',
           handler: () => {
-            this.presentLoader().then(() => {
+            this._loader.presentLoader().then(() => {
               this.markItemAsTransactionComplete(item.itemId).then(() => {
               }).catch(error => {
-                this.showToast(error);
+                this._toastManager.showErrorToast(error);
               }).finally(() => {
-                this.stopLoader();
+                this._loader.stopLoader();
               });
             });
           }

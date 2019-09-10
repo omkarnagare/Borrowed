@@ -1,14 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { AppInfoService } from '../services/app-info.service';
 import { SocialNetworksService } from '../services/social-networks.service';
 import { PlatformInfoService } from '../services/platform-info.service';
+import { Subscription } from 'rxjs';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
 })
-export class SettingsPage implements OnInit {
+export class SettingsPage implements OnInit, AfterViewInit, OnDestroy {
+
+  backButtonSubscription$: Subscription;
 
   isMobilePlatform: boolean = false;
   appInfo: string;
@@ -16,6 +20,7 @@ export class SettingsPage implements OnInit {
   appVersion: string;
 
   constructor(
+    private _platform: Platform,
     private _socialNetworkService: SocialNetworksService,
     private _appInfoService: AppInfoService,
     private _platformInfoService: PlatformInfoService
@@ -24,6 +29,16 @@ export class SettingsPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+    this.backButtonSubscription$ = this._platform.backButton.subscribe(() => {
+      navigator['app'].exitApp();
+    });
+  }
+
+  ngOnDestroy() {
+    this.backButtonSubscription$.unsubscribe();
   }
 
   ionViewDidEnter() {

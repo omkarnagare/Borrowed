@@ -7,6 +7,8 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime, map } from 'rxjs/operators';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { AdmobAdsService } from '../services/admob-ads.service';
+import { LoaderManagerService } from '../services/loader-manager.service';
+import { ToastManagerService } from '../services/toast-manager.service';
 
 @Component({
   selector: 'app-borrowed',
@@ -28,6 +30,8 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
     private _splashScreen: SplashScreen,
     private _platform: Platform,
     private _itemsService: ItemsService,
+    private _loader: LoaderManagerService,
+    private _toastManager: ToastManagerService,
     private _admobService: AdmobAdsService,
     formBuilder: FormBuilder
   ) {
@@ -90,17 +94,17 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   toggleUrgentStatus(id: string, lentItem: Item) {
-    this._itemsService.presentLoader().then(() => {
+    this._loader.presentLoader().then(() => {
       lentItem.isUrgent = !lentItem.isUrgent;
       this._itemsService.updateItem(id, lentItem).then((result) => {
         const message = lentItem.isUrgent
           ? "Item \"" + lentItem.itemName + "\" added to urgent List"
           : "Item \"" + lentItem.itemName + "\" removed from urgent List"
-        this._itemsService.showToast(message);
+        this._toastManager.showToast(message);
       }).catch((error) => {
-        this._itemsService.showToast(error);
+        this._toastManager.showErrorToast(error);
       }).finally(() => {
-        this._itemsService.stopLoader();
+        this._loader.stopLoader();
       });
     });
   }

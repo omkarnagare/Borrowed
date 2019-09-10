@@ -2,6 +2,7 @@ export class BorrowedAppConstants {
 
     public static APP_NAME = "Borrowed";
     public static APP_VERSION = "1.0.0";
+    public static SUPPORT_EMAIL = "omtechnologies.apps@gmail.com";
 
     // firestore
     public static USER_COLLECTION = "users";
