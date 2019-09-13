@@ -9,8 +9,24 @@ const routes: Routes = [
   },
   {
     path: "log-in",
-    loadChildren: "./log-in/log-in.module#LogInPageModule",
-    canActivate: [ CanEnterLogInPageGuard ]
+    children: [
+      {
+        path: '',
+        canActivate: [ CanEnterLogInPageGuard ],
+        loadChildren: () =>
+          import('./log-in/log-in.module').then(m => m.LogInPageModule)
+      },
+      {
+        path: 'privacy-policy',
+        loadChildren: () =>
+          import('./privacy-policy/privacy-policy.module').then(m => m.PrivacyPolicyPageModule)
+      },
+      {
+        path: 'terms-and-conditions',
+        loadChildren: () =>
+          import('./terms-and-conditions/terms-and-conditions.module').then(m => m.TermsAndConditionsPageModule)
+      }
+    ]
   }
 ];
 @NgModule({

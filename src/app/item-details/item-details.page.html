@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title> {{ itemObject.itemName }} </ion-title>
+    <!-- <ion-title> {{ itemObject.itemName }} </ion-title> -->
     <ion-buttons slot="end">
       <ion-button [disabled]="!itemObject.isActive" (click)="toggleUrgentStatus()">
         <ion-icon slot="icon-only" style="color: var(--ion-color-tertiary)" *ngIf="itemObject.isUrgent" name="heart">
@@ -34,10 +34,20 @@
   <div *ngIf="itemObject.itemName" [style.opacity]="itemObject.isActive ? 1 : 0.5">
     <ion-card>
       <ion-img class="item-image" *ngIf="itemObject.itemImage" [src]="itemObject.itemImage"></ion-img>
+      <ion-item lines="none" *ngIf="isMobilePlatform">
+          <ion-chip (click)="selectImageSource()" class="center-chip">
+            <ion-icon name="camera"></ion-icon>
+            <ion-label>Change Image</ion-label>
+          </ion-chip>
+      </ion-item>
       <ion-card-header *ngIf="itemObject.itemDescription">
         <ion-card-subtitle>{{ itemObject.itemDescription }}</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
+        <ion-item *ngIf="itemObject.itemName">
+          <ion-icon slot="start" name="cube"></ion-icon>
+          <ion-label>{{ itemObject.itemName }}</ion-label>
+        </ion-item>
         <ion-item *ngIf="itemObject.borrowingDate">
           <ion-icon slot="start" name="time"></ion-icon>
           <ion-label>{{ itemObject.borrowingDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>

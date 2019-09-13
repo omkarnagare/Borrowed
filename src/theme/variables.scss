@@ -131,9 +131,9 @@
 		ion-grid>ion-row>ion-col.bold-heading>ion-label>h2 {
 			font-weight: bold;
 		}
-		ion-grid>ion-row>ion-col>ion-label>* {
-			white-space: initial !important;
-		}
+		// ion-grid>ion-row>ion-col>ion-label>* {
+		// 	white-space: initial !important;
+		// }
 	}
 	.validation-errors>ion-item {
 		ion-label {

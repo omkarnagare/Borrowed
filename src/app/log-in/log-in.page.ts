@@ -140,7 +140,18 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
             .then((authData) => {
               this.handleSuccess(authData);
             }).catch((authDataError) => {
-              this.handleError(authDataError);
+              // console.error(authDataError);
+              if (authDataError.code === BorrowedAppConstants.NO_USER_FOUND_CODE) {
+                this.handleError(BorrowedAppConstants.NO_USER_FOUND_MESSAGE);
+              } else if (authDataError.code === BorrowedAppConstants.WRONG_PASSWORD_CODE) {
+                this.handleError(BorrowedAppConstants.WRONG_PASSWORD_MESSAGE);
+              } else if (authDataError.code === BorrowedAppConstants.USER_DISABLED_CODE) {
+                this.handleError(BorrowedAppConstants.USER_DISABLED_MESSAGE);
+              } else if (authDataError.code === BorrowedAppConstants.INVALID_USER_EMAIL_CODE) {
+                this.handleError(BorrowedAppConstants.INVALID_USER_EMAIL_MESSAGE);
+              } else {
+                this.handleError(authDataError);
+              }
             });
         } else {
           this._toastManager.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
@@ -175,7 +186,18 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
                 this.handleError(error);
               });
             }).catch((authDataError) => {
-              this.handleError(authDataError);
+              // console.error(authDataError);
+              if (authDataError.code === BorrowedAppConstants.EMAIL_ALREADY_IN_USE_CODE) {
+                this.handleError(BorrowedAppConstants.EMAIL_ALREADY_IN_USE_MESSAGE);
+              } else if (authDataError.code === BorrowedAppConstants.WEAK_PASSWORD_CODE) {
+                this.handleError(BorrowedAppConstants.WEAK_PASSWORD_MESSAGE);
+              } else if (authDataError.code === BorrowedAppConstants.EMAIL_NOT_ENABLED_CODE) {
+                this.handleError(BorrowedAppConstants.EMAIL_NOT_ENABLED_MESSAGE);
+              } else if (authDataError.code === BorrowedAppConstants.INVALID_USER_EMAIL_CODE) {
+                this.handleError(BorrowedAppConstants.INVALID_USER_EMAIL_MESSAGE);
+              } else {
+                this.handleError(authDataError);
+              }
             });
         } else {
           this._toastManager.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
@@ -200,8 +222,15 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
               console.log(response);
               this._loader.stopLoader();
               this.showAlertForResetPassword();
-            }).catch(error => {
-              this.handleError(error);
+            }).catch(authDataError => {
+              // console.error(authDataError);
+              if (authDataError.code === BorrowedAppConstants.NO_USER_FOUND_CODE) {
+                this.handleError(BorrowedAppConstants.NO_USER_FOUND_MESSAGE);
+              } else if (authDataError.code === BorrowedAppConstants.INVALID_USER_EMAIL_CODE) {
+                this.handleError(BorrowedAppConstants.INVALID_USER_EMAIL_MESSAGE);
+              } else {
+                this.handleError(authDataError);
+              }
             });
         } else {
           this._toastManager.showToast(BorrowedAppConstants.INVALID_FIELDS_MESSAGE);
@@ -234,7 +263,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
       console.log(response);
       this.setUserInfoInFirebase();
     }).catch(error => {
-      this.handleError(error);
+      this.handleError(BorrowedAppConstants.LOGIN_FAILED_MESSAGE);
     });
   }
 
@@ -243,7 +272,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
       console.log(response);
       this.setUserInfoInFirebase();
     }).catch(error => {
-      this.handleError(error);
+      this.handleError(BorrowedAppConstants.LOGIN_FAILED_MESSAGE);
     });
   }
 
@@ -252,7 +281,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
       console.log(response);
       this.setUserInfoInFirebase();
     }).catch(error => {
-      this.handleError(error);
+      this.handleError(BorrowedAppConstants.LOGIN_FAILED_MESSAGE);
     });
   }
 

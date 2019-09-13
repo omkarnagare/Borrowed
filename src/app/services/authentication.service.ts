@@ -11,6 +11,7 @@ import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import { TwitterConnect } from '@ionic-native/twitter-connect/ngx';
 import { LoaderManagerService } from './loader-manager.service';
 import { ToastManagerService } from './toast-manager.service';
+import { BorrowedAppConstants } from '../constants';
 
 @Injectable({
   providedIn: 'root'
@@ -93,7 +94,7 @@ export class AuthenticationService {
 
   onLoginError(error: any) {
     console.error(error)
-    this._toastManager.showErrorToast(error);
+    this._toastManager.showErrorToast(BorrowedAppConstants.LOGIN_FAILED_MESSAGE);
     this._loader.stopLoader();
   }
 

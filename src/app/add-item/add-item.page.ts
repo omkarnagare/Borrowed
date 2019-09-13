@@ -62,7 +62,7 @@ export class AddItemPage implements OnInit {
         { type: 'required', message: 'Lendee name cannot be left blank.' },
         { type: 'pattern', message: 'Not a valid name.' }],
       'lendeeContact': [
-        { type: 'pattern', message: 'Valid Examples:  +91-1234567890, 1234567890' }],
+        { type: 'pattern', message: 'Valid Examples:  +91-1234567890, +911234567890, 1234567890' }],
       'lendeeEmail': [
         { type: 'email', message: 'Not a valid Email address.' }],
     };
@@ -78,9 +78,49 @@ export class AddItemPage implements OnInit {
   ionViewDidEnter() {
     this.itemDetailsFormGroup.reset();
     this.itemDetailsFormGroup.markAsUntouched();
+
+    this._admobService.hideBanner();
+  }
+
+  ionViewWillLeave() {
+    this._admobService.unhideBanner();
   }
 
   searchForContacts() {
+    // this.contactsFound = [
+    //   {
+    //     displayName : 'Temp ABCD 123',
+    //     phoneNumbers: [{
+    //       value: '+91 1312313234'
+    //     }, 
+    //     {
+    //       value: '+91 3456234 892'
+    //     }, 
+    //     {
+    //       value: '+91 3456234 891'
+    //     } , 
+    //     {
+    //       value: '+91 3456234 832'
+    //     }           
+    //     ]
+    //   },
+    //   {
+    //     displayName : 'Temp DEF',
+    //     phoneNumbers: [{
+    //       value: '+91 1312313234'
+    //     }, 
+    //     {
+    //       value: '+91 3456234 892'
+    //     }, 
+    //     {
+    //       value: '+91 3456234 891'
+    //     } , 
+    //     {
+    //       value: '+91 3456234 832'
+    //     }           
+    //     ]
+    //   }
+    // ]
     const searchQuery = this.itemDetailsFormGroup.get("searchQuery").value;
     this._contactsService.getContacts(searchQuery).then(
       contacts => {
@@ -93,9 +133,14 @@ export class AddItemPage implements OnInit {
   }
 
   assignContactDetails(contact: any, number: any) {
-    this.itemDetailsFormGroup.get("lendeeName").setValue(contact.displayName);
-    this.itemDetailsFormGroup.get("lendeeContact").setValue(number);
+    const trimmedName = contact.displayName.trim(); // trim whitespaces from name
+    this.itemDetailsFormGroup.get("lendeeName").setValue(trimmedName);
+    const trimmedNumber = number.replace(/\s/g, ""); // remove all the whitespaces from number
+    this.itemDetailsFormGroup.get("lendeeContact").setValue(trimmedNumber);
     this.itemDetailsFormGroup.get("searchQuery").setValue(null);
+
+    this.itemDetailsFormGroup.get("lendeeName").markAsTouched();
+    this.itemDetailsFormGroup.get("lendeeContact").markAsTouched();
   }
 
   async selectImageSource() {
@@ -142,7 +187,7 @@ export class AddItemPage implements OnInit {
   addItem() {
     this._loader.presentLoader().then(() => {
       const itemObject: Item = { ... this.itemDetailsFormGroup.value };
-      itemObject["itemImage"] = this.itemImage ? this.itemImage : "/assets/unknown-item.svg";
+      itemObject["itemImage"] = this.itemImage ? this.itemImage : BorrowedAppConstants.DEFAULT_ITEM_IMAGE;
       this._itemService
         .addItem(itemObject)
         .then((result) => {

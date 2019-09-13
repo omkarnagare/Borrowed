@@ -41,7 +41,8 @@
         </div>
         <ion-item>
           <ion-label>Borrowing Date</ion-label>
-          <ion-datetime [max]="today" displayFormat="DD MMM YYYY" formControlName="borrowingDate" placeholder="Date Given">
+          <ion-datetime [max]="today" displayFormat="DD MMM YYYY" formControlName="borrowingDate"
+            placeholder="Date Given">
           </ion-datetime>
         </ion-item>
         <div *ngFor="let validation of validationMessages.borrowingDate" class="validation-errors">
@@ -57,15 +58,23 @@
         </ion-item>
         <ion-item *ngIf="contactsFound && contactsFound.length !== 0" lines="none">
           <ion-list class="container">
-            <ion-item *ngFor="let contact of contactsFound" lines="none">
-              <div class="scroll" scrollX="true">
-                <ion-chip>{{ contact?.displayName }}</ion-chip>
-                <ion-chip *ngFor="let number of contact?.phoneNumbers"
-                  (click)="assignContactDetails(contact, number.value)">
-                  {{ number.value }}
-                </ion-chip>
-              </div>
-            </ion-item>
+            <div *ngFor="let contact of contactsFound">
+              <ion-item lines="none">
+                <ion-label style="font-size: 12px;">
+                  {{ contact?.displayName }}
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <div class="scroll" scrollX="true">
+                  <!-- <ion-chip>{{ contact?.displayName }}</ion-chip> -->
+                  <ion-chip *ngFor="let number of contact?.phoneNumbers"
+                    (click)="assignContactDetails(contact, number.value)">
+                    <ion-icon style="color:rgb(1, 112, 41)" name="code-download"></ion-icon>
+                    <ion-label color="primary">{{ number.value }}</ion-label>
+                  </ion-chip>
+                </div>
+              </ion-item>
+            </div>
           </ion-list>
         </ion-item>
         <ion-item>

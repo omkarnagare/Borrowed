@@ -8,6 +8,9 @@ import { DatePipe } from '@angular/common';
 import { PlatformInfoService } from '../services/platform-info.service';
 import { LoaderManagerService } from '../services/loader-manager.service';
 import { ToastManagerService } from '../services/toast-manager.service';
+import { BorrowedAppConstants, ImageSourceType } from '../constants';
+import { GetImageService } from '../services/get-image.service';
+import { ActionSheetController } from '@ionic/angular';
 
 @Component({
   selector: 'app-item-details',
@@ -28,6 +31,8 @@ export class ItemDetailsPage implements OnDestroy {
     private _toastManager: ToastManagerService,
     private _socialNetworksService: SocialNetworksService,
     private _platformInfoService: PlatformInfoService,
+    private _getImageService: GetImageService,
+    private _actionSheetController: ActionSheetController,
     private _datePipe: DatePipe,
     private _router: Router,
     activatedRoute: ActivatedRoute
@@ -131,7 +136,56 @@ export class ItemDetailsPage implements OnDestroy {
   }
 
   getItemImage() {
-    return this.itemObject.itemImage === "/assets/unknown-item.svg" ? null : this.itemObject.itemImage;
+    return this.itemObject.itemImage === BorrowedAppConstants.DEFAULT_ITEM_IMAGE ? null : this.itemObject.itemImage;
+  }
+
+  async selectImageSource() {
+    const alert = await this._actionSheetController.create({
+      buttons: [
+        {
+          text: "Camera",
+          icon: 'camera',
+          handler: () => {
+            this.captureItemImage(ImageSourceType.BACK_CAMERA);
+          }
+        },
+        {
+          text: "Gallery",
+          icon: 'images',
+          handler: () => {
+            this.captureItemImage(ImageSourceType.GALLERY);
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  captureItemImage(sourceType: ImageSourceType) {
+    this._getImageService.getImage(sourceType)
+      .then((imageData) => {
+        const itemImage = BorrowedAppConstants.BASE64_IMAGE_PREFIX_DATA + imageData;
+        console.log("imageData", itemImage);
+        //update item image
+        this._itemService.updateItem(this.itemId, {
+          itemImage: itemImage
+        }).then(response => {
+          this._toastManager.showToast(BorrowedAppConstants.ITEM_IMAGE_SUCCESS_MESSAGE);
+        }).catch(error => {
+          this._toastManager.showErrorToast(error);
+        })
+      },
+        (error) => {
+          console.log("error occurred while getting Item Image: ", error);
+        });
   }
 
   ngOnDestroy() {

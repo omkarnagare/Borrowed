@@ -19,9 +19,28 @@ export class BorrowedAppConstants {
     //google pay info
     public static GOOGLE_PAY_ID = "omkar.balkrishan@okhdfcbank";
 
+    //login 
+    public static NO_USER_FOUND_CODE = "auth/user-not-found";
+    public static NO_USER_FOUND_MESSAGE = "No such user exists. Please sign up to create new user.";
+    public static WRONG_PASSWORD_CODE = "auth/wrong-password";
+    public static WRONG_PASSWORD_MESSAGE = "Wrong Password. Please try again.";
+    public static USER_DISABLED_CODE = "auth/user-disabled";
+    public static USER_DISABLED_MESSAGE = "This user account is deactivated. Please sign up to create new user.";
+    public static INVALID_USER_EMAIL_CODE = "auth/invalid-email";
+    public static INVALID_USER_EMAIL_MESSAGE = "Invalid Email. Please try again with correct email.";
+    public static EMAIL_ALREADY_IN_USE_CODE = "auth/email-already-in-use";
+    public static EMAIL_ALREADY_IN_USE_MESSAGE = "The user already exists. Try logging in or use forgot password to continue.";
+    public static EMAIL_NOT_ENABLED_CODE = "auth/operation-not-allowed";
+    public static EMAIL_NOT_ENABLED_MESSAGE = "This method of authentication is not enabled.";
+    public static WEAK_PASSWORD_CODE = "auth/weak-password";
+    public static WEAK_PASSWORD_MESSAGE = "Weak Password. Please try again.";
+    public static LOGIN_FAILED_MESSAGE = "Log In failed. Please try again";
+
     // general constants
+    public static DEFAULT_ITEM_IMAGE = "/assets/unknown-item.svg";
     public static BASE64_IMAGE_PREFIX_DATA = "data:image/jpeg;base64,";
     public static USER_IMAGE_SUCCESS_MESSAGE = "Profile Image set successfully.";
+    public static ITEM_IMAGE_SUCCESS_MESSAGE = "Item Image set successfully.";
     public static DEVICE_OFFLINE_MESSAGE = "Your device seems to be Offline. Borrowed may not work correctly. The app will exit now.";
     public static ERROR_MESSAGE = "Some Error Occurred. Please try again.";
     public static INVALID_FIELDS_MESSAGE = "Please fill all the fields with appropriate values.";

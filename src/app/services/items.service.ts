@@ -148,7 +148,7 @@ export class ItemsService implements OnDestroy {
   async showAlertForTransactionComplete(item: Item) {
     const alert = await this._alertController.create({
       header: "Hurray!! Borrowing Transaction completed.",
-      message: "To view transaction-complete Items, go to Account details.",
+      message: "To view transaction-complete Items in Items history, go to Account details.",
       buttons: [
         {
           text: 'Ok',

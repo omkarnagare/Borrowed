@@ -28,6 +28,14 @@ export class AdmobAdsService implements OnDestroy {
       });
     }
   }
+
+  unhideBanner() {
+    this._admob.showBanner(this._admob.AD_POSITION.BOTTOM_CENTER);
+  }
+
+  hideBanner() {
+    this._admob.hideBanner();
+  }
   
   // setUpInterstitialAd() {
   //   if (!this.adDissmissed$) {
@@ -41,14 +49,16 @@ export class AdmobAdsService implements OnDestroy {
   // }
 
   showInterStitialAd() {
-    if (this._platformInfoService.isAndroidDevice()) {
-      this._admob.prepareInterstitial(environment.interstitialAdConfig).then((success) => {
-        console.log(success);
-        this._admob.showInterstitial();
-      }).catch(error => {
-        console.error(error);
-      });
-    }
+    // TODO: removing full screen ad till I get a strong user base
+    
+    // if (this._platformInfoService.isAndroidDevice()) {
+    //   this._admob.prepareInterstitial(environment.interstitialAdConfig).then((success) => {
+    //     console.log(success);
+    //     this._admob.showInterstitial();
+    //   }).catch(error => {
+    //     console.error(error);
+    //   });
+    // }
   }
 
   removeBanner() {
