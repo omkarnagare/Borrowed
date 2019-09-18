@@ -1,3 +1,5 @@
+import { PIN_STATE } from './constants';
+
 export interface Item {
     // item information
     itemId?: string;
@@ -27,6 +29,7 @@ export interface UserInfo {
     name: string;
     email: string;
     profileImage?: string;
+    pin?: string;
 }
 export interface LogInCredentials {
     email: string;
@@ -69,4 +72,12 @@ export interface GenericShare {
     subject?: string;
     file?: string | string[];
     url?: string
+}
+
+export interface PinModalData {
+    title?: string;
+    expectedPIN?: string;
+    pinSetupState?: PIN_STATE;
+    pin?: string;
+    verified?: boolean;
 }

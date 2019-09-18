@@ -4,6 +4,13 @@ export class BorrowedAppConstants {
     public static APP_VERSION = "1.0.0";
     public static SUPPORT_EMAIL = "omtechnologies.apps@gmail.com";
 
+    //pin modal keys
+    public static PIN_MODAL_TITLE_KEY = "title";
+    public static EXPECTED_PIN_KEY = "expectedPIN";
+    public static PIN_SET_UP_STATE_KEY = "pinSetupState";
+    public static PIN_KEY = "pin";
+    public static PIN_VERIFIED_KEY = "verified";
+
     // firestore
     public static USER_COLLECTION = "users";
     public static ITEMS_COLLECTION = "items";
@@ -131,4 +138,10 @@ export enum UserState {
     LOG_IN = 300,
     SIGN_UP = 301,
     FORGOT_PASSWORD = 302
+}
+
+export enum PIN_STATE {
+    SET_PIN = 400,
+    CHANGE_PIN = 401,
+    VERIFY_PIN = 402
 }

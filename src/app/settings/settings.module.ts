@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { SettingsPage } from './settings.page';
+import { PinUnlockPageModule } from '../pin-unlock/pin-unlock.module';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    PinUnlockPageModule,
     CommonModule,
     FormsModule,
     IonicModule,

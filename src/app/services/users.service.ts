@@ -34,6 +34,14 @@ export class UsersService {
     // this._cloudService.uploadImage(ImageType.USER_PROFILE, imageData, {});
   }
 
+  setPIN(pin: string) {
+    return this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
+      .doc(this._angualrFireAuth.auth.currentUser.uid)
+      .update({
+        pin: pin
+      });
+  }
+
   setUserInfo(userInfo: UserInfo) {
     return this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
       .doc(this._angualrFireAuth.auth.currentUser.uid)

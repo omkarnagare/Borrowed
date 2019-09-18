@@ -3,7 +3,13 @@ import { AppInfoService } from '../services/app-info.service';
 import { SocialNetworksService } from '../services/social-networks.service';
 import { PlatformInfoService } from '../services/platform-info.service';
 import { Subscription } from 'rxjs';
-import { Platform } from '@ionic/angular';
+import { Platform, ModalController } from '@ionic/angular';
+import { PinUnlockPage } from '../pin-unlock/pin-unlock.page';
+import { PinModalData } from '../types';
+import { PIN_STATE, BorrowedAppConstants } from '../constants';
+import { UsersService } from '../services/users.service';
+import { ToastManagerService } from '../services/toast-manager.service';
+import { LoaderManagerService } from '../services/loader-manager.service';
 
 @Component({
   selector: 'app-settings',
@@ -20,6 +26,10 @@ export class SettingsPage implements OnInit, AfterViewInit, OnDestroy {
   appVersion: string;
 
   constructor(
+    private _modalController: ModalController,
+    private _loader: LoaderManagerService,
+    private _toastManager: ToastManagerService,
+    private _userService: UsersService,
     private _platform: Platform,
     private _socialNetworkService: SocialNetworksService,
     private _appInfoService: AppInfoService,
@@ -66,4 +76,60 @@ export class SettingsPage implements OnInit, AfterViewInit, OnDestroy {
     return null;
   }
 
+  async openPinModal() {
+    const pinModalData: PinModalData = {
+      title: "Enter PIN",
+      expectedPIN: "",
+      pinSetupState: PIN_STATE.SET_PIN
+    };
+    const pinModal = await this._modalController.create({
+      component: PinUnlockPage,
+      componentProps: pinModalData,
+    });
+
+    pinModal.onDidDismiss()
+      .then((data) => {
+        const response = data.data;
+        if (response) {
+          const pinModalData: PinModalData = {};
+          if (response[BorrowedAppConstants.PIN_KEY]) {
+            pinModalData.pin = response[BorrowedAppConstants.PIN_KEY];
+          }
+          if (response[BorrowedAppConstants.PIN_VERIFIED_KEY]) {
+            pinModalData.verified = response[BorrowedAppConstants.PIN_VERIFIED_KEY];
+          }
+          if (response[BorrowedAppConstants.PIN_SET_UP_STATE_KEY]) {
+            pinModalData.pinSetupState = response[BorrowedAppConstants.PIN_SET_UP_STATE_KEY];
+          }
+          this.processPinModalData(pinModalData);
+        } else {
+          // no need to take any action
+        }
+      });
+
+    return await pinModal.present();
+  }
+
+  processPinModalData(pinModalData: PinModalData) {
+    switch (pinModalData.pinSetupState) {
+      case PIN_STATE.SET_PIN:
+        console.log(pinModalData.pin);
+        this._loader.presentLoader().then(() => {
+          this._userService.setPIN(pinModalData.pin).then((data) => {
+            this._toastManager.showToast("PIN set successfully");
+          }).finally(() => {
+            this._loader.stopLoader();
+          });
+        });
+        break;
+      case PIN_STATE.CHANGE_PIN:
+        this._userService.setPIN(pinModalData.pin).then((data) => {
+          this._toastManager.showToast("PIN changed successfully");
+        })
+        break;
+      case PIN_STATE.VERIFY_PIN:
+        // no need in settings page
+        break;
+    }
+  }
 }
