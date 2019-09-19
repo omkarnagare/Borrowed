@@ -31,14 +31,14 @@ plugins/
 plugins/android.json
 plugins/ios.json
 $RECYCLE.BIN/
-src/environments/environment.ts
-src/environments/environment.prod.ts
-google-services.json
-GoogleService-Info.plist
-package.json
-package-lock.json
-config.xml
-ionic.config.json
+# src/environments/environment.ts
+# src/environments/environment.prod.ts
+# google-services.json
+# GoogleService-Info.plist
+# package.json
+# package-lock.json
+# config.xml
+# ionic.config.json
 
 .DS_Store
 Thumbs.db

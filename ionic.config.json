@@ -1,0 +1,8 @@
+{
+  "name": "borrowed",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "id": "24ed69f5"
+}

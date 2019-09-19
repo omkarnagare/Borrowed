@@ -1,0 +1,150 @@
+{
+  "name": "borrowed",
+  "version": "0.0.1",
+  "author": "Ionic Framework",
+  "homepage": "https://ionicframework.com/",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "~8.1.2",
+    "@angular/compiler": "~8.1.2",
+    "@angular/core": "~8.1.2",
+    "@angular/fire": "^5.2.1",
+    "@angular/forms": "~8.1.2",
+    "@angular/platform-browser": "~8.1.2",
+    "@angular/platform-browser-dynamic": "~8.1.2",
+    "@angular/pwa": "^0.803.1",
+    "@angular/router": "~8.1.2",
+    "@angular/service-worker": "~8.1.2",
+    "@ionic-native/admob-pro": "^5.13.0",
+    "@ionic-native/app-version": "^5.12.0",
+    "@ionic-native/camera": "^5.11.0",
+    "@ionic-native/clipboard": "^5.13.0",
+    "@ionic-native/contacts": "^5.12.0",
+    "@ionic-native/core": "^5.0.0",
+    "@ionic-native/facebook": "^5.12.0",
+    "@ionic-native/google-plus": "^5.12.0",
+    "@ionic-native/ionic-webview": "^5.12.0",
+    "@ionic-native/network": "^5.12.0",
+    "@ionic-native/pin-dialog": "^4.20.0",
+    "@ionic-native/social-sharing": "^5.11.0",
+    "@ionic-native/splash-screen": "^5.0.0",
+    "@ionic-native/status-bar": "^5.0.0",
+    "@ionic-native/twitter-connect": "^5.12.0",
+    "@ionic/angular": "^4.7.1",
+    "@ionic/storage": "^2.2.0",
+    "color": "^3.1.2",
+    "cordova-android": "8.0.0",
+    "cordova-clipboard": "^1.3.0",
+    "cordova-plugin-admobpro-firebase": "2.37.0",
+    "cordova-plugin-app-version": "^0.1.9",
+    "cordova-plugin-camera": "^4.1.0",
+    "cordova-plugin-contacts": "^3.0.1",
+    "cordova-plugin-extension": "1.5.4",
+    "cordova-plugin-facebook4": "^6.0.0",
+    "cordova-plugin-googleplus": "^8.0.0",
+    "cordova-plugin-ionic": "^5.4.4",
+    "cordova-plugin-ionic-webview": "^4.1.1",
+    "cordova-plugin-network-information": "^2.0.2",
+    "cordova-plugin-x-socialsharing": "^5.4.7",
+    "cordova-sqlite-storage": "^3.3.0",
+    "core-js": "^2.5.4",
+    "es6-promise-plugin": "^4.2.2",
+    "firebase": "^6.3.3",
+    "rxjs": "~6.5.1",
+    "tslib": "^1.9.0",
+    "twitter-connect-plugin": "^0.6.0",
+    "zone.js": "~0.9.1"
+  },
+  "devDependencies": {
+    "@angular-devkit/architect": "~0.801.2",
+    "@angular-devkit/build-angular": "~0.801.2",
+    "@angular-devkit/core": "~8.1.2",
+    "@angular-devkit/schematics": "~8.1.2",
+    "@angular/cli": "~8.1.2",
+    "@angular/compiler": "~8.1.2",
+    "@angular/compiler-cli": "~8.1.2",
+    "@angular/language-service": "~8.1.2",
+    "@ionic/angular-toolkit": "~2.0.0",
+    "@ionic/lab": "2.0.6",
+    "@types/jasmine": "~3.3.8",
+    "@types/jasminewd2": "~2.0.3",
+    "@types/node": "~8.9.4",
+    "codelyzer": "^5.0.0",
+    "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-ionic-keyboard": "^2.1.3",
+    "cordova-plugin-splashscreen": "^5.0.2",
+    "cordova-plugin-statusbar": "^2.4.2",
+    "cordova-plugin-whitelist": "^1.3.3",
+    "jasmine-core": "~3.4.0",
+    "jasmine-spec-reporter": "~4.2.1",
+    "karma": "~4.1.0",
+    "karma-chrome-launcher": "~2.2.0",
+    "karma-coverage-istanbul-reporter": "~2.0.1",
+    "karma-jasmine": "~2.0.1",
+    "karma-jasmine-html-reporter": "^1.4.0",
+    "protractor": "~5.4.0",
+    "ts-node": "~7.0.0",
+    "tslint": "~5.15.0",
+    "typescript": "~3.4.3"
+  },
+  "description": "An Ionic project",
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-camera": {},
+      "cordova-plugin-x-socialsharing": {
+        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
+      },
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+      },
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-contacts": {},
+      "cordova-plugin-app-version": {},
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-ionic": {
+        "APP_ID": "24ed69f5",
+        "CHANNEL_NAME": "Master",
+        "UPDATE_METHOD": "background",
+        "MAX_STORE": "2",
+        "MIN_BACKGROUND_DURATION": "30",
+        "UPDATE_API": "https://api.ionicjs.com"
+      },
+      "cordova-plugin-admobpro-firebase": {
+        "PLAY_SERVICES_VERSION": "16.0.0"
+      },
+      "cordova-plugin-googleplus": {
+        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.1064266627070-46t1dh6graobqt4kkom60oooj18g3j4k",
+        "WEB_APPLICATION_CLIENT_ID": "1064266627070-ar5jqmoj2tsum88j6qbb6r01f69pimvt.apps.googleusercontent.com",
+        "PLAY_SERVICES_VERSION": "16.0.0"
+      },
+      "twitter-connect-plugin": {
+        "FABRIC_KEY": "68323215facd32e8d2bf6d9e74edc1f07beb92d6",
+        "TWITTER_KEY": "NU5jNJT5J7RXLQ07DcZNZKGsU",
+        "TWITTER_SECRET": "McAPWNwByhMGZFocnJgpXYfpIPKf6UQGxE4XxCt8DpeFo607Xh"
+      },
+      "cordova-clipboard": {},
+      "cordova-plugin-facebook4": {
+        "APP_ID": "2388309858159962",
+        "APP_NAME": "Borrowed",
+        "FACEBOOK_HYBRID_APP_EVENTS": "false",
+        "FACEBOOK_ANDROID_SDK_VERSION": "5.2.0"
+      }
+    },
+    "platforms": [
+      "android"
+    ]
+  }
+}
