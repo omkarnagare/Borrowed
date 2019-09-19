@@ -9,6 +9,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { AdmobAdsService } from '../services/admob-ads.service';
 import { LoaderManagerService } from '../services/loader-manager.service';
 import { ToastManagerService } from '../services/toast-manager.service';
+import { VerificationManagerService } from '../services/verification-manager.service';
 
 @Component({
   selector: 'app-borrowed',
@@ -35,6 +36,7 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
     private _loader: LoaderManagerService,
     private _toastManager: ToastManagerService,
     private _admobService: AdmobAdsService,
+    private _verificationManager: VerificationManagerService,
     formBuilder: FormBuilder
   ) {
     this.searchFromGroup = formBuilder.group({
@@ -57,6 +59,9 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
     this._splashScreen.hide();
     this.searching = true;
     this.searchFromGroup.get("searchControl").setValue("");
+    // this._verificationManager.isVerified().then((data) => {
+    //   console.log("isVerified", data);
+    // });
   }
 
   ngAfterViewInit() {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { BorrowedAppConstants, PIN_STATE } from '../constants';
-import { ToastManagerService } from '../services/toast-manager.service';
 
 @Component({
   selector: 'app-pin-unlock',
@@ -23,8 +22,7 @@ export class PinUnlockPage implements OnInit {
 
   constructor(
     private _navParams: NavParams,
-    private _modalController: ModalController,
-    private _toastManager: ToastManagerService
+    private _modalController: ModalController
   ) {
     // set expected pin here
     this.title = this._navParams.get(BorrowedAppConstants.PIN_MODAL_TITLE_KEY);
@@ -45,7 +43,7 @@ export class PinUnlockPage implements OnInit {
     } else if (length === 3) {
       this.pin3Class = "active";
     } else if (length === 4) {
-
+      this.pin4Class = "active";
       if (this.pinSetupState === PIN_STATE.SET_PIN) {
 
         if (this.expectedPin) {
@@ -62,14 +60,33 @@ export class PinUnlockPage implements OnInit {
           }
         } else {
           this.expectedPin = this.pin;
-          this.title = "Re-Enter PIN";
+          this.title = "Confirm PIN";
           this.resetPin();
         }
 
       } else if (this.pinSetupState === PIN_STATE.CHANGE_PIN) {
 
-      } else if (this.pinSetupState === PIN_STATE.VERIFY_PIN) {
+        if (this.expectedPin === this.pin) {
+          this.expectedPin = "";
+          this.title = "Enter New PIN";
+          this.pinSetupState = PIN_STATE.SET_PIN;
+          this.resetPin();
+        } else {
+          this.title = "Wrong PIN. Try Again";
+          this.clearPin();
+        }
 
+      } else if (this.pinSetupState === PIN_STATE.VERIFY_PIN || this.pinSetupState === PIN_STATE.REMOVE_PIN) {
+        if (this.expectedPin === this.pin) {
+          // dismissModal
+          this._modalController.dismiss({
+            pin: this.pin,
+            pinSetupState: this.pinSetupState
+          });
+        } else {
+          this.title = "Wrong PIN. Try Again";
+          this.clearPin();
+        }
       }
 
     } else if (length > 4) {
@@ -116,7 +133,7 @@ export class PinUnlockPage implements OnInit {
     }, 200);
   }
 
-  dismissModal () {
+  dismissModal() {
     this._modalController.dismiss();
   }
 

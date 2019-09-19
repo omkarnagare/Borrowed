@@ -22,6 +22,9 @@
 <ion-content fullscreen>
 
   <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Account Details</ion-card-subtitle>
+    </ion-card-header>
     <ion-card-content>
 
       <div *ngIf="!storedUserProfile">
@@ -78,31 +81,57 @@
 
       <ion-item routerLink="/tabs/borrowed">
         <ion-label>
-          <!-- <ion-icon name="arrow-dropleft"></ion-icon> -->Items Logged 
+          <!-- <ion-icon name="arrow-dropleft"></ion-icon> -->Items Logged
         </ion-label>
         <ion-badge color="success" slot="end">{{ (lentItems | async)?.length }}</ion-badge>
       </ion-item>
 
       <ion-item routerLink="/tabs/urgent-items">
         <ion-label>
-          <!-- <ion-icon name="arrow-dropleft"></ion-icon> -->Urgent Items 
+          <!-- <ion-icon name="arrow-dropleft"></ion-icon> -->Urgent Items
         </ion-label>
         <ion-badge color="danger" slot="end">{{ (urgentLentItems | async)?.length }}</ion-badge>
       </ion-item>
 
       <ion-item routerLink="transaction-complete-items">
         <ion-label>
-          <!-- <ion-icon name="arrow-dropleft"></ion-icon> -->Items History 
+          <!-- <ion-icon name="arrow-dropleft"></ion-icon> -->Items History
         </ion-label>
         <ion-badge color="danger" slot="end">{{ (transactionCompleteItems | async)?.length }}</ion-badge>
       </ion-item>
 
     </ion-card-content>
   </ion-card>
+
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Security</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <div *ngIf="(storedUserProfile | async) as userProfile">
+        <ion-item *ngIf="!userProfile.pin" (click)="confirmPinAction(400)">
+          <ion-icon style="color:black" slot="start" name="apps"></ion-icon>
+          <ion-label>Set PIN</ion-label>
+        </ion-item>
+        <ion-item *ngIf="userProfile.pin" (click)="confirmPinAction(401, userProfile.pin)">
+          <ion-icon style="color:black" slot="start" name="apps"></ion-icon>
+          <ion-label>Change PIN</ion-label>
+        </ion-item>
+        <ion-item *ngIf="userProfile.pin" (click)="confirmPinAction(403, userProfile.pin)">
+          <ion-icon style="color:red" slot="start" name="apps"></ion-icon>
+          <ion-label>Remove PIN</ion-label>
+        </ion-item>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
-    <ion-button (click)="confirmLogOut()" class="expand-button" style="padding: 0px 8px 0px 8px" color="danger"> Log Out </ion-button>
+    <ion-button (click)="confirmLogOut()" class="expand-button" style="padding: 0px 8px 0px 8px" color="danger"> Log Out
+    </ion-button>
   </ion-toolbar>
 </ion-footer>

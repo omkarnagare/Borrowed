@@ -143,5 +143,6 @@ export enum UserState {
 export enum PIN_STATE {
     SET_PIN = 400,
     CHANGE_PIN = 401,
-    VERIFY_PIN = 402
+    VERIFY_PIN = 402,
+    REMOVE_PIN = 403
 }

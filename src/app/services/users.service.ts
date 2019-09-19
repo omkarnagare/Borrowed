@@ -42,6 +42,10 @@ export class UsersService {
       });
   }
 
+  removePIN() {
+    return this.setPIN("");
+  }
+
   setUserInfo(userInfo: UserInfo) {
     return this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
       .doc(this._angualrFireAuth.auth.currentUser.uid)
