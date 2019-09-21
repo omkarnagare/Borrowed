@@ -13,6 +13,7 @@ import { ToastManagerService } from '../services/toast-manager.service';
 import { AdmobAdsService } from '../services/admob-ads.service';
 import { PinUnlockPage } from '../pin-unlock/pin-unlock.page';
 import { LoaderManagerService } from '../services/loader-manager.service';
+import { PinVerificationService } from '../services/pin-verification.service';
 
 @Component({
   selector: 'app-account',
@@ -39,6 +40,7 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
     private _platform: Platform,
     private _admobService: AdmobAdsService,
     private _usersService: UsersService,
+    private _pinVerification: PinVerificationService,
     private _getImageService: GetImageService,
     private _itemsService: ItemsService,
     private _toastManager: ToastManagerService,
@@ -271,7 +273,9 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
   setPin(pin: string) {
     this._loader.presentLoader().then(() => {
       this._usersService.setPIN(pin).then((data) => {
-        this._toastManager.showToast("PIN set successfully");
+        // this._toastManager.showToast("PIN set successfully");
+        this._pinVerification.pin = pin;
+        this._pinVerification.verified = false;
       }).finally(() => {
         this._loader.stopLoader();
       });
@@ -281,7 +285,8 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
   removePin() {
     this._loader.presentLoader().then(() => {
       this._usersService.removePIN().then((data) => {
-        this._toastManager.showToast("PIN removed successfully");
+        // this._toastManager.showToast("PIN removed successfully");
+        this._pinVerification.verified = true;
       }).finally(() => {
         this._loader.stopLoader();
       });

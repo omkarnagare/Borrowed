@@ -54,7 +54,7 @@
     </div>
   </div>
 </ion-content>
-
-<div class="close" (click)="dismissModal()">
+<!-- hiding close modal while pin verification -->
+<div class="close" *ngIf="pinSetupState !== 402" (click)="dismissModal()">
   <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
 </div>

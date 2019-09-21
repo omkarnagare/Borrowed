@@ -2,14 +2,16 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
-import { Platform } from '@ionic/angular';
+import { Platform, ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime, map } from 'rxjs/operators';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { AdmobAdsService } from '../services/admob-ads.service';
 import { LoaderManagerService } from '../services/loader-manager.service';
 import { ToastManagerService } from '../services/toast-manager.service';
-import { VerificationManagerService } from '../services/verification-manager.service';
+import { PinVerificationService } from '../services/pin-verification.service';
+import { PIN_STATE } from '../constants';
+import { PinUnlockPage } from '../pin-unlock/pin-unlock.page';
 
 @Component({
   selector: 'app-borrowed',
@@ -36,7 +38,8 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
     private _loader: LoaderManagerService,
     private _toastManager: ToastManagerService,
     private _admobService: AdmobAdsService,
-    private _verificationManager: VerificationManagerService,
+    private _pinVerification: PinVerificationService,
+    private _modalController: ModalController,
     formBuilder: FormBuilder
   ) {
     this.searchFromGroup = formBuilder.group({
@@ -56,12 +59,35 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ionViewDidEnter() {
-    this._splashScreen.hide();
-    this.searching = true;
-    this.searchFromGroup.get("searchControl").setValue("");
-    // this._verificationManager.isVerified().then((data) => {
-    //   console.log("isVerified", data);
-    // });
+    this._pinVerification.isVerified().then((data) => {
+      if (data.verified) {
+        // safe to go ahead
+      } else {
+        this.openPinVerifyModal(data.pin);
+      }
+
+      this._splashScreen.hide();
+      this.searching = true;
+      this.searchFromGroup.get("searchControl").setValue("");
+    });
+  }
+
+  async openPinVerifyModal(expectedPIN: string = "") {
+    console.log(expectedPIN);
+    const pinModal = await this._modalController.create({
+      component: PinUnlockPage,
+      componentProps: {
+        title: "Enter PIN",
+        pinSetupState: PIN_STATE.VERIFY_PIN,
+        expectedPIN: expectedPIN
+      },
+      backdropDismiss: false // user cannot dissmiss by clicking outside
+    });
+    pinModal.onDidDismiss()
+    .then((data) => {
+        this._pinVerification.verified = true;
+    });
+    return await pinModal.present();
   }
 
   ngAfterViewInit() {
