@@ -13,24 +13,24 @@
 
 <ion-content fullscreen>
 
-  <ion-card no-margin>
+  <ion-card no-margin *ngIf="showItemDetailsForm">
     <ion-card-content>
       <form [formGroup]="itemDetailsFormGroup">
         <div *ngIf="isMobilePlatform">
-          <ion-item lines="none">
+          <ion-item lines="none" @slidetoptitle>
             <ion-avatar class="item-picture">
               <ion-img [src]="itemImage">
               </ion-img>
             </ion-avatar>
           </ion-item>
-          <ion-item lines="none">
+          <ion-item lines="none" @slidetoptitle>
             <ion-chip (click)="selectImageSource()" class="center-chip">
               <ion-icon name="camera"></ion-icon>
               <ion-label> {{ itemImage ? "Change Image" : "Add Image (Optional)" }}</ion-label>
             </ion-chip>
           </ion-item>
         </div>
-        <ion-item>
+        <ion-item  @slidelefttitle>
           <ion-input placeholder="Item Name/Category" formControlName="itemName" type="text"></ion-input>
         </ion-item>
         <div *ngFor="let validation of validationMessages.itemName" class="validation-errors">
@@ -39,7 +39,7 @@
             <ion-label>{{ validation.message }}</ion-label>
           </ion-item>
         </div>
-        <ion-item>
+        <ion-item @sliderighttitle>
           <ion-label>Borrowing Date</ion-label>
           <ion-datetime [max]="today" displayFormat="DD MMM YYYY" formControlName="borrowingDate"
             placeholder="Date Given">
@@ -52,7 +52,7 @@
           </ion-item>
         </div>
         <ion-item *ngIf="isMobilePlatform" lines="none">
-          <ion-searchbar formControlName="searchQuery" (ionChange)="searchForContacts()" searchIcon="contacts"
+          <ion-searchbar @slidelefttitle formControlName="searchQuery" (ionChange)="searchForContacts()" searchIcon="contacts"
             placeholder="browse from contact list" autocomplete="on" debounce="700">
           </ion-searchbar>
         </ion-item>
@@ -77,7 +77,7 @@
             </div>
           </ion-list>
         </ion-item>
-        <ion-item>
+        <ion-item @slidelefttitle>
           <ion-input placeholder="Lendee" formControlName="lendeeName" type="text"></ion-input>
         </ion-item>
         <div *ngFor="let validation of validationMessages.lendeeName" class="validation-errors">
@@ -86,7 +86,7 @@
             <ion-label>{{ validation.message }}</ion-label>
           </ion-item>
         </div>
-        <ion-item>
+        <ion-item @sliderighttitle>
           <ion-input placeholder="Contact Number For Lendee" formControlName="lendeeContact" type="text"></ion-input>
         </ion-item>
         <div *ngFor="let validation of validationMessages.lendeeContact" class="validation-errors">
@@ -95,7 +95,7 @@
             <ion-label>{{ validation.message }}</ion-label>
           </ion-item>
         </div>
-        <ion-item>
+        <ion-item @slidelefttitle>
           <ion-input placeholder="Email For Lendee" formControlName="lendeeEmail" type="text"></ion-input>
         </ion-item>
         <div *ngFor="let validation of validationMessages.lendeeEmail" class="validation-errors">
@@ -104,16 +104,16 @@
             <ion-label>{{ validation.message }}</ion-label>
           </ion-item>
         </div>
-        <ion-item lines="none">
+        <ion-item lines="none" @sliderighttitle>
           <ion-label>Urgent</ion-label>
           <ion-toggle formControlName="isUrgent" checked="false"></ion-toggle>
         </ion-item>
-        <ion-item>
+        <ion-item @slidelefttitle>
           <ion-textarea placeholder="Add something more about the item here" formControlName="itemDescription">
           </ion-textarea>
         </ion-item>
 
-        <ion-button (click)="addItem()" [disabled]="itemDetailsFormGroup.invalid" class="expand-button">
+        <ion-button @slidebottomtitle (click)="addItem()" [disabled]="itemDetailsFormGroup.invalid" class="expand-button">
           Add</ion-button>
         <!-- <ion-button (click)="closeModal()" class="expand-button">
           Cancel</ion-button> -->

@@ -10,7 +10,7 @@ export class ToastManagerService {
     private _toastController: ToastController
   ) { }
 
-  showToast(message: any, duration = 2000) {
+  showToast(message: any, duration = 3000) {
     const toast = this._toastController.create({
       message: message,
       duration: duration,
@@ -25,7 +25,7 @@ export class ToastManagerService {
     });
   }
 
-  showErrorToast(error: any, duration = 2000) {
+  showErrorToast(error: any, duration = 3000) {
     console.error(error);
     const toast = this._toastController.create({
       message: error.message ? error.message : error,

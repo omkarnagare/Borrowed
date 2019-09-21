@@ -36,11 +36,11 @@
 
   <div *ngIf="(lentItems | async)?.length === 0">
     <ion-card class="card-center" routerLink="/tabs/add-item">
-      <ion-img src="/assets/empty-box.svg" class="center-image"></ion-img>
+      <ion-img @slidetoptitle src="/assets/empty-box.svg" class="center-image"></ion-img>
       <ion-card-header>
-        <ion-card-title>No Lent Items Present !!</ion-card-title>
+        <ion-card-title @slidelefttitle>No Lent Items Present !!</ion-card-title>
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-content @sliderighttitle>
         <h2>Click here to Add</h2>
         <p>Before you forget.</p>
       </ion-card-content>
@@ -49,7 +49,7 @@
 
   <div *ngIf="(lentItems | async) as loadedItems">
     <ion-list *ngIf="loadedItems.length > 0">
-      <ion-list-header>Lent Items</ion-list-header>
+      <ion-list-header @sliderighttitle>Lent Items</ion-list-header>
       <ion-item-sliding *ngFor="let lentItem of loadedItems">
         <ion-item-options side="start">
           <ion-item-option color="danger" (click)="removeItem( lentItem )">
@@ -59,21 +59,21 @@
         </ion-item-options>
 
         <ion-item [routerLink]="['item-details', lentItem.itemId]" class="item-grid-content"
-        [style.opacity]="lentItem.isActive ? 1 : 0.5">
+          [style.opacity]="lentItem.isActive ? 1 : 0.5">
           <ion-grid fixed>
             <ion-row>
-              <ion-col size="2">
+              <ion-col size="2" @slidelefttitle>
                 <ion-thumbnail>
                   <img [src]="lentItem.itemImage">
                 </ion-thumbnail>
               </ion-col>
-              <ion-col size="7" class="bold-heading">
+              <ion-col size="7" class="bold-heading" @slidetoptitle>
                 <ion-label>
                   <h2 text-uppercase>{{ lentItem.itemName }}</h2>
                   <p> Lent to : <b>{{ lentItem.lendeeName }}</b></p>
                 </ion-label>
               </ion-col>
-              <ion-col size="3">
+              <ion-col size="3" @sliderighttitle>
                 <ion-label>
                   <p><b>{{ lentItem.borrowingDate  | date: 'MMM dd' }}</b></p>
                   <p>{{ lentItem.borrowingDate  | date: "HH:mm" }}</p>
@@ -85,7 +85,8 @@
 
         <ion-item-options side="end" [style.opacity]="lentItem.isActive ? 1 : 0.3">
           <ion-item-option [disabled]="!lentItem.isActive" (click)="toggleUrgentStatus( lentItem.itemId, lentItem )">
-            <ion-icon *ngIf="lentItem.isUrgent" style="color:var(--ion-color-tertiary)" name="heart" slot="icon-only"></ion-icon>
+            <ion-icon *ngIf="lentItem.isUrgent" style="color:var(--ion-color-tertiary)" name="heart" slot="icon-only">
+            </ion-icon>
             <ion-icon *ngIf="!lentItem.isUrgent" name="heart-empty" slot="icon-only"></ion-icon>
           </ion-item-option>
         </ion-item-options>

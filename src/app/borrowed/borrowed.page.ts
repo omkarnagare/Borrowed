@@ -14,10 +14,45 @@ import { PIN_STATE } from '../constants';
 import { PinUnlockPage } from '../pin-unlock/pin-unlock.page';
 import { ConfirmExitService } from '../services/confirm-exit.service';
 
+import { trigger, state, transition, style, animate } from '@angular/animations';
+
 @Component({
   selector: 'app-borrowed',
   templateUrl: 'borrowed.page.html',
-  styleUrls: ['borrowed.page.scss']
+  styleUrls: ['borrowed.page.scss'],
+  animations: [
+    trigger('fadein', [
+      state('void', style({ opacity: 0 })),
+      transition('void => *', [
+        style({ opacity: 0 }),
+        animate('600ms ease-out', style({ opacity: 1 }))
+      ])
+    ]),
+    trigger('slidelefttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('sliderighttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('slidetoptitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('slidebottomtitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+      ])
+    ])
+  ]
 })
 export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
 

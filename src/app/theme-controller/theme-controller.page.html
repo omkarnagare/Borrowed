@@ -11,11 +11,12 @@
 
 <ion-content fullscreen>
 
+  <div *ngIf="showThemeSelection">
   <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>Pick a Theme by clicking on one of the Theme-box below : </ion-card-subtitle>
+      <ion-card-subtitle @fadein>Pick a Theme by clicking on one of the Theme-box below : </ion-card-subtitle>
     </ion-card-header>
-    <ion-card-content class="themes-container">
+    <ion-card-content class="themes-container" @slidetoptitle>
         <span class="theme-circles" [style.background-color]="theme.color" *ngFor="let theme of themes"
         (click)="setTheme(theme.name)">
       </span>
@@ -23,44 +24,45 @@
   </ion-card>
 
   <ion-list class="preview-theme">
-    <ion-list-header>
+    <ion-list-header @slidebottomtitle>
       Theme Colors (Read Only)
     </ion-list-header>
-    <ion-item color="primary">
+    <ion-item color="primary" @slidelefttitle>
       <ion-label>Primary</ion-label>
     </ion-item>
 
-    <ion-item color="secondary">
+    <ion-item color="secondary" @sliderighttitle>
       <ion-label>Secondary</ion-label>
     </ion-item>
 
-    <ion-item color="tertiary">
+    <ion-item color="tertiary" @slidelefttitle>
       <ion-label>Tertiary</ion-label>
     </ion-item>
 
-    <ion-item color="dark">
+    <ion-item color="dark" @sliderighttitle>
       <ion-label>Dark</ion-label>
     </ion-item>
 
-    <ion-item color="medium">
+    <ion-item color="medium" @slidelefttitle>
       <ion-label>Medium</ion-label>
     </ion-item>
 
-    <ion-item color="light">
+    <ion-item color="light" @sliderighttitle>
       <ion-label>Light</ion-label>
     </ion-item>
 
-    <ion-item color="success">
+    <ion-item color="success" @slidelefttitle>
       <ion-label>Success</ion-label>
     </ion-item>
 
-    <ion-item color="warning">
+    <ion-item color="warning" @sliderighttitle>
       <ion-label>Warning</ion-label>
     </ion-item>
 
-    <ion-item color="danger">
+    <ion-item color="danger" @slidelefttitle>
       <ion-label>Danger</ion-label>
     </ion-item>
   </ion-list>
+</div>
 
 </ion-content>

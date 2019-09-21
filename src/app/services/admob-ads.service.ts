@@ -30,11 +30,15 @@ export class AdmobAdsService implements OnDestroy {
   }
 
   unhideBanner() {
-    this._admob.showBanner(this._admob.AD_POSITION.BOTTOM_CENTER);
+    if (this._platformInfoService.isAndroidDevice()) {
+      this._admob.showBanner(this._admob.AD_POSITION.BOTTOM_CENTER);
+    }
   }
 
   hideBanner() {
-    this._admob.hideBanner();
+    if (this._platformInfoService.isAndroidDevice()) {
+      this._admob.hideBanner();
+    }
   }
   
   // setUpInterstitialAd() {

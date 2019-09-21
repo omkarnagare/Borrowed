@@ -17,14 +17,50 @@ import { PinVerificationService } from '../services/pin-verification.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ConfirmExitService } from '../services/confirm-exit.service';
 
+import { trigger, state, transition, style, animate } from '@angular/animations';
+
 @Component({
   selector: 'app-account',
   templateUrl: 'account.page.html',
-  styleUrls: ['account.page.scss']
+  styleUrls: ['account.page.scss'],
+  animations: [
+    trigger('fadein', [
+      state('void', style({ opacity: 0 })),
+      transition('void => *', [
+        style({ opacity: 0 }),
+        animate('600ms ease-out', style({ opacity: 1 }))
+      ])
+    ]),
+    trigger('slidelefttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('sliderighttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('slidetoptitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('slidebottomtitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+      ])
+    ])
+  ]
 })
 export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
 
   backButtonSubscription$: Subscription;
+  showAccountDetails: boolean = false;
 
   storedUserProfile: Observable<any>;
   lentItems: Observable<Item[]>;
@@ -69,26 +105,6 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
         { type: 'required', message: 'Name cannot be left blank.' },
         { type: 'pattern', message: 'Not a valid name.' }]
     };
-
-    this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
-
-    this.storedUserProfile = _usersService.getUserProfile();
-    this.lentItems = this._itemsService.getActiveItems();
-    this.urgentLentItems = this._itemsService.getUrgentItems();
-    this.transactionCompleteItems = this._itemsService.getTransactionCompleteItems();
-
-    this.storedUserProfile$ = this.storedUserProfile.subscribe(data => {
-      console.log("storedUserProfile", data);
-    });
-    this.lentItems$ = this.lentItems.subscribe(data => {
-      console.log("lentItems", data);
-    });
-    this.urgentLentItems$ = this.urgentLentItems.subscribe(data => {
-      console.log("urgentLentItems", data);
-    });
-    this.transactionCompleteItems$ = this.transactionCompleteItems.subscribe(data => {
-      console.log("transactionCompleteItems", data);
-    });
   }
 
   isError(name: string, validationType: string): boolean {
@@ -118,6 +134,37 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
     this.backButtonSubscription$ = this._platform.backButton.subscribe(() => {
       // navigator['app'].exitApp();
       this._confirmExitService.confirmExit();
+    });
+  }
+
+  ionViewDidEnter() {
+    this.showAccountDetails = true;
+    this.setUpServices();    
+  }
+
+  ionViewWillLeave() {
+    this.showAccountDetails = false;
+  }
+
+  setUpServices() {
+    this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
+
+    this.storedUserProfile = this._usersService.getUserProfile();
+    this.lentItems = this._itemsService.getActiveItems();
+    this.urgentLentItems = this._itemsService.getUrgentItems();
+    this.transactionCompleteItems = this._itemsService.getTransactionCompleteItems();
+
+    this.storedUserProfile$ = this.storedUserProfile.subscribe(data => {
+      console.log("storedUserProfile", data);
+    });
+    this.lentItems$ = this.lentItems.subscribe(data => {
+      console.log("lentItems", data);
+    });
+    this.urgentLentItems$ = this.urgentLentItems.subscribe(data => {
+      console.log("urgentLentItems", data);
+    });
+    this.transactionCompleteItems$ = this.transactionCompleteItems.subscribe(data => {
+      console.log("transactionCompleteItems", data);
     });
   }
 

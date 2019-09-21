@@ -8,14 +8,49 @@ import { DatePipe } from '@angular/common';
 import { PlatformInfoService } from '../services/platform-info.service';
 import { LoaderManagerService } from '../services/loader-manager.service';
 import { ToastManagerService } from '../services/toast-manager.service';
-import { BorrowedAppConstants, ImageSourceType } from '../constants';
+import { BorrowedAppConstants, ImageSourceType, SOCIAL_SHARE_OPTIONS } from '../constants';
 import { GetImageService } from '../services/get-image.service';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, AlertController } from '@ionic/angular';
+
+import { trigger, state, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-item-details',
   templateUrl: './item-details.page.html',
   styleUrls: ['./item-details.page.scss'],
+  animations: [
+    trigger('fadein', [
+      state('void', style({ opacity: 0 })),
+      transition('void => *', [
+        style({ opacity: 0 }),
+        animate('600ms ease-out', style({ opacity: 1 }))
+      ])
+    ]),
+    trigger('slidelefttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }))
+      ])
+    ]),
+    trigger('sliderighttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }))
+      ])
+    ]),
+    trigger('slidetoptitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }))
+      ])
+    ]),
+    trigger('slidebottomtitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }))
+      ])
+    ])
+  ]
 })
 export class ItemDetailsPage implements OnDestroy {
 
@@ -33,6 +68,7 @@ export class ItemDetailsPage implements OnDestroy {
     private _platformInfoService: PlatformInfoService,
     private _getImageService: GetImageService,
     private _actionSheetController: ActionSheetController,
+    private _alertController: AlertController,
     private _datePipe: DatePipe,
     private _router: Router,
     activatedRoute: ActivatedRoute
@@ -71,51 +107,96 @@ export class ItemDetailsPage implements OnDestroy {
     });
   }
 
-  sendReminderOnWhatsapp() {
+  async confirmSendingReminderWithNote(socialOption: SOCIAL_SHARE_OPTIONS) {
+    const alert = await this._alertController.create({
+      header: 'Include Description',
+      message: 'Do you want to send your personalized item description along with the reminder?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            this.shareReminderViaSocialOptions(socialOption, false);
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.shareReminderViaSocialOptions(socialOption, true);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  shareReminderViaSocialOptions(socialOption: SOCIAL_SHARE_OPTIONS, includeDescription: boolean) {
+    switch (socialOption) {
+      case SOCIAL_SHARE_OPTIONS.WHATSAPP:
+        this.sendReminderOnWhatsapp(includeDescription);
+        break;
+      case SOCIAL_SHARE_OPTIONS.FACEBOOK:
+        this.sendReminderOnFacebook(includeDescription);
+        break;
+      case SOCIAL_SHARE_OPTIONS.INSTAGRAM:
+        this.sendReminderOnInstagram(includeDescription);
+        break;
+      case SOCIAL_SHARE_OPTIONS.TWITTER:
+        this.sendReminderOnTwitter(includeDescription);
+        break;
+      case SOCIAL_SHARE_OPTIONS.EMAIL:
+        this.sendReminderOnEmail(includeDescription);
+        break;
+      default:
+        this.sendReminder(includeDescription);
+    }
+  }
+
+  sendReminderOnWhatsapp(includeDescription: boolean) {
     const attr: WhatsAppAttributes = {
-      message: this.constructMessage(),
+      message: this.constructMessage(includeDescription),
       image: this.getItemImage(),
     };
     this._socialNetworksService.shareToWhatsApp(attr);
   }
 
-  sendReminderOnFacebook() {
+  sendReminderOnFacebook(includeDescription: boolean) {
     const attr: FacebookAttributes = {
-      message: this.constructMessage(),
+      message: this.constructMessage(includeDescription),
       image: this.getItemImage()
     };
     this._socialNetworksService.shareToFacebook(attr);
   }
 
-  sendReminderOnInstagram() {
+  sendReminderOnInstagram(includeDescription: boolean) {
     const attr: InstagramAttributes = {
-      message: this.constructMessage(),
+      message: this.constructMessage(includeDescription),
       image: this.getItemImage(),
     };
     this._socialNetworksService.shareToInstagram(attr);
   }
 
-  sendReminderOnTwitter() {
+  sendReminderOnTwitter(includeDescription: boolean) {
     const attr: TwitterAttributes = {
-      message: this.constructMessage(),
+      message: this.constructMessage(includeDescription),
       image: this.getItemImage(),
     };
     this._socialNetworksService.shareToTwitter(attr);
   }
 
-  sendReminder() {
+  sendReminder(includeDescription: boolean) {
     const attr: GenericShare = {
       subject: this.constructSubject(),
-      message: this.constructMessage(),
+      message: this.constructMessage(includeDescription),
     };
     this._socialNetworksService.share(attr);
   }
 
-  sendReminderOnEmail() {
+  sendReminderOnEmail(includeDescription: boolean) {
     const toEmail = this.itemObject.lendeeEmail ? [this.itemObject.lendeeEmail] : [];
     const attr: EmailAttributes = {
       subject: this.constructSubject(),
-      message: this.constructMessage(),
+      message: this.constructMessage(includeDescription),
       to: toEmail,
       cc: [],
       bcc: []
@@ -127,10 +208,13 @@ export class ItemDetailsPage implements OnDestroy {
     return "Reminder for \"" + this.itemObject.itemName + "\"";
   }
 
-  constructMessage(): string {
+  constructMessage(includeDescription: boolean): string {
     let message = "Hi " + this.itemObject.lendeeName + ", It's been a while since We last discussed about \"" + this.itemObject.itemName + "\". The borrowing day was " + this._datePipe.transform(this.itemObject.borrowingDate, 'EEEE, dd MMMM yyyy') + ".";
     if (this.itemObject.isUrgent) {
       message = message + " We should discuss about it as soon as possible.";
+    }
+    if (includeDescription && this.itemObject.itemDescription) {
+      message = message + "My personal notes about the \"" + this.itemObject.itemName + "\" are as follows : " + this.itemObject.itemDescription + "."
     }
     return message;
   }

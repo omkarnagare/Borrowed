@@ -33,62 +33,64 @@
 
   <div *ngIf="itemObject.itemName" [style.opacity]="itemObject.isActive ? 1 : 0.5">
     <ion-card>
-      <ion-img class="item-image" *ngIf="itemObject.itemImage" [src]="itemObject.itemImage"></ion-img>
+      <ion-img @slidetoptitle class="item-image" *ngIf="itemObject.itemImage" [src]="itemObject.itemImage"></ion-img>
       <ion-item lines="none" *ngIf="isMobilePlatform">
-          <ion-chip (click)="selectImageSource()" class="center-chip">
-            <ion-icon name="camera"></ion-icon>
-            <ion-label>Change Image</ion-label>
-          </ion-chip>
+        <ion-chip (click)="selectImageSource()" class="center-chip">
+          <ion-icon @slidelefttitle name="camera"></ion-icon>
+          <ion-label @sliderighttitle>Change Image</ion-label>
+        </ion-chip>
       </ion-item>
       <ion-card-header *ngIf="itemObject.itemDescription">
-        <ion-card-subtitle>{{ itemObject.itemDescription }}</ion-card-subtitle>
+        <ion-card-subtitle @sliderighttitle>{{ itemObject.itemDescription }}</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
         <ion-item *ngIf="itemObject.itemName">
-          <ion-icon slot="start" name="cube"></ion-icon>
-          <ion-label>{{ itemObject.itemName }}</ion-label>
+          <ion-icon @slidelefttitle slot="start" name="cube"></ion-icon>
+          <ion-label @sliderighttitle>{{ itemObject.itemName }}</ion-label>
         </ion-item>
         <ion-item *ngIf="itemObject.borrowingDate">
-          <ion-icon slot="start" name="time"></ion-icon>
-          <ion-label>{{ itemObject.borrowingDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
+          <ion-icon @slidelefttitle slot="start" name="time"></ion-icon>
+          <ion-label @sliderighttitle>{{ itemObject.borrowingDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
         </ion-item>
         <ion-item *ngIf="itemObject.lendeeName">
-          <ion-icon slot="start" name="person"></ion-icon>
-          <ion-label>{{ itemObject.lendeeName }}</ion-label>
+          <ion-icon @slidelefttitle slot="start" name="person"></ion-icon>
+          <ion-label @sliderighttitle>{{ itemObject.lendeeName }}</ion-label>
         </ion-item>
         <ion-item *ngIf="itemObject.lendeeContact">
-          <ion-icon slot="start" name="call"></ion-icon>
-          <ion-label>{{ itemObject.lendeeContact }}</ion-label>
+          <ion-icon @slidelefttitle slot="start" name="call"></ion-icon>
+          <ion-label @sliderighttitle>{{ itemObject.lendeeContact }}</ion-label>
         </ion-item>
         <ion-item *ngIf="itemObject.lendeeEmail">
-          <ion-icon slot="start" name="mail"></ion-icon>
-          <ion-label>{{ itemObject.lendeeEmail }}</ion-label>
+          <ion-icon @slidelefttitle slot="start" name="mail"></ion-icon>
+          <ion-label @sliderighttitle>{{ itemObject.lendeeEmail }}</ion-label>
         </ion-item>
       </ion-card-content>
     </ion-card>
 
     <ion-card *ngIf="isMobilePlatform && itemObject.isActive">
       <ion-card-content class="social-icon-container">
-        <p>Everyone is busy nowdays.</p>
-        <p>Remind "{{ itemObject.lendeeName }}" about "{{ itemObject.itemName }}" with</p>
-        <a (click)="sendReminderOnWhatsapp()">
-          <ion-icon style="color:#25D366" name="logo-whatsapp"></ion-icon>
-        </a>
-        <a (click)="sendReminderOnFacebook()">
-          <ion-icon style="color:#3b5998" name="logo-facebook"></ion-icon>
-        </a>
-        <a (click)="sendReminderOnInstagram()">
-          <ion-icon style="color:#8a3ab9" name="logo-instagram"></ion-icon>
-        </a>
-        <a (click)="sendReminderOnTwitter()">
-          <ion-icon style="color:#1da1f2" name="logo-twitter"></ion-icon>
-        </a>
-        <a (click)="sendReminderOnEmail()">
-          <ion-icon style="color:rgb(126, 6, 6)" name="mail"></ion-icon>
-        </a>
-        <a (click)="sendReminder()">
-          <ion-icon style="color:rgb(0, 0, 0)" name="share"></ion-icon>
-        </a>
+        <p @sliderighttitle>Everyone is busy nowdays.</p>
+        <p @sliderighttitle>Remind "{{ itemObject.lendeeName }}" about "{{ itemObject.itemName }}" with</p>
+        <div @slidebottomtitle>
+          <a (click)="confirmSendingReminderWithNote(600)">
+            <ion-icon style="color:#25D366" name="logo-whatsapp"></ion-icon>
+          </a>
+          <a (click)="confirmSendingReminderWithNote(601)">
+            <ion-icon style="color:#3b5998" name="logo-facebook"></ion-icon>
+          </a>
+          <a (click)="confirmSendingReminderWithNote(602)">
+            <ion-icon style="color:#8a3ab9" name="logo-instagram"></ion-icon>
+          </a>
+          <a (click)="confirmSendingReminderWithNote(603)">
+            <ion-icon style="color:#1da1f2" name="logo-twitter"></ion-icon>
+          </a>
+          <a (click)="confirmSendingReminderWithNote(604)">
+            <ion-icon style="color:rgb(126, 6, 6)" name="mail"></ion-icon>
+          </a>
+          <a (click)="confirmSendingReminderWithNote(605)">
+            <ion-icon style="color:rgb(0, 0, 0)" name="share"></ion-icon>
+          </a>
+        </div>
       </ion-card-content>
     </ion-card>
   </div>

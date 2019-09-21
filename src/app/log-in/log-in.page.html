@@ -5,123 +5,135 @@
 </ion-header>
 
 <ion-content fullscreen>
+
   <form [formGroup]="userInfoFormGroup">
-    <ion-card>
-      <ion-card-content>
-        <div *ngIf="userState && userState === 301">
-          <ion-item>
-            <ion-icon slot="start" name="person"></ion-icon>
-            <ion-input placeholder="Enter Full Name" formControlName="name" type="text"></ion-input>
-          </ion-item>
-
-          <div *ngFor="let validation of validationMessages.name" class="validation-errors">
-            <ion-item class="error-message" *ngIf="isError('name', validation.type)">
-              <ion-icon name="alert"></ion-icon>
-              <ion-label>{{ validation.message }}</ion-label>
+    <div *ngIf="showUserForm">
+      <ion-card>
+        <ion-card-content>
+          <div *ngIf="userState && userState === 301">
+            <ion-item>
+              <ion-icon @slidetoptitle slot="start" name="person"></ion-icon>
+              <ion-input @slidebottomtitle placeholder="Enter Full Name" formControlName="name" type="text"></ion-input>
             </ion-item>
-          </div>
-        </div>
-        <div *ngIf="userState">
-          <ion-item>
-            <ion-icon slot="start" name="mail"></ion-icon>
-            <ion-input placeholder="Enter Email" formControlName="email" type="email"></ion-input>
-          </ion-item>
 
-          <div *ngFor="let validation of validationMessages.email" class="validation-errors">
-            <ion-item class="error-message" *ngIf="isError('email', validation.type)">
-              <ion-icon name="alert"></ion-icon>
-              <ion-label>{{ validation.message }}</ion-label>
+            <div *ngFor="let validation of validationMessages.name" class="validation-errors">
+              <ion-item class="error-message" *ngIf="isError('name', validation.type)">
+                <ion-icon @slidetoptitle name="alert"></ion-icon>
+                <ion-label>{{ validation.message }}</ion-label>
+              </ion-item>
+            </div>
+          </div>
+          <div *ngIf="userState">
+            <ion-item>
+              <ion-icon @slidetoptitle slot="start" name="mail"></ion-icon>
+              <ion-input @slidebottomtitle placeholder="Enter Email" formControlName="email" type="email"></ion-input>
             </ion-item>
-          </div>
-        </div>
-        <div *ngIf="userState && userState !== 302">
-          <ion-item>
-            <ion-icon slot="start" name="lock"></ion-icon>
-            <ion-input placeholder="Enter Password" formControlName="password"
-              [type]="showPassword ? 'text' : 'password'"></ion-input>
-            <ion-icon *ngIf="showPassword" name="eye-off" (click)="togglePasswordVisibility()"></ion-icon>
-            <ion-icon *ngIf="!showPassword" name="eye" (click)="togglePasswordVisibility()"></ion-icon>
-          </ion-item>
 
-          <div *ngFor="let validation of validationMessages.password" class="validation-errors">
-            <ion-item class="error-message" *ngIf="isError('password', validation.type)">
-              <ion-icon name="alert"></ion-icon>
-              <ion-label>{{ validation.message }}</ion-label>
+            <div *ngFor="let validation of validationMessages.email" class="validation-errors">
+              <ion-item class="error-message" *ngIf="isError('email', validation.type)">
+                <ion-icon @slidetoptitle name="alert"></ion-icon>
+                <ion-label>{{ validation.message }}</ion-label>
+              </ion-item>
+            </div>
+          </div>
+          <div *ngIf="userState && userState !== 302">
+            <ion-item>
+              <ion-icon @slidetoptitle slot="start" name="lock"></ion-icon>
+              <ion-input @slidebottomtitle placeholder="Enter Password" formControlName="password"
+                [type]="showPassword ? 'text' : 'password'"></ion-input>
+              <ion-icon @fadein *ngIf="showPassword" name="eye-off" (click)="togglePasswordVisibility()">
+              </ion-icon>
+              <ion-icon @fadein *ngIf="!showPassword" name="eye" (click)="togglePasswordVisibility()"></ion-icon>
             </ion-item>
+
+            <div *ngFor="let validation of validationMessages.password" class="validation-errors">
+              <ion-item class="error-message" *ngIf="isError('password', validation.type)">
+                <ion-icon @slidetoptitle name="alert"></ion-icon>
+                <ion-label>{{ validation.message }}</ion-label>
+              </ion-item>
+            </div>
           </div>
-        </div>
 
-        <div *ngIf="userState && userState === 301">
-          <ion-item>
-            <ion-icon slot="start" name="lock"></ion-icon>
-            <ion-input placeholder="Confirm Password" formControlName="confirmPassword" type="password"></ion-input>
-          </ion-item>
-
-          <div *ngFor="let validation of validationMessages.confirmPassword" class="validation-errors">
-            <ion-item class="error-message" *ngIf="isError('confirmPassword', validation.type)">
-              <ion-icon name="alert"></ion-icon>
-              <ion-label>{{ validation.message }}</ion-label>
+          <div *ngIf="userState && userState === 301">
+            <ion-item>
+              <ion-icon @slidetoptitle slot="start" name="lock"></ion-icon>
+              <ion-input @slidebottomtitle placeholder="Confirm Password" formControlName="confirmPassword"
+                type="password"></ion-input>
             </ion-item>
+
+            <div *ngFor="let validation of validationMessages.confirmPassword" class="validation-errors">
+              <ion-item class="error-message" *ngIf="isError('confirmPassword', validation.type)">
+                <ion-icon @slidetoptitle name="alert"></ion-icon>
+                <ion-label>{{ validation.message }}</ion-label>
+              </ion-item>
+            </div>
           </div>
-        </div>
 
-        <ion-grid fixed>
-          <ion-row *ngIf="userState && userState === 300">
-            <ion-col size="12">
-              <ion-button (click)="logInWithEmailAndPassword()" class="expand-button">
-                Log In</ion-button>
-            </ion-col>
-          </ion-row>
-          <ion-row *ngIf="!userState || userState === 301">
-            <ion-col size="12">
-              <ion-button (click)="signUp()" class="expand-button">
-                Sign Up</ion-button>
-            </ion-col>
-          </ion-row>
-          <ion-row *ngIf="userState && userState === 302">
-            <ion-col size="12">
-              <ion-button (click)="forgotPassword()" class="expand-button">
-                Reset Password</ion-button>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="12" class="account-actions">
-              <p *ngIf="userState !== 300">Already have an account? <a (click)="logInWithEmailAndPassword()">Login
-                  here</a>.</p>
-              <p *ngIf="userState && userState !== 301">New User? <a (click)="signUp()">Sign Up today</a>.</p>
-              <p *ngIf="userState !== 302">Forgot Password? <a (click)="forgotPassword()">Reset it here</a>.</p>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
+          <ion-grid fixed>
+            <ion-row *ngIf="userState && userState === 300">
+              <ion-col size="12">
+                <ion-button @slidelefttitle (click)="logInWithEmailAndPassword()" class="expand-button">
+                  Log In</ion-button>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="!userState || userState === 301">
+              <ion-col size="12">
+                <ion-button @sliderighttitle (click)="signUp()" class="expand-button">
+                  Sign Up</ion-button>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="userState && userState === 302">
+              <ion-col size="12">
+                <ion-button @slidelefttitle (click)="forgotPassword()" class="expand-button">
+                  Reset Password</ion-button>
+              </ion-col>
+            </ion-row>
+            <ion-row @fadein>
+              <ion-col size="12" class="account-actions">
+                <p *ngIf="userState !== 300">Already have an account? <a (click)="logInWithEmailAndPassword()">Login
+                    here</a>.</p>
+                <p *ngIf="userState && userState !== 301">New User? <a (click)="signUp()">Sign Up today</a>.</p>
+                <p *ngIf="userState !== 302">Forgot Password? <a (click)="forgotPassword()">Reset it here</a>.</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </div>
 
-    <ion-card class="text-center" *ngIf="isMobilePlatform">
-      <ion-card-header>
-        <p>OR</p>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-button class="facebook expand-button" (click)="logInWithFacebook()">
-          <ion-icon slot="start" name="logo-facebook"></ion-icon>
-          Log In With Facebook
-        </ion-button>
-        <ion-button class="google expand-button" (click)="logInWithGooglePlus()">
-          <ion-icon slot="start" name="logo-google"></ion-icon>
-          Log In With Google
-        </ion-button>
-        <!-- <ion-button class="twitter expand-button" (click)="logInWithTwitter()">
-          <ion-icon slot="start" name="logo-twitter"></ion-icon>
+    <div *ngIf="showUserForm">
+      <ion-card class="text-center" *ngIf="isMobilePlatform">
+        <ion-card-header @slidetoptitle>
+          <p>OR</p>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-button class="facebook expand-button" (click)="logInWithFacebook()">
+            <ion-icon @slidelefttitle slot="start" name="logo-facebook"></ion-icon>
+            <div @sliderighttitle>
+              Log In With Facebook</div>
+          </ion-button>
+          <ion-button class="google expand-button" (click)="logInWithGooglePlus()">
+            <ion-icon @slidelefttitle slot="start" name="logo-google"></ion-icon>
+            <div @sliderighttitle>
+              Log In With Google</div>
+          </ion-button>
+          <!-- <ion-button class="twitter expand-button" (click)="logInWithTwitter()">
+          <ion-icon @slidetoptitle slot="start" name="logo-twitter"></ion-icon>
           Log In With Twitter
         </ion-button> -->
 
-      </ion-card-content>
-    </ion-card>
+        </ion-card-content>
+      </ion-card>
+    </div>
 
-    <ion-card class="text-center">
-      <ion-card-content>
-        <ion-note> By Signing Up or Logging In, you agree to our <a routerLink="terms-and-conditions">Terms
-            & Conditions</a> and <a routerLink="privacy-policy"> Privacy Policy</a> </ion-note>
-      </ion-card-content>
-    </ion-card>
+    <div *ngIf="showUserForm">
+      <ion-card class="text-center">
+        <ion-card-content @slidetoptitle>
+          <ion-note> By Signing Up or Logging In, you agree to our <a routerLink="terms-and-conditions">Terms
+              & Conditions</a> and <a routerLink="privacy-policy"> Privacy Policy</a> </ion-note>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </form>
+
 </ion-content>

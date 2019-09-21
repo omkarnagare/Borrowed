@@ -6,14 +6,50 @@ import { Subscription } from 'rxjs';
 import { Platform } from '@ionic/angular';
 import { ConfirmExitService } from '../services/confirm-exit.service';
 
+import { trigger, state, transition, style, animate } from '@angular/animations';
+
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
+  animations: [
+    trigger('fadein', [
+      state('void', style({ opacity: 0 })),
+      transition('void => *', [
+        style({ opacity: 0 }),
+        animate('600ms ease-out', style({ opacity: 1 }))
+      ])
+    ]),
+    trigger('slidelefttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('sliderighttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('slidetoptitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('slidebottomtitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+      ])
+    ])
+  ]
 })
 export class SettingsPage implements OnInit, AfterViewInit, OnDestroy {
 
   backButtonSubscription$: Subscription;
+  showSettingsMenu: boolean = false; // required to re-create component for animation
 
   isMobilePlatform: boolean = false;
   appInfo: string;
@@ -46,6 +82,11 @@ export class SettingsPage implements OnInit, AfterViewInit, OnDestroy {
 
   ionViewDidEnter() {
     this.appVersion = this._appInfoService.getAppVersion();
+    this.showSettingsMenu = true;
+  }
+
+  ionViewWillLeave() {
+    this.showSettingsMenu = false;
   }
 
   share() {

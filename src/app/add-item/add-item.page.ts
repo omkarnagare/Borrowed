@@ -12,12 +12,49 @@ import { LoaderManagerService } from '../services/loader-manager.service';
 import { ToastManagerService } from '../services/toast-manager.service';
 import { AdmobAdsService } from '../services/admob-ads.service';
 
+import { trigger, state, transition, style, animate } from '@angular/animations';
+
 @Component({
   selector: 'app-add-item',
   templateUrl: './add-item.page.html',
   styleUrls: ['./add-item.page.scss'],
+  animations: [
+    trigger('fadein', [
+      state('void', style({ opacity: 0 })),
+      transition('void => *', [
+        style({ opacity: 0 }),
+        animate('600ms ease-out', style({ opacity: 1 }))
+      ])
+    ]),
+    trigger('slidelefttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('sliderighttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('slidetoptitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('slidebottomtitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+      ])
+    ])
+  ]
 })
 export class AddItemPage implements OnInit {
+
+  showItemDetailsForm: boolean = false;
 
   itemDetailsFormGroup: FormGroup;
   validationMessages: any;
@@ -76,6 +113,8 @@ export class AddItemPage implements OnInit {
   }
 
   ionViewDidEnter() {
+    this.showItemDetailsForm = true;
+
     this.itemImage = null;
     this.itemDetailsFormGroup.reset();
     this.itemDetailsFormGroup.markAsUntouched();
@@ -85,6 +124,7 @@ export class AddItemPage implements OnInit {
 
   ionViewWillLeave() {
     this._admobService.unhideBanner();
+    this.showItemDetailsForm = false;
   }
 
   searchForContacts() {

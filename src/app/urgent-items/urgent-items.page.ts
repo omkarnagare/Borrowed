@@ -7,16 +7,51 @@ import { ToastManagerService } from '../services/toast-manager.service';
 import { Platform } from '@ionic/angular';
 import { ConfirmExitService } from '../services/confirm-exit.service';
 
+import { trigger, state, transition, style, animate } from '@angular/animations';
+
 @Component({
   selector: 'app-urgent-items',
   templateUrl: 'urgent-items.page.html',
-  styleUrls: ['urgent-items.page.scss']
+  styleUrls: ['urgent-items.page.scss'],
+  animations: [
+    trigger('fadein', [
+      state('void', style({ opacity: 0 })),
+      transition('void => *', [
+        style({ opacity: 0 }),
+        animate('600ms ease-out', style({ opacity: 1 }))
+      ])
+    ]),
+    trigger('slidelefttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('sliderighttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('slidetoptitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('slidebottomtitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+      ])
+    ])
+  ]
 })
 export class UrgentItemsPage implements OnInit, AfterViewInit, OnDestroy {
 
   backButtonSubscription$: Subscription;
 
-  urgentLentItems: Observable<Item[]>;
+  urgentLentItems: Observable<Item[]> = null;
   urgentItems$: Subscription;
 
   constructor(

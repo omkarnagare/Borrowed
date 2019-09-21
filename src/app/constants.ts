@@ -154,3 +154,12 @@ export enum PIN_STATE {
     VERIFY_PIN = 502,
     REMOVE_PIN = 503
 }
+
+export enum SOCIAL_SHARE_OPTIONS {
+    WHATSAPP = 600,
+    FACEBOOK = 601,
+    INSTAGRAM = 602,
+    TWITTER = 603,
+    EMAIL = 604,
+    GENERAL = 605
+}

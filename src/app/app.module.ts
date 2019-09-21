@@ -11,6 +11,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { environment } from '../environments/environment'
 
 import { HttpClientModule } from '@angular/common/http'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -32,6 +33,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DatePipe } from '@angular/common';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { alertEnterAnimation, toastEnterAnimation, alertLeaveAnimation, toastLeaveAnimation } from './app-animations';
 
 @NgModule({
   declarations: [AppComponent],
@@ -43,7 +45,13 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AngularFireStorageModule,
     HttpClientModule,
     BrowserModule,
-    IonicModule.forRoot(),
+    BrowserAnimationsModule,
+    IonicModule.forRoot({
+      alertEnter: alertEnterAnimation,
+      alertLeave: alertLeaveAnimation,
+      toastEnter: toastEnterAnimation,
+      toastLeave: toastLeaveAnimation
+    }),
     IonicStorageModule.forRoot({
       name: 'borrowedDB',
       driverOrder: ['indexeddb', 'sqlite', 'websql']

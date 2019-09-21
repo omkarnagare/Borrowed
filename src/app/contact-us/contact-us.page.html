@@ -11,18 +11,38 @@
 
 <ion-content fullscreen>
 
-  <form [formGroup]="contactUsFormGroup" *ngIf="isMobilePlatform">
+  <div *ngIf="isMobilePlatform === null">
     <ion-card>
-        <ion-card-header>
-            <ion-card-title>Facing issue with Borrowed??</ion-card-title>
-            <ion-card-subtitle>
-              <p>Don't worry, We are here to help you.</p>
-              <p>Fill in the following details.</p>
-            </ion-card-subtitle>
-          </ion-card-header>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-card-title>
+        <ion-card-subtitle>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <form [formGroup]="contactUsFormGroup" *ngIf="isMobilePlatform === true">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title @slidetoptitle>Facing issue with Borrowed??</ion-card-title>
+        <ion-card-subtitle @slidebottomtitle>
+          <p>Don't worry, We are here to help you.</p>
+          <p>Fill in the following details.</p>
+        </ion-card-subtitle>
+      </ion-card-header>
       <ion-card-content>
         <div>
-          <ion-item>
+          <ion-item @slidelefttitle>
             <ion-input placeholder="What happened" formControlName="subject" type="text"></ion-input>
           </ion-item>
 
@@ -34,7 +54,7 @@
           </div>
         </div>
         <div>
-          <ion-item>
+          <ion-item @sliderighttitle>
             <ion-textarea placeholder="Describe your issue here" formControlName="body" type="text"></ion-textarea>
           </ion-item>
 
@@ -47,17 +67,18 @@
         </div>
 
 
-        <ion-button [disabled]="!contactUsFormGroup.valid" (click)="showAlertForSendingEmail()" class="expand-button">
+        <ion-button @slidebottomtitle [disabled]="!contactUsFormGroup.valid" (click)="showAlertForSendingEmail()"
+          class="expand-button">
           Send</ion-button>
       </ion-card-content>
     </ion-card>
   </form>
 
-  <div *ngIf="!isMobilePlatform">
+  <div *ngIf="isMobilePlatform === false">
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Facing issue with Todos??</ion-card-title>
-        <ion-card-subtitle>
+        <ion-card-title @slidetoptitle>Facing issue with Todos??</ion-card-title>
+        <ion-card-subtitle @slidebottomtitle>
           <p>Don't worry, We are here to help you.</p>
           <p> Support Email: <br> <b>{{ supportEmail }}</b>
           </p>

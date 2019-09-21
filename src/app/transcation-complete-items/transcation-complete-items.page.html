@@ -20,11 +20,11 @@
 
   <div *ngIf="(transcationCompleteItems | async)?.length === 0">
     <ion-card class="card-center">
-      <ion-img src="/assets/empty-box.svg" class="center-image"></ion-img>
+      <ion-img @slidetoptitle src="/assets/empty-box.svg" class="center-image"></ion-img>
       <ion-card-header>
-        <ion-card-title>No items present in the history.</ion-card-title>
+        <ion-card-title @slidelefttitle>No items present in the history.</ion-card-title>
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-content @sliderighttitle>
         <h2>To complete borrowing transaction for an Item : </h2>
         <p>Click on "check" icon which will be shown after
           right-sliding the item on the home page.</p>
@@ -34,7 +34,7 @@
 
   <div *ngIf="(transcationCompleteItems | async) as loadedItems">
     <ion-list *ngIf="loadedItems.length > 0">
-      <ion-list-header>Done Items</ion-list-header>
+      <ion-list-header @slidelefttitle>Done Items</ion-list-header>
       <ion-item-sliding *ngFor="let transcationCompleteItem of loadedItems">
         <ion-item-options side="start">
           <ion-item-option color="danger" (click)="removeItem( transcationCompleteItem )">
@@ -47,12 +47,12 @@
           [style.opacity]="transcationCompleteItem.isActive ? 1 : 0.5">
           <ion-grid fixed>
             <ion-row>
-              <ion-col size="3">
+              <ion-col size="3" @slidebottomtitle>
                 <ion-thumbnail>
                   <img [src]="transcationCompleteItem.itemImage">
                 </ion-thumbnail>
               </ion-col>
-              <ion-col size="9" class="bold-heading">
+              <ion-col size="9" class="bold-heading" @sliderighttitle>
                 <ion-label>
                   <h2 text-uppercase>{{ transcationCompleteItem.itemName }}</h2>
                   <p> Lent to <b>{{ transcationCompleteItem.lendeeName }}</b> on

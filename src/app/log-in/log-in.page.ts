@@ -13,14 +13,50 @@ import { LoaderManagerService } from '../services/loader-manager.service';
 import { ToastManagerService } from '../services/toast-manager.service';
 import { ConfirmExitService } from '../services/confirm-exit.service';
 
+import { trigger, state, transition, style, animate } from '@angular/animations';
+
 @Component({
   selector: 'app-log-in',
   templateUrl: './log-in.page.html',
   styleUrls: ['./log-in.page.scss'],
+  animations: [
+    trigger('fadein', [
+      state('void', style({ opacity: 0 })),
+      transition('void => *', [
+        style({ opacity: 0 }),
+        animate('600ms ease-out', style({ opacity: 1 }))
+      ])
+    ]),
+    trigger('slidelefttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('sliderighttitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateX(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('slidetoptitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(-150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+      ])
+    ]),
+    trigger('slidebottomtitle', [
+      transition('void => *', [
+        style({ opacity: 0, transform: 'translateY(+150%)' }),
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+      ])
+    ])
+  ]
 })
 export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
 
   backButtonSubscription$;
+  showUserForm: boolean = false;
 
   userInfoFormGroup: FormGroup;
   validationMessages: any;
@@ -42,7 +78,6 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
     private _alertController: AlertController,
     formBuilder: FormBuilder
   ) {
-    this.isMobilePlatform = this._platformInfoService.isMobilePlatform()
     this.userInfoFormGroup = formBuilder.group({
       name: ["", [Validators.required, Validators.pattern("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")]],
       email: ["", [Validators.required, Validators.email]],
@@ -71,7 +106,13 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ionViewDidEnter() {
+    this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
+    this.showUserForm = true;
     this._splashScreen.hide();
+  }
+
+  ionViewWillLeave() {
+    this.showUserForm = false;
   }
 
   togglePasswordVisibility() {
