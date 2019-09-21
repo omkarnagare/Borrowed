@@ -14,6 +14,8 @@ import { AdmobAdsService } from '../services/admob-ads.service';
 import { PinUnlockPage } from '../pin-unlock/pin-unlock.page';
 import { LoaderManagerService } from '../services/loader-manager.service';
 import { PinVerificationService } from '../services/pin-verification.service';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { ConfirmExitService } from '../services/confirm-exit.service';
 
 @Component({
   selector: 'app-account',
@@ -36,6 +38,10 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
 
   isMobilePlatform: boolean = false;
 
+  userInfoFormGroup: FormGroup;
+  validationMessages: any
+  editingName: boolean = false;
+
   constructor(
     private _platform: Platform,
     private _admobService: AdmobAdsService,
@@ -45,12 +51,25 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
     private _itemsService: ItemsService,
     private _toastManager: ToastManagerService,
     private _platformInfoService: PlatformInfoService,
+    private _confirmExitService: ConfirmExitService,
     private _authenticationService: AuthenticationService,
     private _alertController: AlertController,
     private _actionSheetController: ActionSheetController,
     private _modalController: ModalController,
-    private _loader: LoaderManagerService
+    private _loader: LoaderManagerService,
+    formBuilder: FormBuilder
   ) {
+
+    this.userInfoFormGroup = formBuilder.group({
+      name: ["", [Validators.required, Validators.pattern("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")]]
+    });
+
+    this.validationMessages = {
+      'name': [
+        { type: 'required', message: 'Name cannot be left blank.' },
+        { type: 'pattern', message: 'Not a valid name.' }]
+    };
+
     this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
 
     this.storedUserProfile = _usersService.getUserProfile();
@@ -72,13 +91,33 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  isError(name: string, validationType: string): boolean {
+    return this.userInfoFormGroup.get(name).hasError(validationType) && (this.userInfoFormGroup.get(name).dirty || this.userInfoFormGroup.get(name).touched)
+  }
+
+  updateUserDisplayName() {
+    const displayName = this.userInfoFormGroup.get('name').value;
+    this._loader.presentLoader().then(() => {
+      this._usersService.updateUserDisplayName(displayName).then(() => {
+        this._toastManager.showToast(BorrowedAppConstants.DISPLAY_NAME_UPDATE_SUCCESS_MESSAGE);
+        this.userInfoFormGroup.reset();
+        this.editingName = false;
+      }).catch(error => {
+        this._toastManager.showErrorToast(error);
+      }).finally(() => {
+        this._loader.stopLoader();
+      });
+    });
+  }
+
   ngOnInit() {
 
   }
 
   ngAfterViewInit() {
     this.backButtonSubscription$ = this._platform.backButton.subscribe(() => {
-      navigator['app'].exitApp();
+      // navigator['app'].exitApp();
+      this._confirmExitService.confirmExit();
     });
   }
 
@@ -145,6 +184,7 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
 
   async confirmLogOut() {
     const alert = await this._alertController.create({
+      header: 'Confirm Log-Out',
       message: 'Are you sure you want to log out?',
       buttons: [
         {
@@ -238,21 +278,26 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
 
   async confirmPinAction(pinSetupState: PIN_STATE, expectedPIN: string = "") {
     let message: string;
+    let header: string;
     switch (pinSetupState) {
       case PIN_STATE.SET_PIN:
+        header = 'Set 4-digit PIN';
         message = 'This will set up a PIN for your account. Once set, You won\'t be able to access your data without valid PIN. Do you want to continue ?';
         break;
       // case PIN_STATE.VERIFY_PIN:
       //   message = "";
       //   break;
       case PIN_STATE.CHANGE_PIN:
+        header = 'Change PIN';
         message = 'This will change the PIN for your account. Do you want to continue ?';
         break;
       case PIN_STATE.REMOVE_PIN:
+        header = 'Remove PIN';
         message = 'Are you sure you want remove the PIN. This will leave your data unsupervised ?';
         break;
     }
     const alert = await this._alertController.create({
+      header: header,
       message: message,
       buttons: [
         {
@@ -275,7 +320,7 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
       this._usersService.setPIN(pin).then((data) => {
         // this._toastManager.showToast("PIN set successfully");
         this._pinVerification.pin = pin;
-        this._pinVerification.verified = false;
+        this._pinVerification.verified = true;
       }).finally(() => {
         this._loader.stopLoader();
       });

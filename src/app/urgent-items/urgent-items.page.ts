@@ -5,6 +5,7 @@ import { ItemsService } from '../services/items.service';
 import { LoaderManagerService } from '../services/loader-manager.service';
 import { ToastManagerService } from '../services/toast-manager.service';
 import { Platform } from '@ionic/angular';
+import { ConfirmExitService } from '../services/confirm-exit.service';
 
 @Component({
   selector: 'app-urgent-items',
@@ -21,6 +22,7 @@ export class UrgentItemsPage implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private _platform: Platform,
     private _itemsService: ItemsService,
+    private _confirmExitService: ConfirmExitService,
     private _loader: LoaderManagerService,
     private _toastManager: ToastManagerService
   ) {
@@ -30,7 +32,8 @@ export class UrgentItemsPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.backButtonSubscription$ = this._platform.backButton.subscribe(() => {
-      navigator['app'].exitApp();
+      // navigator['app'].exitApp();
+      this._confirmExitService.confirmExit();
     });
   }
 

@@ -12,6 +12,7 @@ import { ToastManagerService } from '../services/toast-manager.service';
 import { PinVerificationService } from '../services/pin-verification.service';
 import { PIN_STATE } from '../constants';
 import { PinUnlockPage } from '../pin-unlock/pin-unlock.page';
+import { ConfirmExitService } from '../services/confirm-exit.service';
 
 @Component({
   selector: 'app-borrowed',
@@ -39,6 +40,7 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
     private _toastManager: ToastManagerService,
     private _admobService: AdmobAdsService,
     private _pinVerification: PinVerificationService,
+    private _confirmExitService: ConfirmExitService,
     private _modalController: ModalController,
     formBuilder: FormBuilder
   ) {
@@ -92,7 +94,8 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.backButtonSubscription$ = this._platform.backButton.subscribe(() => {
-      navigator['app'].exitApp();
+      // navigator['app'].exitApp();
+      this._confirmExitService.confirmExit();
     });
   }
 

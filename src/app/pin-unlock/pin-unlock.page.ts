@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { BorrowedAppConstants, PIN_STATE } from '../constants';
+import { AdmobAdsService } from '../services/admob-ads.service';
 
 @Component({
   selector: 'app-pin-unlock',
@@ -21,6 +22,7 @@ export class PinUnlockPage implements OnInit {
   pin4Class: string = "";
 
   constructor(
+    private _admobService: AdmobAdsService,
     private _navParams: NavParams,
     private _modalController: ModalController
   ) {
@@ -135,6 +137,14 @@ export class PinUnlockPage implements OnInit {
 
   dismissModal() {
     this._modalController.dismiss();
+  }
+
+  ionViewDidEnter() {
+    this._admobService.hideBanner();
+  }
+
+  ionViewWillLeave() {
+    this._admobService.unhideBanner();
   }
 
 }

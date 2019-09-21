@@ -3,6 +3,7 @@ export class BorrowedAppConstants {
     public static APP_NAME = "Borrowed";
     public static APP_VERSION = "1.0.0";
     public static SUPPORT_EMAIL = "omtechnologies.apps@gmail.com";
+    public static DISPLAY_NAME_UPDATE_SUCCESS_MESSAGE = "Display name updated successfully.";
 
     //pin modal keys
     public static PIN_MODAL_TITLE_KEY = "title";
@@ -140,9 +141,16 @@ export enum UserState {
     FORGOT_PASSWORD = 302
 }
 
+export enum SIGN_IN_OPTIONS {
+    EMAIL_PASSOWRD = 400,
+    GOOGLE = 401,
+    FACEBOOK = 402,
+    TWITTER = 403
+}
+
 export enum PIN_STATE {
-    SET_PIN = 400,
-    CHANGE_PIN = 401,
-    VERIFY_PIN = 402,
-    REMOVE_PIN = 403
+    SET_PIN = 500,
+    CHANGE_PIN = 501,
+    VERIFY_PIN = 502,
+    REMOVE_PIN = 503
 }

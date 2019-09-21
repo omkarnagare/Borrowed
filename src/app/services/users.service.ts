@@ -46,23 +46,49 @@ export class UsersService {
     return this.setPIN("");
   }
 
-  setUserInfo(userInfo: UserInfo) {
+  updateUserDisplayName(displayName: string): Promise<void> {
     return this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
       .doc(this._angualrFireAuth.auth.currentUser.uid)
-      .set({
-        name: userInfo.name,
-        email: userInfo.email,
-        profileImage: "/assets/person.svg"
+      .update({
+        name: displayName
       });
   }
 
-  setUserInfoFromGooglePlus(userInfo: SocialUserInfo) {
+  setUserInfo(userInfo: UserInfo) {
     return this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
       .doc(this._angualrFireAuth.auth.currentUser.uid)
-      .set({
-        name: userInfo.displayName,
+      .update({
         email: userInfo.email,
-        profileImage: userInfo.photoURL
+        signedInWith: userInfo.signedInWith
+      }).catch(error => {
+        console.error(error);
+        this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
+        .doc(this._angualrFireAuth.auth.currentUser.uid)
+        .set({
+          name: userInfo.name,
+          email: userInfo.email,
+          profileImage: "/assets/person.svg",
+          signedInWith: userInfo.signedInWith
+        });
+      });
+  }
+
+  setUserInfoFromSocialNetworks(userInfo: SocialUserInfo) {
+    return this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
+      .doc(this._angualrFireAuth.auth.currentUser.uid)
+      .update({
+        email: userInfo.email,
+        signedInWith: userInfo.signedInWith
+      }).catch(error => {
+        console.error(error);
+        this._anugularFirestore.collection(BorrowedAppConstants.USER_COLLECTION)
+        .doc(this._angualrFireAuth.auth.currentUser.uid)
+        .set({
+          name: userInfo.displayName,
+          email: userInfo.email,
+          profileImage: userInfo.photoURL,
+          signedInWith: userInfo.signedInWith
+        });
       });
   }
 }

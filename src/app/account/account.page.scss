@@ -1,8 +1,10 @@
 .profile-picture {
-    padding: 5px; 
-    width:128px;
-    height:128px;
+    margin: auto;
+    padding: 0px; 
+    width:160px;
+    height:160px;
     position: relative;
+    align-content: center;
 }
 
 .camera-button {
@@ -10,7 +12,7 @@
     width: 36px; 
     height: 36px; 
     position: absolute; 
-    left: 65%; 
+    left: 70%; 
     bottom: 10%; 
     margin: auto;
 }

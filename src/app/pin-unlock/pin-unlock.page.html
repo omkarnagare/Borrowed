@@ -29,20 +29,20 @@
 
         <div id="numbers">
           <div class="grid">
-            <div class="grid__col grid__col--1-of-3"><button (click)="add(1)">1</button></div>
-            <div class="grid__col grid__col--1-of-3"><button (click)="add(2)">2</button></div>
-            <div class="grid__col grid__col--1-of-3"><button (click)="add(3)">3</button></div>
+            <div class="grid__col grid__col--1-of-3"><button (click)="add('1')">1</button></div>
+            <div class="grid__col grid__col--1-of-3"><button (click)="add('2')">2</button></div>
+            <div class="grid__col grid__col--1-of-3"><button (click)="add('3')">3</button></div>
 
-            <div class="grid__col grid__col--1-of-3"><button (click)="add(4)">4</button></div>
-            <div class="grid__col grid__col--1-of-3"><button (click)="add(5)">5</button></div>
-            <div class="grid__col grid__col--1-of-3"><button (click)="add(6)">6</button></div>
+            <div class="grid__col grid__col--1-of-3"><button (click)="add('4')">4</button></div>
+            <div class="grid__col grid__col--1-of-3"><button (click)="add('5')">5</button></div>
+            <div class="grid__col grid__col--1-of-3"><button (click)="add('6')">6</button></div>
 
-            <div class="grid__col grid__col--1-of-3"><button (click)="add(7)">7</button></div>
-            <div class="grid__col grid__col--1-of-3"><button (click)="add(8)">8</button></div>
-            <div class="grid__col grid__col--1-of-3"><button (click)="add(9)">9</button></div>
+            <div class="grid__col grid__col--1-of-3"><button (click)="add('7')">7</button></div>
+            <div class="grid__col grid__col--1-of-3"><button (click)="add('8')">8</button></div>
+            <div class="grid__col grid__col--1-of-3"><button (click)="add('9')">9</button></div>
 
             <div class="grid__col grid__col--1-of-3"></div>
-            <div class="grid__col grid__col--1-of-3"><button (click)="add(0)">0</button></div>
+            <div class="grid__col grid__col--1-of-3"><button (click)="add('0')">0</button></div>
             <div class="grid__col grid__col--1-of-3">
                 <ion-icon class="delete" (click)="delete()" slot="icon-only" name="backspace"></ion-icon>
             </div>
@@ -55,6 +55,6 @@
   </div>
 </ion-content>
 <!-- hiding close modal while pin verification -->
-<div class="close" *ngIf="pinSetupState !== 402" (click)="dismissModal()">
+<div class="close" *ngIf="pinSetupState !== 502" (click)="dismissModal()">
   <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
 </div>

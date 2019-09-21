@@ -76,6 +76,7 @@ export class AddItemPage implements OnInit {
   }
 
   ionViewDidEnter() {
+    this.itemImage = null;
     this.itemDetailsFormGroup.reset();
     this.itemDetailsFormGroup.markAsUntouched();
 

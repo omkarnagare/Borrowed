@@ -1,4 +1,4 @@
-import { PIN_STATE } from './constants';
+import { PIN_STATE, SIGN_IN_OPTIONS } from './constants';
 
 export interface Item {
     // item information
@@ -23,6 +23,7 @@ export interface SocialUserInfo {
     emailVerified?: boolean;
     phoneNumber?: string;
     photoURL: string;
+    signedInWith?: SIGN_IN_OPTIONS;
 }
 
 export interface UserInfo {
@@ -30,6 +31,7 @@ export interface UserInfo {
     email: string;
     profileImage?: string;
     pin?: string;
+    signedInWith?: SIGN_IN_OPTIONS;
 }
 export interface LogInCredentials {
     email: string;

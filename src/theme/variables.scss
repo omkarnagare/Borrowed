@@ -167,8 +167,22 @@
 		width: 100%;
 		contain: content;
 	}
-	.toast-container {
-		background: var(--ion-color-primary);
+	.borrowed-toast {
+		--border-radius: 16px;
+	}
+	.loading-wrapper {
+		border-radius: 16px;
+	}
+	.alert-wrapper {
+		border-radius: 16px;
+		.alert-message {
+			color: black;
+		}
+		.alert-button-group {
+			button {
+				color: black;
+			}
+		}
 	}
 	ion-textarea>textarea {
 		height: 150px;

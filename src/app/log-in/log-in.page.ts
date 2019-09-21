@@ -5,12 +5,13 @@ import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
 import { Platform, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { BorrowedAppConstants, UserState } from '../constants';
+import { BorrowedAppConstants, UserState, SIGN_IN_OPTIONS } from '../constants';
 import { UsersService } from '../services/users.service';
 import { PlatformInfoService } from '../services/platform-info.service';
 import { AdmobAdsService } from '../services/admob-ads.service';
 import { LoaderManagerService } from '../services/loader-manager.service';
 import { ToastManagerService } from '../services/toast-manager.service';
+import { ConfirmExitService } from '../services/confirm-exit.service';
 
 @Component({
   selector: 'app-log-in',
@@ -33,6 +34,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
     private _platform: Platform,
     private _router: Router,
     private _authenticationService: AuthenticationService,
+    private _confirmExitService: ConfirmExitService,
     private _loader: LoaderManagerService,
     private _toastManager: ToastManagerService,
     private _userService: UsersService,
@@ -81,7 +83,8 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.backButtonSubscription$ = this._platform.backButton.subscribe(() => {
-      navigator['app'].exitApp();
+      // navigator['app'].exitApp();
+      this._confirmExitService.confirmExit();
     });
   }
 
@@ -178,6 +181,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
           }
           const credentials: LogInCredentials = this.userInfoFormGroup.value;
           const userInfo: UserInfo = this.userInfoFormGroup.value;
+          userInfo.signedInWith = SIGN_IN_OPTIONS.EMAIL_PASSOWRD;
           this._authenticationService.signUp(credentials)
             .then((authData) => {
               this._userService.setUserInfo(userInfo).then(response => {
@@ -247,6 +251,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
 
   async showAlertForResetPassword() {
     const alert = await this._alertController.create({
+      header: 'Success',
       message: 'Please check your email inbox for a password reset link',
       buttons: [
         {
@@ -261,7 +266,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   logInWithFacebook() {
     this._authenticationService.logInWithFacebook().then(response => {
       console.log(response);
-      this.setUserInfoInFirebase();
+      this.setUserInfoInFirebase(SIGN_IN_OPTIONS.FACEBOOK);
     }).catch(error => {
       this.handleError(BorrowedAppConstants.LOGIN_FAILED_MESSAGE);
     });
@@ -270,7 +275,7 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   logInWithGooglePlus() {
     this._authenticationService.logInWithGooglePlus().then(response => {
       console.log(response);
-      this.setUserInfoInFirebase();
+      this.setUserInfoInFirebase(SIGN_IN_OPTIONS.GOOGLE);
     }).catch(error => {
       this.handleError(BorrowedAppConstants.LOGIN_FAILED_MESSAGE);
     });
@@ -279,13 +284,13 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
   logInWithTwitter() {
     this._authenticationService.logInWithTwitter().then(response => {
       console.log(response);
-      this.setUserInfoInFirebase();
+      this.setUserInfoInFirebase(SIGN_IN_OPTIONS.TWITTER);
     }).catch(error => {
       this.handleError(BorrowedAppConstants.LOGIN_FAILED_MESSAGE);
     });
   }
 
-  setUserInfoInFirebase() {
+  setUserInfoInFirebase(signedInWith: SIGN_IN_OPTIONS) {
     this._authenticationService.getAuth().onAuthStateChanged(user => {
       if (user) {
         const userInfo: SocialUserInfo = {
@@ -294,9 +299,10 @@ export class LogInPage implements OnInit, OnDestroy, AfterViewInit {
           email: user.email,
           emailVerified: user.emailVerified,
           phoneNumber: user.phoneNumber,
-          photoURL: user.photoURL
+          photoURL: user.photoURL,
+          signedInWith: signedInWith
         };
-        this._userService.setUserInfoFromGooglePlus(userInfo).then(response => {
+        this._userService.setUserInfoFromSocialNetworks(userInfo).then(response => {
           this._router.navigate(["/tabs"]);
         }).catch(error => {
           this._toastManager.showErrorToast(error);

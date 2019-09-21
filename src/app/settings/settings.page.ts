@@ -4,6 +4,7 @@ import { SocialNetworksService } from '../services/social-networks.service';
 import { PlatformInfoService } from '../services/platform-info.service';
 import { Subscription } from 'rxjs';
 import { Platform } from '@ionic/angular';
+import { ConfirmExitService } from '../services/confirm-exit.service';
 
 @Component({
   selector: 'app-settings',
@@ -21,6 +22,7 @@ export class SettingsPage implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private _platform: Platform,
+    private _confirmExitService: ConfirmExitService,
     private _socialNetworkService: SocialNetworksService,
     private _appInfoService: AppInfoService,
     private _platformInfoService: PlatformInfoService
@@ -33,7 +35,8 @@ export class SettingsPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.backButtonSubscription$ = this._platform.backButton.subscribe(() => {
-      navigator['app'].exitApp();
+      // navigator['app'].exitApp();
+      this._confirmExitService.confirmExit();
     });
   }
 

@@ -15,7 +15,8 @@ export class LoaderManagerService {
   async presentLoader( message: string = 'Processing your request ...') {
     if (!this.loader) {
       this.loader = await this._loadingController.create({
-        message: message
+        message: message,
+        backdropDismiss: false
       });
       await this.loader.present();
     }

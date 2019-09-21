@@ -29,17 +29,19 @@ export class PinVerificationService implements OnInit, OnDestroy{
         });
       } else {
         this.storedUserProfile.subscribe(userProfile => {
-          if (userProfile.pin) {
-            this.verified = false;
-            this.pin = userProfile.pin;
-          } else {
-            this.verified = true;
+          if (userProfile) {
+            if (userProfile.pin) {
+              this.verified = false;
+              this.pin = userProfile.pin;
+            } else {
+              this.verified = true;
+            }
+            this.userProfileFetched = true;
+            resolve({
+              pin: this.pin,
+              verified: this.verified
+            });
           }
-          this.userProfileFetched = true;
-          resolve({
-            pin: this.pin,
-            verified: this.verified
-          });
         });
       }
     });

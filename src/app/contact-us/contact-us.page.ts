@@ -61,6 +61,7 @@ export class ContactUsPage implements OnInit {
 
   async showAlertForSendingEmail() {
     const alert = await this._alertController.create({
+      header: 'Confirm Action',
       message: 'This will send a email to Team Borrowed. Would you like to continue?',
       buttons: [
         {
@@ -82,6 +83,7 @@ export class ContactUsPage implements OnInit {
 
   async showAlertForSentEmail() {
     const alert = await this._alertController.create({
+      header: 'Success',
       message: 'The mail has been sent to Team Borrowed successfully. \
       Team will contact you shortly if required.',
       buttons: [
