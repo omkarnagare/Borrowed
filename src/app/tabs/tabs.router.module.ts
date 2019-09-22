@@ -25,12 +25,12 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'urgent-items',
+        path: 'important-items',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../urgent-items/urgent-items.module').then(m => m.UrgentItemsPageModule)
+              import('../important-items/important-items.module').then(m => m.ImportantItemsPageModule)
           },
           {
             path: 'item-details/:itemId',

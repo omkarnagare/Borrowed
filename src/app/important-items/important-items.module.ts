@@ -3,15 +3,15 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UrgentItemsPage } from './urgent-items.page';
+import { ImportantItemsPage } from './important-items.page';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    RouterModule.forChild([{ path: '', component: UrgentItemsPage }])
+    RouterModule.forChild([{ path: '', component: ImportantItemsPage }])
   ],
-  declarations: [UrgentItemsPage]
+  declarations: [ImportantItemsPage]
 })
-export class UrgentItemsPageModule {}
+export class ImportantItemsPageModule {}

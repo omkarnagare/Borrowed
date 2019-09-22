@@ -10,9 +10,9 @@ import { ConfirmExitService } from '../services/confirm-exit.service';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 
 @Component({
-  selector: 'app-urgent-items',
-  templateUrl: 'urgent-items.page.html',
-  styleUrls: ['urgent-items.page.scss'],
+  selector: 'app-important-items',
+  templateUrl: 'important-items.page.html',
+  styleUrls: ['important-items.page.scss'],
   animations: [
     trigger('fadein', [
       state('void', style({ opacity: 0 })),
@@ -47,7 +47,7 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
     ])
   ]
 })
-export class UrgentItemsPage implements OnInit, AfterViewInit, OnDestroy {
+export class ImportantItemsPage implements OnInit, AfterViewInit, OnDestroy {
 
   backButtonSubscription$: Subscription;
 
