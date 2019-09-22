@@ -49,13 +49,69 @@ export class ItemsService implements OnDestroy {
         lendeeName: itemDetails.lendeeName,
         lendeeContact: itemDetails.lendeeContact,
         lendeeEmail: itemDetails.lendeeEmail,
+
+        transactionType: itemDetails.transactionType,
+        importance: itemDetails.importance,
+        eventDate: itemDetails.eventDate,
+        expectedReturnDate: itemDetails.expectedReturnDate,
+        personName: itemDetails.personName,
+        personContactNumber: itemDetails.personContactNumber,
+        personEmail: itemDetails.personEmail,
+
         isActive: true
       });
   }
 
   getItem(itemId: string): Observable<any> {
     return this.collectionRef
-      .doc(itemId).valueChanges();
+      .doc(itemId).valueChanges().pipe(
+        map(item => {
+          // TODO: remove when app version for all user is greater than 1.1
+          return this.handleOldItem(item);
+        })
+      );
+  }
+
+  // TODO: remove when app version for all user is greater than 1.1
+  handleOldItem(data: Item): Item {
+    if (data.transactionType) {
+      // new data - no need to process
+      return data;
+    } else {
+      data.transactionType = "borrowed";
+      data.importance = "low";
+      data.eventDate = data.borrowingDate;
+      data.expectedReturnDate = this.getDateOfOneMonthLater(data.borrowingDate);
+      data.personName = data.lendeeName;
+      data.personContactNumber = data.lendeeContact;
+      data.personEmail = data.lendeeEmail;
+      return data;
+    }
+  }
+
+  getDateOfOneMonthLater(dateStr: string): string {
+    const date = new Date(dateStr);
+    const laterDate = new Date(dateStr);
+    laterDate.setMonth(date.getMonth() + 1);
+    return this.dateToLocalISO(laterDate);
+  }
+
+  dateToLocalISO(date: Date): string {
+    var tzo = -date.getTimezoneOffset(),
+      dif = tzo >= 0 ? '+' : '-',
+      pad = function (num) {
+        var norm = Math.floor(Math.abs(num));
+        return (norm < 10 ? '0' : '') + norm;
+      };
+    return date.getFullYear() +
+      '-' + pad(date.getMonth() + 1) +
+      '-' + pad(date.getDate()) +
+      'T' + pad(date.getHours()) +
+      ':' + pad(date.getMinutes()) +
+      ':' + pad(date.getSeconds()) +
+      '.' + pad(date.getMilliseconds()) +
+      dif + pad(tzo / 60) +
+      ':' + pad(tzo % 60);
   }
 
   getActiveItems(): Observable<any> {
@@ -65,7 +121,7 @@ export class ItemsService implements OnDestroy {
       }));
   }
 
-  getTransactionCompleteItems(): Observable<any> {
+  getDoneItems(): Observable<any> {
     return this.getAllItems().pipe(
       map((data) => {
         return data.filter(item => item["isActive"] === false);
@@ -77,7 +133,17 @@ export class ItemsService implements OnDestroy {
       .snapshotChanges()
       .pipe(
         map(actions => {
-          return actions.map(action => ({ itemId: action.payload.doc.id, ...action.payload.doc.data() }));
+          const data = actions.map(action => ({ itemId: action.payload.doc.id, ...action.payload.doc.data() }));
+          
+          // handling old-item data
+          // TODO: remove when app version for all user is greater than 1.1
+          const items = [];
+          for (let index = 0; index < data.length; index++) {
+            const element = data[index];
+            items.push(this.handleOldItem(element));
+          }
+
+          return items;
         })
       );
   }

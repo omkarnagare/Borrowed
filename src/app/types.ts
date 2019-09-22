@@ -2,18 +2,30 @@ import { PIN_STATE, SIGN_IN_OPTIONS } from './constants';
 
 export interface Item {
     // item information
+    // to be retained
     itemId?: string;
-    itemName: string;
+    itemName?: string;
     itemDescription?: string;
-    borrowingDate: string;
     itemImage?: string;
+
+    // to be deprecated
     isUrgent?: boolean;
+    borrowingDate?: string;
     lendeeName?: string;
     lendeeContact?: string;
     lendeeEmail?: string;
 
+    //new parameters
+    transactionType?: string;
+    importance?: string;
+    eventDate?: string;
+    expectedReturnDate?: string;
+    personName?: string;
+    personContactNumber?: string;
+    personEmail?: string;
+
     // maintenance information
-    isActive: boolean;
+    isActive?: boolean;
 }
 
 export interface SocialUserInfo {

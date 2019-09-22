@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { trigger, state, transition, style, animate } from '@angular/animations';
+import { AdmobAdsService } from '../services/admob-ads.service';
 
 @Component({
   selector: 'app-about-dev',
@@ -44,13 +45,16 @@ export class AboutDevPage implements OnInit {
 
   showAboutDevPage: boolean = false;
 
-  constructor() { }
+  constructor(
+    private _admobService: AdmobAdsService
+  ) { }
 
   ngOnInit() {
   }
 
   ionViewDidEnter() {
     this.showAboutDevPage = true;
+    this._admobService.showInterStitialAd();
   }
 
   ionViewWillLeave() {

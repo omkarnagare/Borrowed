@@ -1,0 +1,42 @@
+<ion-content fullscreen no-margin>
+
+  <ion-searchbar @slidebottomtitle (ionChange)="searchForContacts($event)" searchIcon="contacts"
+    placeholder="Enter to search from contacts" autocomplete="on" debounce="400"> </ion-searchbar>
+
+  <div *ngIf="contactsFound && contactsFound.length === 0">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title @slidelefttitle>Oops.. No Match found !!</ion-card-title>
+      </ion-card-header>
+      <ion-card-content @sliderighttitle>
+        <h2>Start typing name of the person you want to find from contacts in the above searchbar</h2>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div *ngIf="contactsFound && contactsFound.length !== 0">
+    <div *ngFor="let contact of contactsFound" class="contact">
+      <ion-item style="border-bottom: 2px solid var(--ion-color-secondary);">
+        <ion-avatar slot="start" @slidelefttitle>
+          <img src="./assets/person.svg">
+        </ion-avatar>
+        <ion-label @sliderighttitle>
+          <h2>{{ contact?.displayName }}</h2>
+        </ion-label>
+      </ion-item>
+      <ion-list>
+        <ion-item *ngFor="let number of contact?.phoneNumbers">
+          <ion-label @slidebottomtitle>{{ number.value }}</ion-label>
+          <ion-icon @slidetoptitle slot="end" name="send" (click)="assignContactDetails(contact, number.value)"></ion-icon>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+
+  <ion-fab @slidetoptitle vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="dissmissModal()">
+      <ion-icon name="close"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

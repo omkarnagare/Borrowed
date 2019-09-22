@@ -152,7 +152,7 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
     this.storedUserProfile = this._usersService.getUserProfile();
     this.lentItems = this._itemsService.getActiveItems();
     this.urgentLentItems = this._itemsService.getUrgentItems();
-    this.transactionCompleteItems = this._itemsService.getTransactionCompleteItems();
+    this.transactionCompleteItems = this._itemsService.getDoneItems();
 
     this.storedUserProfile$ = this.storedUserProfile.subscribe(data => {
       console.log("storedUserProfile", data);
@@ -250,7 +250,6 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   logOut() {
-    this._admobService.removeBanner();
     this._authenticationService.logOut().then(() => {
       // this._router.navigate(['']);
       console.log("User logged out successfully");

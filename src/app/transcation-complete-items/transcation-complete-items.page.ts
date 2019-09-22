@@ -56,7 +56,7 @@ export class TranscationCompleteItemsPage implements OnInit, OnDestroy {
   ngOnInit() { }
 
   ionViewDidEnter() {
-    this.transcationCompleteItems = this._itemsService.getTransactionCompleteItems();
+    this.transcationCompleteItems = this._itemsService.getDoneItems();
     this.transcationCompleteItems$ = this.transcationCompleteItems.subscribe((data) => {
       console.log("urgent items: ", data);
     });

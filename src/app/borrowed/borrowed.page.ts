@@ -65,8 +65,6 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
   searching: boolean;
   enableSearchBar: boolean;
 
-  adEnabled: boolean = false;
-
   constructor(
     private _splashScreen: SplashScreen,
     private _platform: Platform,
@@ -145,10 +143,6 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
     this.lentItems = this._itemsService.getActiveItems().pipe(
       map((data) => {
         this.searching = false;
-        if (!this.adEnabled) {
-          this._admobService.showBannerAd();
-          this.adEnabled = true;
-        }
         return data.filter(item => {
           return item.itemName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
         });

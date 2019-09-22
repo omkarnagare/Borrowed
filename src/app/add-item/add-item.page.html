@@ -16,6 +16,22 @@
   <ion-card no-margin *ngIf="showItemDetailsForm">
     <ion-card-content>
       <form [formGroup]="itemDetailsFormGroup">
+
+        <div>
+          <ion-item @sliderighttitle lines="none">
+            <ion-segment mode="ios" (ionChange)="onTransactionTypeChange($event)" color="secondary">
+              <ion-segment-button value="lent" checked>
+                <ion-label>Lent</ion-label>
+                <ion-icon name="cloud-upload"></ion-icon>
+              </ion-segment-button>
+              <ion-segment-button value="borrowed">
+                <ion-label>borrowed</ion-label>
+                <ion-icon name="cloud-download"></ion-icon>
+              </ion-segment-button>
+            </ion-segment>
+          </ion-item>
+        </div>
+
         <div *ngIf="isMobilePlatform">
           <ion-item lines="none" @slidetoptitle>
             <ion-avatar class="item-picture">
@@ -30,93 +46,113 @@
             </ion-chip>
           </ion-item>
         </div>
-        <ion-item  @slidelefttitle>
-          <ion-input placeholder="Item Name/Category" formControlName="itemName" type="text"></ion-input>
-        </ion-item>
-        <div *ngFor="let validation of validationMessages.itemName" class="validation-errors">
-          <ion-item class="error-message" *ngIf="isError('itemName', validation.type)">
-            <ion-icon name="alert"></ion-icon>
-            <ion-label>{{ validation.message }}</ion-label>
-          </ion-item>
-        </div>
-        <ion-item @sliderighttitle>
-          <ion-label>Borrowing Date</ion-label>
-          <ion-datetime [max]="today" displayFormat="DD MMM YYYY" formControlName="borrowingDate"
-            placeholder="Date Given">
-          </ion-datetime>
-        </ion-item>
-        <div *ngFor="let validation of validationMessages.borrowingDate" class="validation-errors">
-          <ion-item class="error-message" *ngIf="isError('borrowingDate', validation.type)">
-            <ion-icon name="alert"></ion-icon>
-            <ion-label>{{ validation.message }}</ion-label>
-          </ion-item>
-        </div>
-        <ion-item *ngIf="isMobilePlatform" lines="none">
-          <ion-searchbar @slidelefttitle formControlName="searchQuery" (ionChange)="searchForContacts()" searchIcon="contacts"
-            placeholder="browse from contact list" autocomplete="on" debounce="700">
-          </ion-searchbar>
-        </ion-item>
-        <ion-item *ngIf="contactsFound && contactsFound.length !== 0" lines="none">
-          <ion-list class="container">
-            <div *ngFor="let contact of contactsFound">
-              <ion-item lines="none">
-                <ion-label style="font-size: 12px;">
-                  {{ contact?.displayName }}
-                </ion-label>
-              </ion-item>
-              <ion-item lines="none">
-                <div class="scroll" scrollX="true">
-                  <!-- <ion-chip>{{ contact?.displayName }}</ion-chip> -->
-                  <ion-chip *ngFor="let number of contact?.phoneNumbers"
-                    (click)="assignContactDetails(contact, number.value)">
-                    <ion-icon style="color:rgb(1, 112, 41)" name="code-download"></ion-icon>
-                    <ion-label color="primary">{{ number.value }}</ion-label>
-                  </ion-chip>
-                </div>
-              </ion-item>
-            </div>
-          </ion-list>
-        </ion-item>
-        <ion-item @slidelefttitle>
-          <ion-input placeholder="Lendee" formControlName="lendeeName" type="text"></ion-input>
-        </ion-item>
-        <div *ngFor="let validation of validationMessages.lendeeName" class="validation-errors">
-          <ion-item class="error-message" *ngIf="isError('lendeeName', validation.type)">
-            <ion-icon name="alert"></ion-icon>
-            <ion-label>{{ validation.message }}</ion-label>
-          </ion-item>
-        </div>
-        <ion-item @sliderighttitle>
-          <ion-input placeholder="Contact Number For Lendee" formControlName="lendeeContact" type="text"></ion-input>
-        </ion-item>
-        <div *ngFor="let validation of validationMessages.lendeeContact" class="validation-errors">
-          <ion-item class="error-message" *ngIf="isError('lendeeContact', validation.type)">
-            <ion-icon name="alert"></ion-icon>
-            <ion-label>{{ validation.message }}</ion-label>
-          </ion-item>
-        </div>
-        <ion-item @slidelefttitle>
-          <ion-input placeholder="Email For Lendee" formControlName="lendeeEmail" type="text"></ion-input>
-        </ion-item>
-        <div *ngFor="let validation of validationMessages.lendeeEmail" class="validation-errors">
-          <ion-item class="error-message" *ngIf="isError('lendeeEmail', validation.type)">
-            <ion-icon name="alert"></ion-icon>
-            <ion-label>{{ validation.message }}</ion-label>
-          </ion-item>
-        </div>
-        <ion-item lines="none" @sliderighttitle>
-          <ion-label>Urgent</ion-label>
-          <ion-toggle formControlName="isUrgent" checked="false"></ion-toggle>
-        </ion-item>
-        <ion-item @slidelefttitle>
-          <ion-textarea placeholder="Add something more about the item here" formControlName="itemDescription">
-          </ion-textarea>
-        </ion-item>
 
-        <ion-button @slidebottomtitle (click)="addItem()" [disabled]="itemDetailsFormGroup.invalid" class="expand-button">
+        <div>
+          <ion-label class="input-label" @slidelefttitle>Item*</ion-label>
+          <ion-item @slidelefttitle>
+            <ion-input placeholder="Enter Item name" formControlName="itemName" type="text"></ion-input>
+          </ion-item>
+          <div *ngFor="let validation of validationMessages.itemName" class="validation-errors">
+            <ion-item class="error-message" *ngIf="isError('itemName', validation.type)">
+              <ion-icon name="alert"></ion-icon>
+              <ion-label>{{ validation.message }}</ion-label>
+            </ion-item>
+          </div>
+        </div>
+
+        <div>
+          <ion-label class="input-label" @sliderighttitle>Importance*</ion-label>
+          <ion-item @sliderighttitle lines="none">
+            <ion-segment mode="ios" (ionChange)="onImportanceChange($event)" color="primary">
+              <ion-segment-button value="high">
+                <ion-label>High</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="medium">
+                <ion-label>Medium</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="low" checked>
+                <ion-label>Low</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </ion-item>
+        </div>
+
+        <div>
+          <ion-label class="input-label" @slidelefttitle>Event Date*</ion-label>
+          <ion-item @slidelefttitle>
+            <ion-datetime [max]="today" displayFormat="DD MMM YYYY" formControlName="eventDate"
+              placeholder="Enter Date of event">
+            </ion-datetime>
+          </ion-item>
+          <div *ngFor="let validation of validationMessages.eventDate" class="validation-errors">
+            <ion-item class="error-message" *ngIf="isError('eventDate', validation.type)">
+              <ion-icon name="alert"></ion-icon>
+              <ion-label>{{ validation.message }}</ion-label>
+            </ion-item>
+          </div>
+        </div>
+
+        <div>
+          <ion-label class="input-label" @sliderighttitle>Expected Date</ion-label>
+          <ion-item @sliderighttitle>
+            <ion-datetime [min]="today" displayFormat="DD MMM YYYY" formControlName="expectedReturnDate"
+              placeholder="Enter Date of return">
+            </ion-datetime>
+          </ion-item>
+        </div>
+
+        <div>
+          <ion-label class="input-label" @slidelefttitle>Notes about item</ion-label>
+          <ion-item @slidelefttitle>
+            <ion-textarea placeholder="Add something more about the item here (Optional)"
+              formControlName="itemDescription">
+            </ion-textarea>
+          </ion-item>
+        </div>
+
+        <div>
+          <ion-label class="input-label" @sliderighttitle>Name of the Person*</ion-label>
+          <ion-item @sliderighttitle>
+            <ion-input placeholder="Enter Name" formControlName="personName" type="text"></ion-input>
+            <ion-icon *ngIf="isMobilePlatform" name="paper" (click)="openContactFinderModal()"></ion-icon>
+          </ion-item>
+          <div *ngFor="let validation of validationMessages.personName" class="validation-errors">
+            <ion-item class="error-message" *ngIf="isError('personName', validation.type)">
+              <ion-icon name="alert"></ion-icon>
+              <ion-label>{{ validation.message }}</ion-label>
+            </ion-item>
+          </div>
+        </div>
+
+        <div>
+          <ion-label class="input-label" @slidelefttitle>Contact Number</ion-label>
+          <ion-item @slidelefttitle>
+            <ion-input placeholder="Enter Contact Number" formControlName="personContactNumber" type="text"></ion-input>
+          </ion-item>
+          <div *ngFor="let validation of validationMessages.personContactNumber" class="validation-errors">
+            <ion-item class="error-message" *ngIf="isError('personContactNumber', validation.type)">
+              <ion-icon name="alert"></ion-icon>
+              <ion-label>{{ validation.message }}</ion-label>
+            </ion-item>
+          </div>
+        </div>
+
+        <div>
+          <ion-label class="input-label" @sliderighttitle>Email Information</ion-label>
+          <ion-item @sliderighttitle>
+            <ion-input placeholder="Enter Email" formControlName="personEmail" type="text"></ion-input>
+          </ion-item>
+          <div *ngFor="let validation of validationMessages.personEmail" class="validation-errors">
+            <ion-item class="error-message" *ngIf="isError('personEmail', validation.type)">
+              <ion-icon name="alert"></ion-icon>
+              <ion-label>{{ validation.message }}</ion-label>
+            </ion-item>
+          </div>
+        </div>
+
+        <ion-button @slidebottomtitle (click)="addItem()" [disabled]="itemDetailsFormGroup.invalid"
+          class="expand-button">
           Add</ion-button>
-        <!-- <ion-button (click)="closeModal()" class="expand-button">
-          Cancel</ion-button> -->
       </form>
     </ion-card-content>
   </ion-card>

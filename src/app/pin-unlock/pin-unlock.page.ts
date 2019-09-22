@@ -140,11 +140,9 @@ export class PinUnlockPage implements OnInit {
   }
 
   ionViewDidEnter() {
-    this._admobService.hideBanner();
   }
 
   ionViewWillLeave() {
-    this._admobService.unhideBanner();
   }
 
 }

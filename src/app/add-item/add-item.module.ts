@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AddItemPage } from './add-item.page';
+import { ContactFinderPageModule } from '../contact-finder/contact-finder.module';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    ContactFinderPageModule,
     ReactiveFormsModule,
     CommonModule,
     FormsModule,
