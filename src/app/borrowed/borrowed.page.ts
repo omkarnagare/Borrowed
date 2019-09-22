@@ -161,22 +161,6 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
     this._itemsService.remove(item);
   }
 
-  toggleUrgentStatus(id: string, lentItem: Item) {
-    this._loader.presentLoader().then(() => {
-      lentItem.isUrgent = !lentItem.isUrgent;
-      this._itemsService.updateItem(id, lentItem).then((result) => {
-        const message = lentItem.isUrgent
-          ? "Item \"" + lentItem.itemName + "\" added to urgent List"
-          : "Item \"" + lentItem.itemName + "\" removed from urgent List"
-        this._toastManager.showToast(message);
-      }).catch((error) => {
-        this._toastManager.showErrorToast(error);
-      }).finally(() => {
-        this._loader.stopLoader();
-      });
-    });
-  }
-
   toggleFiltering() {
     this.enableSearchBar = !this.enableSearchBar;
     if (!this.enableSearchBar) {

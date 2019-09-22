@@ -6,9 +6,9 @@ import { ItemsService } from '../services/items.service';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 
 @Component({
-  selector: 'app-transcation-complete-items',
-  templateUrl: './transcation-complete-items.page.html',
-  styleUrls: ['./transcation-complete-items.page.scss'],
+  selector: 'app-items-history',
+  templateUrl: './items-history.page.html',
+  styleUrls: ['./items-history.page.scss'],
   animations: [
     trigger('fadein', [
       state('void', style({ opacity: 0 })),
@@ -43,7 +43,7 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
     ])
   ]
 })
-export class TranscationCompleteItemsPage implements OnInit, OnDestroy {
+export class ItemsHistoryPage implements OnInit, OnDestroy {
 
   transcationCompleteItems: Observable<Item[]>;
   transcationCompleteItems$: Subscription;
@@ -58,7 +58,7 @@ export class TranscationCompleteItemsPage implements OnInit, OnDestroy {
   ionViewDidEnter() {
     this.transcationCompleteItems = this._itemsService.getDoneItems();
     this.transcationCompleteItems$ = this.transcationCompleteItems.subscribe((data) => {
-      console.log("urgent items: ", data);
+      console.log("important items: ", data);
     });
   }
 

@@ -58,12 +58,12 @@ const routes: Routes = [
               import('../account/account.module').then(m => m.AccountPageModule)
           },
           {
-            path: 'transaction-complete-items',
+            path: 'items-history',
             children: [
               {
                 path: '',
                 loadChildren: () =>
-                  import('../transcation-complete-items/transcation-complete-items.module').then(m => m.TranscationCompleteItemsPageModule)
+                  import('../items-history/items-history.module').then(m => m.ItemsHistoryPageModule)
               },
               {
                 path: 'item-details/:itemId',

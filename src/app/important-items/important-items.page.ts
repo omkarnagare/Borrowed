@@ -51,8 +51,8 @@ export class ImportantItemsPage implements OnInit, AfterViewInit, OnDestroy {
 
   backButtonSubscription$: Subscription;
 
-  urgentLentItems: Observable<Item[]> = null;
-  urgentItems$: Subscription;
+  importantLentItems: Observable<Item[]> = null;
+  importantItems$: Subscription;
 
   constructor(
     private _platform: Platform,
@@ -73,9 +73,9 @@ export class ImportantItemsPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ionViewDidEnter() {
-    this.urgentLentItems = this._itemsService.getUrgentItems();
-    this.urgentItems$ = this.urgentLentItems.subscribe((data) => {
-      console.log("urgent items: ", data);
+    this.importantLentItems = this._itemsService.getImportantItems();
+    this.importantItems$ = this.importantLentItems.subscribe((data) => {
+      console.log("important items: ", data);
     });
   }
 
@@ -83,27 +83,11 @@ export class ImportantItemsPage implements OnInit, AfterViewInit, OnDestroy {
     this._itemsService.remove(item);
   }
 
-  toggleUrgentStatus(id: string, lentItem: Item) {
-    this._loader.presentLoader().then(() => {
-      lentItem.isUrgent = !lentItem.isUrgent;
-      this._itemsService.updateItem(id, { isUrgent: lentItem.isUrgent }).then((result) => {
-        const message = lentItem.isUrgent
-          ? "Item \"" + lentItem.itemName + "\" added to urgent List"
-          : "Item \"" + lentItem.itemName + "\" removed from urgent List"
-        this._toastManager.showToast(message);
-      }).catch((error) => {
-        this._toastManager.showErrorToast(error);
-      }).finally(() => {
-        this._loader.stopLoader();
-      });
-    });
-  }
-
   ngOnDestroy() {
     this.backButtonSubscription$.unsubscribe();
-    this.urgentItems$.unsubscribe();
-    this.urgentItems$ = null;
-    this.urgentLentItems = null;
+    this.importantItems$.unsubscribe();
+    this.importantItems$ = null;
+    this.importantLentItems = null;
   }
 
 }

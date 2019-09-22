@@ -113,16 +113,16 @@
 
             <ion-item routerLink="/tabs/important-items">
               <ion-label>
-                <!-- <ion-icon name="arrow-dropleft"></ion-icon> -->Urgent Items
+                <!-- <ion-icon name="arrow-dropleft"></ion-icon> -->Important Items
               </ion-label>
-              <ion-badge color="danger" slot="end">{{ (urgentLentItems | async)?.length }}</ion-badge>
+              <ion-badge color="danger" slot="end">{{ (importantLentItems | async)?.length }}</ion-badge>
             </ion-item>
 
-            <ion-item routerLink="transaction-complete-items">
+            <ion-item routerLink="items-history">
               <ion-label>
                 <!-- <ion-icon name="arrow-dropleft"></ion-icon> -->Items History
               </ion-label>
-              <ion-badge color="danger" slot="end">{{ (transactionCompleteItems | async)?.length }}</ion-badge>
+              <ion-badge color="danger" slot="end">{{ (doneItems | async)?.length }}</ion-badge>
             </ion-item>
           </div>
 

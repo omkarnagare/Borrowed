@@ -51,7 +51,7 @@
     <ion-list *ngIf="loadedItems.length > 0">
       <ion-list-header @sliderighttitle>Lent Items</ion-list-header>
       <ion-item-sliding *ngFor="let lentItem of loadedItems">
-        <ion-item-options side="start">
+        <ion-item-options side="end">
           <ion-item-option color="danger" (click)="removeItem( lentItem )">
             <ion-icon *ngIf="lentItem.isActive" name="checkmark" slot="icon-only"></ion-icon>
             <ion-icon *ngIf="!lentItem.isActive" name="trash" slot="icon-only"></ion-icon>
@@ -83,13 +83,6 @@
           </ion-grid>
         </ion-item>
 
-        <ion-item-options side="end" [style.opacity]="lentItem.isActive ? 1 : 0.3">
-          <ion-item-option [disabled]="!lentItem.isActive" (click)="toggleUrgentStatus( lentItem.itemId, lentItem )">
-            <ion-icon *ngIf="lentItem.isUrgent" style="color:var(--ion-color-tertiary)" name="heart" slot="icon-only">
-            </ion-icon>
-            <ion-icon *ngIf="!lentItem.isUrgent" name="heart-empty" slot="icon-only"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
       </ion-item-sliding>
     </ion-list>
   </div>

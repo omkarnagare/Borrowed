@@ -27,7 +27,7 @@
       <ion-card-content @sliderighttitle>
         <h2>To complete borrowing transaction for an Item : </h2>
         <p>Click on "check" icon which will be shown after
-          right-sliding the item on the home page.</p>
+          left-sliding the item on the home page.</p>
       </ion-card-content>
     </ion-card>
   </div>
@@ -36,7 +36,7 @@
     <ion-list *ngIf="loadedItems.length > 0">
       <ion-list-header @slidelefttitle>Done Items</ion-list-header>
       <ion-item-sliding *ngFor="let transcationCompleteItem of loadedItems">
-        <ion-item-options side="start">
+        <ion-item-options side="end">
           <ion-item-option color="danger" (click)="removeItem( transcationCompleteItem )">
             <ion-icon *ngIf="transcationCompleteItem.isActive" name="checkmark" slot="icon-only"></ion-icon>
             <ion-icon *ngIf="!transcationCompleteItem.isActive" name="trash" slot="icon-only"></ion-icon>
@@ -62,14 +62,7 @@
             </ion-row>
           </ion-grid>
         </ion-item>
-
-        <ion-item-options side="end" [style.opacity]="transcationCompleteItem.isActive ? 1 : 0.3">
-          <ion-item-option>
-            <ion-icon *ngIf="transcationCompleteItem.isUrgent" style="color:var(--ion-color-tertiary)" name="heart"
-              slot="icon-only"></ion-icon>
-            <ion-icon *ngIf="!transcationCompleteItem.isUrgent" name="heart-empty" slot="icon-only"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
+        
       </ion-item-sliding>
     </ion-list>
   </div>

@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TranscationCompleteItemsPage } from './transcation-complete-items.page';
+import { ItemsHistoryPage } from './items-history.page';
 
-describe('TranscationCompleteItemsPage', () => {
-  let component: TranscationCompleteItemsPage;
-  let fixture: ComponentFixture<TranscationCompleteItemsPage>;
+describe('ItemsHistoryPage', () => {
+  let component: ItemsHistoryPage;
+  let fixture: ComponentFixture<ItemsHistoryPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TranscationCompleteItemsPage ],
+      declarations: [ ItemsHistoryPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TranscationCompleteItemsPage);
+    fixture = TestBed.createComponent(ItemsHistoryPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,73 +1,63 @@
 <ion-header translucent>
   <ion-toolbar color="primary">
     <ion-title>
-      Urgent Items
+      Important Items
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
 
-  <div *ngIf="!urgentLentItems">
+  <div *ngIf="!importantLentItems">
     <ion-card *ngFor="let x of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]">
       <ion-skeleton-text animated></ion-skeleton-text>
       <ion-skeleton-text animated></ion-skeleton-text>
     </ion-card>
   </div>
 
-  <div *ngIf="(urgentLentItems | async)?.length === 0">
+  <div *ngIf="(importantLentItems | async)?.length === 0">
     <ion-card class="card-center">
       <ion-img @slidetoptitle src="/assets/empty-box.svg" class="center-image"></ion-img>
       <ion-card-header>
-        <ion-card-title @sliderighttitle>Hurrah! No Urgent items.</ion-card-title>
+        <ion-card-title @sliderighttitle>Hurrah! No Important items.</ion-card-title>
       </ion-card-header>
       <ion-card-content @slidelefttitle>
-        <h2>If you forgot to mark your items as urgent : </h2>
-        <p>Use "Heart" icon present at the top in the item details or Click on "Heart" icon which will be shown after
-          left-sliding the item on the home page.</p>
+        <p>Add your valuable item with it's importance set as "High" to mark that item as important in Borrowed.</p>
       </ion-card-content>
     </ion-card>
   </div>
 
-  <div *ngIf="(urgentLentItems | async) as loadedItems">
+  <div *ngIf="(importantLentItems | async) as loadedItems">
     <ion-list *ngIf="loadedItems.length > 0">
-      <ion-list-header @sliderighttitle>Urgent Lent Items</ion-list-header>
-      <ion-item-sliding *ngFor="let urgentLentItem of loadedItems">
-        <ion-item-options side="start">
-          <ion-item-option color="danger" (click)="removeItem( urgentLentItem )">
-            <ion-icon *ngIf="urgentLentItem.isActive" name="checkmark" slot="icon-only"></ion-icon>
-            <ion-icon *ngIf="!urgentLentItem.isActive" name="trash" slot="icon-only"></ion-icon>
+      <ion-list-header @sliderighttitle>Important Items</ion-list-header>
+      <ion-item-sliding *ngFor="let importantItem of loadedItems">
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="removeItem( importantItem )">
+            <ion-icon *ngIf="importantItem.isActive" name="checkmark" slot="icon-only"></ion-icon>
+            <ion-icon *ngIf="!importantItem.isActive" name="trash" slot="icon-only"></ion-icon>
           </ion-item-option>
         </ion-item-options>
 
-        <ion-item [routerLink]="['item-details', urgentLentItem.itemId]" class="item-grid-content"
-          [style.opacity]="urgentLentItem.isActive ? 1 : 0.5">
+        <ion-item [routerLink]="['item-details', importantItem.itemId]" class="item-grid-content"
+          [style.opacity]="importantItem.isActive ? 1 : 0.5">
           <ion-grid fixed>
             <ion-row>
               <ion-col size="3" @slidetoptitle>
                 <ion-thumbnail>
-                  <img [src]="urgentLentItem.itemImage">
+                  <img [src]="importantItem.itemImage">
                 </ion-thumbnail>
               </ion-col>
               <ion-col size="9" class="bold-heading" @sliderighttitle>
                 <ion-label>
-                  <h2 text-uppercase>{{ urgentLentItem.itemName }}</h2>
-                  <p> Lent to <b>{{ urgentLentItem.lendeeName }}</b> on
-                    <b>{{ urgentLentItem.borrowingDate  | date: 'dd MMM, yyyy' }}</b></p>
+                  <h2 text-uppercase>{{ importantItem.itemName }}</h2>
+                  <p> Lent to <b>{{ importantItem.lendeeName }}</b> on
+                    <b>{{ importantItem.borrowingDate  | date: 'dd MMM, yyyy' }}</b></p>
                 </ion-label>
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-item>
 
-        <ion-item-options side="end" [style.opacity]="urgentLentItem.isActive ? 1 : 0.3">
-          <ion-item-option [disabled]="!urgentLentItem.isActive"
-            (click)="toggleUrgentStatus( urgentLentItem.itemId, urgentLentItem )">
-            <ion-icon *ngIf="urgentLentItem.isUrgent" style="color:var(--ion-color-tertiary)" name="heart"
-              slot="icon-only"></ion-icon>
-            <ion-icon *ngIf="!urgentLentItem.isUrgent" name="heart-empty" slot="icon-only"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
       </ion-item-sliding>
     </ion-list>
   </div>

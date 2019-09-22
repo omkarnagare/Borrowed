@@ -9,7 +9,6 @@ export interface Item {
     itemImage?: string;
 
     // to be deprecated
-    isUrgent?: boolean;
     borrowingDate?: string;
     lendeeName?: string;
     lendeeContact?: string;

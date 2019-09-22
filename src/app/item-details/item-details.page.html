@@ -3,14 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <!-- <ion-title> {{ itemObject.itemName }} </ion-title> -->
-    <ion-buttons slot="end">
-      <ion-button [disabled]="!itemObject.isActive" (click)="toggleUrgentStatus()">
-        <ion-icon slot="icon-only" style="color: var(--ion-color-tertiary)" *ngIf="itemObject.isUrgent" name="heart">
-        </ion-icon>
-        <ion-icon slot="icon-only" *ngIf="!itemObject.isUrgent" name="heart-empty"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ion-title> {{ itemObject.itemName }} </ion-title>
   </ion-toolbar>
 </ion-header>
 

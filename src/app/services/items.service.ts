@@ -44,7 +44,6 @@ export class ItemsService implements OnDestroy {
         itemName: itemDetails.itemName,
         itemDescription: itemDetails.itemDescription,
         borrowingDate: itemDetails.borrowingDate,
-        isUrgent: itemDetails.isUrgent,
         itemImage: itemDetails.itemImage,
         lendeeName: itemDetails.lendeeName,
         lendeeContact: itemDetails.lendeeContact,
@@ -153,7 +152,7 @@ export class ItemsService implements OnDestroy {
       .doc(itemId).update(itemDetails);
   }
 
-  markItemAsTransactionComplete(itemId: string) {
+  markItemAsDone(itemId: string) {
     return this.collectionRef
       .doc(itemId).update({ isActive: false });
   }
@@ -167,15 +166,15 @@ export class ItemsService implements OnDestroy {
     if (item.isActive) {
       this.showAlertForTransactionComplete(item);
     } else {
-      // transaction complete items
+      // transaction complete or done items
       this.showAlertForDelete(item);
     }
   }
 
-  getUrgentItems(): Observable<any> {
+  getImportantItems(): Observable<any> {
     return this.getActiveItems().pipe(
       map((data) => {
-        return data.filter(item => item.isUrgent);
+        return data.filter(item => item.importance === "high");
       })
     );
   }
@@ -214,14 +213,14 @@ export class ItemsService implements OnDestroy {
   async showAlertForTransactionComplete(item: Item) {
     const alert = await this._alertController.create({
       header: "Hurray!! Borrowing Transaction completed.",
-      message: "To view transaction-complete Items in Items history, go to Account details.",
+      message: "To view transaction-complete / done Items in Items history, go to Account details.",
       buttons: [
         {
           text: 'Ok',
           role: 'cancel',
           handler: () => {
             this._loader.presentLoader().then(() => {
-              this.markItemAsTransactionComplete(item.itemId).then(() => {
+              this.markItemAsDone(item.itemId).then(() => {
               }).catch(error => {
                 this._toastManager.showErrorToast(error);
               }).finally(() => {

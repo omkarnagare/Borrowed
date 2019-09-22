@@ -78,7 +78,6 @@ export class ItemDetailsPage implements OnDestroy {
     this.itemObject = {
       itemName: "",
       borrowingDate: "",
-      isUrgent: false,
       isActive: true
     }
     this.itemId = activatedRoute.snapshot.params["itemId"];
@@ -89,22 +88,6 @@ export class ItemDetailsPage implements OnDestroy {
           this.itemObject = item;
         }
       });
-  }
-
-  toggleUrgentStatus() {
-    this._loader.presentLoader().then(() => {
-      this.itemObject.isUrgent = !this.itemObject.isUrgent;
-      this._itemService.updateItem(this.itemId, { isUrgent: this.itemObject.isUrgent }).then((result) => {
-        const message = this.itemObject.isUrgent
-          ? "Item \"" + this.itemObject.itemName + "\" added to urgent List"
-          : "Item \"" + this.itemObject.itemName + "\" removed from urgent List"
-        this._toastManager.showToast(message);
-      }).catch((error) => {
-        this._toastManager.showErrorToast(error);
-      }).finally(() => {
-        this._loader.stopLoader();
-      });
-    });
   }
 
   async confirmSendingReminderWithNote(socialOption: SOCIAL_SHARE_OPTIONS) {
@@ -210,9 +193,6 @@ export class ItemDetailsPage implements OnDestroy {
 
   constructMessage(includeDescription: boolean): string {
     let message = "Hi " + this.itemObject.lendeeName + ", It's been a while since We last discussed about \"" + this.itemObject.itemName + "\". The borrowing day was " + this._datePipe.transform(this.itemObject.borrowingDate, 'EEEE, dd MMMM yyyy') + ".";
-    if (this.itemObject.isUrgent) {
-      message = message + " We should discuss about it as soon as possible.";
-    }
     if (includeDescription && this.itemObject.itemDescription) {
       message = message + "My personal notes about the \"" + this.itemObject.itemName + "\" are as follows : " + this.itemObject.itemDescription + "."
     }
