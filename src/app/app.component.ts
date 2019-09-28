@@ -5,6 +5,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { ThemingService } from './services/theming.service';
 import { AuthenticationService } from './services/authentication.service';
 import { Router } from '@angular/router';
+import { PinVerificationService } from './services/pin-verification.service';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ export class AppComponent {
 
   constructor(
     private _themingService: ThemingService, // this is needed to set the theme via constructor
+    private _pinVerificationService: PinVerificationService,
     private platform: Platform,
     private statusBar: StatusBar,
     private _authenticationService: AuthenticationService,
@@ -37,6 +39,10 @@ export class AppComponent {
           this._router.navigate(["/log-in"]);
         }
       })
+
+      this.platform.pause.subscribe(() => {
+        this._pinVerificationService.verified = false;
+      });
 
     });
   }

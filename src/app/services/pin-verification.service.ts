@@ -6,18 +6,15 @@ import { PinModalData } from '../types';
 @Injectable({
   providedIn: 'root'
 })
-export class PinVerificationService implements OnInit, OnDestroy{
+export class PinVerificationService implements OnInit, OnDestroy {
 
-  userProfileFetched:boolean = false; // one time variable
+  userProfileFetched: boolean = false; // one time variable
   verified: boolean = false; // status of pin verification
   pin: string = ""; // current pin
 
-  storedUserProfile: Observable<any>;
-
   constructor(
     private _usersService: UsersService
-  ) { 
-    this.storedUserProfile = this._usersService.getUserProfile();
+  ) {
   }
 
   isVerified(): Promise<PinModalData> {
@@ -28,7 +25,7 @@ export class PinVerificationService implements OnInit, OnDestroy{
           verified: this.verified
         });
       } else {
-        this.storedUserProfile.subscribe(userProfile => {
+        this._usersService.getUserProfile().subscribe(userProfile => {
           if (userProfile) {
             if (userProfile.pin) {
               this.verified = false;
@@ -51,6 +48,5 @@ export class PinVerificationService implements OnInit, OnDestroy{
   }
 
   ngOnDestroy() {
-    this.storedUserProfile = null;
   }
 }

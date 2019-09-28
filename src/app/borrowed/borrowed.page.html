@@ -3,21 +3,29 @@
     <ion-title>
       Borrowed
     </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="toggleFiltering()">
-        <ion-icon slot="icon-only" *ngIf="!enableSearchBar" name="search"></ion-icon>
-        <ion-icon slot="icon-only" *ngIf="enableSearchBar" name="search"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
 
-  <div *ngIf="enableSearchBar">
-    <form [formGroup]="searchFromGroup">
-      <ion-searchbar formControlName="searchControl" (ionChange)="onSearchInput()"></ion-searchbar>
-    </form>
+  <div @slidelefttitle>
+    <ion-searchbar (ionChange)="onSearchInput($event)" debounce="500"></ion-searchbar>
+  </div>
+
+  <div>
+    <ion-item @sliderighttitle lines="none">
+      <ion-segment mode="ios" (ionChange)="onItemsTypeChange($event)" color="secondary">
+        <ion-segment-button mode="ios" value="all" checked>
+          <ion-label>All</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="ios" value="lent">
+          <ion-label>Lent</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="ios" value="borrowed">
+          <ion-label>Borrowed</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
   </div>
 
   <div *ngIf="searching" class="spinner-container">
@@ -27,18 +35,37 @@
     </div>
   </div>
 
-  <div *ngIf="!lentItems">
+  <div *ngIf="items === null">
     <ion-card *ngFor="let x of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]">
-      <ion-skeleton-text animated></ion-skeleton-text>
-      <ion-skeleton-text animated></ion-skeleton-text>
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="2">
+            <ion-thumbnail>
+              <ion-skeleton-text animated style="border-radius: 8px"></ion-skeleton-text>
+            </ion-thumbnail>
+          </ion-col>
+          <ion-col size="7">
+            <ion-skeleton-text animated></ion-skeleton-text>
+            <ion-skeleton-text animated></ion-skeleton-text>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-col>
+          <ion-col size="3">
+            <ion-label>
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-card>
   </div>
 
-  <div *ngIf="(lentItems | async)?.length === 0">
+  <div *ngIf="items !== null && items.length === 0">
     <ion-card class="card-center" routerLink="/tabs/add-item">
       <ion-img @slidetoptitle src="/assets/empty-box.svg" class="center-image"></ion-img>
       <ion-card-header>
-        <ion-card-title @slidelefttitle>No Lent Items Present !!</ion-card-title>
+        <ion-card-title @slidelefttitle>No Items Present !!</ion-card-title>
       </ion-card-header>
       <ion-card-content @sliderighttitle>
         <h2>Click here to Add</h2>
@@ -47,43 +74,49 @@
     </ion-card>
   </div>
 
-  <div *ngIf="(lentItems | async) as loadedItems">
-    <ion-list *ngIf="loadedItems.length > 0">
-      <ion-list-header @sliderighttitle>Lent Items</ion-list-header>
-      <ion-item-sliding *ngFor="let lentItem of loadedItems">
+  <div *ngIf="items !== null">
+    <ion-list *ngIf="items.length > 0">
+
+      <ion-item-sliding *ngFor="let item of items">
         <ion-item-options side="end">
-          <ion-item-option color="danger" (click)="removeItem( lentItem )">
-            <ion-icon *ngIf="lentItem.isActive" name="checkmark" slot="icon-only"></ion-icon>
-            <ion-icon *ngIf="!lentItem.isActive" name="trash" slot="icon-only"></ion-icon>
+          <ion-item-option color="danger" (click)="removeItem( item )">
+            <ion-icon *ngIf="item.isActive" name="checkmark" slot="icon-only"></ion-icon>
+            <ion-icon *ngIf="!item.isActive" name="trash" slot="icon-only"></ion-icon>
           </ion-item-option>
         </ion-item-options>
 
-        <ion-item [routerLink]="['item-details', lentItem.itemId]" class="item-grid-content"
-          [style.opacity]="lentItem.isActive ? 1 : 0.5">
+        <ion-item [routerLink]="['item-details', item.itemId]" class="item-grid-content"
+          [ngClass]="calculatePendingTime(item.expectedReturnDate, item)" [style.opacity]="item.isActive ? 1 : 0.5"
+          lines="none">
+          <ion-thumbnail @slidelefttitle>
+            <img [src]="item.itemImage">
+          </ion-thumbnail>
           <ion-grid fixed>
-            <ion-row>
-              <ion-col size="2" @slidelefttitle>
-                <ion-thumbnail>
-                  <img [src]="lentItem.itemImage">
-                </ion-thumbnail>
+            <ion-row class="ribbon-box">
+              <div class="ribbon" @slidetoptitle [ngClass]="item.importance"><span>{{ item.importance }}</span></div>
+              <ion-col size="2">
               </ion-col>
-              <ion-col size="7" class="bold-heading" @slidetoptitle>
+              <ion-col size="6" class="bold-heading" @slidetoptitle>
                 <ion-label>
-                  <h2 text-uppercase>{{ lentItem.itemName }}</h2>
-                  <p> Lent to : <b>{{ lentItem.lendeeName }}</b></p>
+                  <h2 text-uppercase>{{ item.itemName }}</h2>
+                  <p> {{ item.transactionType === 'lent' ? 'Lent To': 'Borrowed From'}}</p>
+                  <p> <b style="color: var(--ion-color-primary)" text-capitalize>{{ item.personName }}</b> </p>
+                  <p> Status : <b text-uppercase class="status">{{ item.status }}</b></p>
                 </ion-label>
               </ion-col>
-              <ion-col size="3" @sliderighttitle>
+              <ion-col size="2" @sliderighttitle>
                 <ion-label>
-                  <p><b>{{ lentItem.borrowingDate  | date: 'MMM dd' }}</b></p>
-                  <p>{{ lentItem.borrowingDate  | date: "HH:mm" }}</p>
+                  <p><b>{{ item.eventDate  | date: 'MMM dd' }}</b></p>
+                  <p>{{ item.eventDate  | date: "HH:mm" }}</p>
                 </ion-label>
+              </ion-col>
+              <ion-col size="2">
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-item>
-
       </ion-item-sliding>
+
     </ion-list>
   </div>
 </ion-content>

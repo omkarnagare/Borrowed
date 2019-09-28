@@ -1,14 +1,9 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
 import { Platform, ModalController } from '@ionic/angular';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { debounceTime, map } from 'rxjs/operators';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { AdmobAdsService } from '../services/admob-ads.service';
-import { LoaderManagerService } from '../services/loader-manager.service';
-import { ToastManagerService } from '../services/toast-manager.service';
 import { PinVerificationService } from '../services/pin-verification.service';
 import { PIN_STATE } from '../constants';
 import { PinUnlockPage } from '../pin-unlock/pin-unlock.page';
@@ -31,25 +26,25 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
     trigger('slidelefttitle', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateX(-150%)' }),
-        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }))
       ])
     ]),
     trigger('sliderighttitle', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateX(+150%)' }),
-        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }))
       ])
     ]),
     trigger('slidetoptitle', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateY(-150%)' }),
-        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }))
       ])
     ]),
     trigger('slidebottomtitle', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateY(+150%)' }),
-        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }))
       ])
     ])
   ]
@@ -58,52 +53,42 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
 
   backButtonSubscription$: Subscription;
 
-  lentItems: Observable<Item[]>;
-  lentItems$: Subscription;
+  allItems: any = null;
+  items: any = null;
+  items$: Subscription;
 
-  searchFromGroup: FormGroup;
+  itemsType: string = null;
+  searchTerm: string = "";
+
   searching: boolean;
-  enableSearchBar: boolean;
 
   constructor(
     private _splashScreen: SplashScreen,
     private _platform: Platform,
     private _itemsService: ItemsService,
-    private _loader: LoaderManagerService,
-    private _toastManager: ToastManagerService,
-    private _admobService: AdmobAdsService,
     private _pinVerification: PinVerificationService,
     private _confirmExitService: ConfirmExitService,
-    private _modalController: ModalController,
-    formBuilder: FormBuilder
+    private _modalController: ModalController
   ) {
-    this.searchFromGroup = formBuilder.group({
-      searchControl: ""
-    });
-    this.searching = true;
-    this.enableSearchBar = false;
-
-    this.searchFromGroup.get("searchControl").valueChanges
-      .pipe(debounceTime(700))
-      .subscribe(search => {
-        this.setFilteredItems(search);
-      });
   }
 
   ngOnInit() {
   }
 
   ionViewDidEnter() {
+    this.items$ = this._itemsService.getAllItems().subscribe(items => {
+      this.allItems = items;
+      this.items = [... this.allItems];
+      console.log(this.items)
+      this.filterItems();
+    });
     this._pinVerification.isVerified().then((data) => {
       if (data.verified) {
         // safe to go ahead
       } else {
         this.openPinVerifyModal(data.pin);
       }
-
       this._splashScreen.hide();
-      this.searching = true;
-      this.searchFromGroup.get("searchControl").setValue("");
     });
   }
 
@@ -119,9 +104,9 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
       backdropDismiss: false // user cannot dissmiss by clicking outside
     });
     pinModal.onDidDismiss()
-    .then((data) => {
+      .then((data) => {
         this._pinVerification.verified = true;
-    });
+      });
     return await pinModal.present();
   }
 
@@ -134,39 +119,58 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.backButtonSubscription$.unsubscribe();
-    this.lentItems$.unsubscribe();
-    this.lentItems$ = null;
-    this.lentItems = null;
+    if (this.items$) {
+      this.items$.unsubscribe();
+      this.items$ = null;
+    }
+    this.items = null;
   }
 
-  setFilteredItems(searchTerm: string) {
-    this.lentItems = this._itemsService.getActiveItems().pipe(
-      map((data) => {
-        this.searching = false;
-        return data.filter(item => {
-          return item.itemName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
-        });
-      })
-    );
-    this.lentItems$ = this.lentItems.subscribe(data => {
-      console.log(data);
+  onItemsTypeChange(event) {
+    this.itemsType = event.detail.value;
+    console.log(this.itemsType);
+    if (this.allItems) {
+      this.filterItems();
+    }
+  }
+
+  calculatePendingTime(date: string, item: any) {
+    const expectedReturnDate = new Date(date);
+    item["status"] = this._itemsService.calculatePendingTime(expectedReturnDate);
+    return item["status"];
+  }
+
+  filterItems() {
+    this.searching = true;
+    this.items = this.allItems.filter(item => {
+      this.searching = false;
+
+      if (item.isActive && item.itemName.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1) {
+        switch (this.itemsType) {
+          case "all":
+            return true;
+          default:
+            if (item.transactionType === this.itemsType) {
+              return true;
+            } else {
+              return false;
+            }
+        }
+      } else {
+        return false;
+      }
+
     });
   }
 
-  onSearchInput() {
-    this.searching = true;
+  onSearchInput(event: any) {
+    this.searchTerm = event.detail.value;
+    console.log(this.searchTerm);
+    this.filterItems();
   }
 
   removeItem(item: Item) {
     this._itemsService.remove(item);
-  }
-
-  toggleFiltering() {
-    this.enableSearchBar = !this.enableSearchBar;
-    if (!this.enableSearchBar) {
-      this.searching = true;
-      this.searchFromGroup.get("searchControl").setValue("");
-    }
   }
 
 }

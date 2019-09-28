@@ -34,25 +34,25 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
     trigger('slidelefttitle', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateX(-150%)' }),
-        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }))
       ])
     ]),
     trigger('sliderighttitle', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateX(+150%)' }),
-        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }))
       ])
     ]),
     trigger('slidetoptitle', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateY(-150%)' }),
-        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }))
       ])
     ]),
     trigger('slidebottomtitle', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateY(+150%)' }),
-        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }))
       ])
     ])
   ]
@@ -62,15 +62,14 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
   backButtonSubscription$: Subscription;
   showAccountDetails: boolean = false;
 
-  storedUserProfile: Observable<any>;
-  lentItems: Observable<Item[]>;
-  importantLentItems: Observable<Item[]>;
-  doneItems: Observable<Item[]>;
+  userProfile: any = null;
+  allItems: Item[] = null;
+  userProfile$: Subscription;
+  allItems$: Subscription;
 
-  storedUserProfile$: Subscription;
-  lentItems$: Subscription;
-  importantLentItems$: Subscription;
-  doneItems$: Subscription;
+  lentItemsCount: number = 0;
+  borrowedItemsCount: number = 0;
+  doneItemsCount: number = 0;
 
   isMobilePlatform: boolean = false;
 
@@ -80,7 +79,6 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private _platform: Platform,
-    private _admobService: AdmobAdsService,
     private _usersService: UsersService,
     private _pinVerification: PinVerificationService,
     private _getImageService: GetImageService,
@@ -139,7 +137,7 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
 
   ionViewDidEnter() {
     this.showAccountDetails = true;
-    this.setUpServices();    
+    this.setUpServices();
   }
 
   ionViewWillLeave() {
@@ -149,39 +147,37 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
   setUpServices() {
     this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
 
-    this.storedUserProfile = this._usersService.getUserProfile();
-    this.lentItems = this._itemsService.getActiveItems();
-    this.importantLentItems = this._itemsService.getImportantItems();
-    this.doneItems = this._itemsService.getDoneItems();
+    this.userProfile$ = this._usersService.getUserProfile().subscribe(data => {
+      console.log("userProfile", data);
+      this.userProfile = data;
+    });
+    this.allItems$ = this._itemsService.getAllItems().subscribe(data => {
+      console.log("allItems", data);
+      this.calculateCounts(data);
+      this.allItems = data;
+    });
+  }
 
-    this.storedUserProfile$ = this.storedUserProfile.subscribe(data => {
-      console.log("storedUserProfile", data);
+  calculateCounts(items: any) {
+    const activeItems = items.filter(item => {
+      return item.isActive;
     });
-    this.lentItems$ = this.lentItems.subscribe(data => {
-      console.log("lentItems", data);
+    this.doneItemsCount = items.length - activeItems.length;
+    const lentItems = activeItems.filter(item => {
+      return item.transactionType === "lent";
     });
-    this.importantLentItems$ = this.importantLentItems.subscribe(data => {
-      console.log("importantLentItems", data);
-    });
-    this.doneItems$ = this.doneItems.subscribe(data => {
-      console.log("doneItems", data);
-    });
+    this.lentItemsCount = lentItems.length;
+    this.borrowedItemsCount = activeItems.length - this.lentItemsCount;
   }
 
   ngOnDestroy() {
     this.backButtonSubscription$.unsubscribe();
-    this.storedUserProfile$.unsubscribe();
-    this.lentItems$.unsubscribe();
-    this.importantLentItems$.unsubscribe();
-    this.doneItems$.unsubscribe();
-    this.storedUserProfile$ = null;
-    this.lentItems$ = null;
-    this.importantLentItems$ = null;
-    this.doneItems$ = null;
-    this.storedUserProfile = null;
-    this.lentItems = null;
-    this.importantLentItems = null;
-    this.doneItems = null;
+    this.userProfile$.unsubscribe();
+    this.allItems$.unsubscribe();
+    this.userProfile$ = null;
+    this.allItems$ = null;
+    this.userProfile = null;
+    this.allItems = null;
   }
 
   async selectImageSource() {

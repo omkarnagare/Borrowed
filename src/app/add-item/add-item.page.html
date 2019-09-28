@@ -20,12 +20,12 @@
         <div>
           <ion-item @sliderighttitle lines="none">
             <ion-segment mode="ios" (ionChange)="onTransactionTypeChange($event)" color="secondary">
-              <ion-segment-button value="lent" checked>
+              <ion-segment-button mode="ios" value="lent" checked>
                 <ion-label>Lent</ion-label>
                 <ion-icon name="cloud-upload"></ion-icon>
               </ion-segment-button>
-              <ion-segment-button value="borrowed">
-                <ion-label>borrowed</ion-label>
+              <ion-segment-button mode="ios" value="borrowed">
+                <ion-label>Borrowed</ion-label>
                 <ion-icon name="cloud-download"></ion-icon>
               </ion-segment-button>
             </ion-segment>
@@ -64,13 +64,13 @@
           <ion-label class="input-label" @sliderighttitle>Importance*</ion-label>
           <ion-item @sliderighttitle lines="none">
             <ion-segment mode="ios" (ionChange)="onImportanceChange($event)" color="primary">
-              <ion-segment-button value="high">
+              <ion-segment-button value="high" mode="ios">
                 <ion-label>High</ion-label>
               </ion-segment-button>
-              <ion-segment-button value="medium">
+              <ion-segment-button value="medium" mode="ios">
                 <ion-label>Medium</ion-label>
               </ion-segment-button>
-              <ion-segment-button value="low" checked>
+              <ion-segment-button value="low" checked mode="ios">
                 <ion-label>Low</ion-label>
               </ion-segment-button>
             </ion-segment>
@@ -113,7 +113,7 @@
         <div>
           <ion-label class="input-label" @sliderighttitle>Name of the Person*</ion-label>
           <ion-item @sliderighttitle>
-            <ion-input placeholder="Enter Name" formControlName="personName" type="text"></ion-input>
+            <ion-input text-capitalize placeholder="Enter Name" formControlName="personName" type="text"></ion-input>
             <ion-icon *ngIf="isMobilePlatform" name="paper" (click)="openContactFinderModal()"></ion-icon>
           </ion-item>
           <div *ngFor="let validation of validationMessages.personName" class="validation-errors">

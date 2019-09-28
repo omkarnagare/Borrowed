@@ -55,7 +55,7 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
 export class ItemDetailsPage implements OnDestroy {
 
   itemId: string;
-  itemObject: Item;
+  itemObject: Item = null;
   itemDetails$: Subscription;
 
   isMobilePlatform: boolean = false;
@@ -75,11 +75,6 @@ export class ItemDetailsPage implements OnDestroy {
   ) {
     this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
 
-    this.itemObject = {
-      itemName: "",
-      borrowingDate: "",
-      isActive: true
-    }
     this.itemId = activatedRoute.snapshot.params["itemId"];
     this.itemDetails$ = this._itemService.getItem(this.itemId)
       .subscribe((item) => {
@@ -88,6 +83,25 @@ export class ItemDetailsPage implements OnDestroy {
           this.itemObject = item;
         }
       });
+  }
+
+  calculatePendingTime(item) {
+    if (item.isActive) {
+      const expectedReturnDate = new Date(item.expectedReturnDate);
+      this.itemObject["status"] = this._itemService.calculatePendingTime(expectedReturnDate);
+      switch (this.itemObject["status"]) {
+        case "overdue":
+          return "danger";
+        case "urgent":
+          return "warning";
+        case "normal":
+        default:
+          return "success";
+      }
+    } else {
+      this.itemObject["status"] = "inactive";
+      return "#bbbbbb";
+    }
   }
 
   async confirmSendingReminderWithNote(socialOption: SOCIAL_SHARE_OPTIONS) {

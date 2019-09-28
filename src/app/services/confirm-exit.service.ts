@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { PinVerificationService } from './pin-verification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ export class ConfirmExitService {
   alertPresentedAlready: boolean = false;
 
   constructor(
-    private _alertController: AlertController
+    private _alertController: AlertController,
+    private _pinVerification: PinVerificationService
   ) { }
 
   async confirmExit() {
@@ -30,6 +32,7 @@ export class ConfirmExitService {
             text: 'Exit',
             handler: () => {
               this.alertPresentedAlready = false;
+              this._pinVerification.verified = false;
               navigator['app'].exitApp();
             }
           }]

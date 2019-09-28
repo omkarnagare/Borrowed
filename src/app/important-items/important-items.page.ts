@@ -24,25 +24,25 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
     trigger('slidelefttitle', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateX(-150%)' }),
-        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }))
       ])
     ]),
     trigger('sliderighttitle', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateX(+150%)' }),
-        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+        animate('600ms 200ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }))
       ])
     ]),
     trigger('slidetoptitle', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateY(-150%)' }),
-        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }))
       ])
     ]),
     trigger('slidebottomtitle', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateY(+150%)' }),
-        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }, ))
+        animate('600ms 200ms ease-out', style({ transform: 'translateY(0%)', opacity: 1 }))
       ])
     ])
   ]
@@ -51,8 +51,13 @@ export class ImportantItemsPage implements OnInit, AfterViewInit, OnDestroy {
 
   backButtonSubscription$: Subscription;
 
-  importantLentItems: Observable<Item[]> = null;
-  importantItems$: Subscription;
+  allItems: Item[] = null;
+  items: Item[] = null;
+  items$: Subscription;
+
+  itemsType: string;
+  searchTerm: string = "";
+  searching: boolean;
 
   constructor(
     private _platform: Platform,
@@ -65,6 +70,62 @@ export class ImportantItemsPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() { }
 
+  onItemsTypeChange(event) {
+    this.itemsType = event.detail.value;
+    console.log(this.itemsType);
+    if (this.allItems) {
+      this.filterItems();
+    }
+  }
+
+  onSearchInput(event: any) {
+    this.searchTerm = event.detail.value;
+    console.log(this.searchTerm);
+    this.filterItems();
+  }
+
+  calculatePendingTime(item) {
+    if (item.isActive) {
+      const expectedReturnDate = new Date(item.expectedReturnDate);
+      return this._itemsService.calculatePendingTime(expectedReturnDate);
+    } else {
+      return "inactive";
+    }
+  }
+
+  filterItems() {
+    this.searching = true;
+    this.items = this.allItems.filter(item => {
+      this.searching = false;
+
+      if (item.itemName.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1) {
+        switch (this.itemsType) {
+          case "important":
+            if (item.isActive && item.importance === "high") {
+              return true;
+            } else {
+              return false;
+            }
+          case "overdue":
+            if (item.isActive && this.calculatePendingTime(item) === "overdue") {
+              return true;
+            } else {
+              return false;
+            }
+          case "done":
+            if (!item.isActive) {
+              return true;
+            } else {
+              return false;
+            }
+        }
+      } else {
+        return false;
+      }
+
+    });
+  }
+
   ngAfterViewInit() {
     this.backButtonSubscription$ = this._platform.backButton.subscribe(() => {
       // navigator['app'].exitApp();
@@ -73,9 +134,11 @@ export class ImportantItemsPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ionViewDidEnter() {
-    this.importantLentItems = this._itemsService.getImportantItems();
-    this.importantItems$ = this.importantLentItems.subscribe((data) => {
-      console.log("important items: ", data);
+    this.items$ = this._itemsService.getAllItems().subscribe((data) => {
+      console.log(" items: ", data);
+      this.allItems = data;
+      this.items = [...this.allItems];
+      this.filterItems();
     });
   }
 
@@ -85,9 +148,11 @@ export class ImportantItemsPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.backButtonSubscription$.unsubscribe();
-    this.importantItems$.unsubscribe();
-    this.importantItems$ = null;
-    this.importantLentItems = null;
+    if (this.items$) {
+      this.items$.unsubscribe();
+      this.items$ = null;
+    }
+    this.items = null;
   }
 
 }

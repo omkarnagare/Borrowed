@@ -3,13 +3,13 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title> {{ itemObject.itemName }} </ion-title>
+    <ion-title> {{ itemObject ? itemObject.itemName: "" }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
 
-  <div *ngIf="!itemObject.itemName">
+  <div *ngIf="itemObject === null">
     <ion-card>
       <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
       <ion-card-header>
@@ -24,7 +24,7 @@
     </ion-card>
   </div>
 
-  <div *ngIf="itemObject.itemName" [style.opacity]="itemObject.isActive ? 1 : 0.5">
+  <div *ngIf="itemObject !== null" [style.opacity]="itemObject.isActive ? 1 : 0.5">
     <ion-card>
       <ion-img @slidetoptitle class="item-image" *ngIf="itemObject.itemImage" [src]="itemObject.itemImage"></ion-img>
       <ion-item lines="none" *ngIf="isMobilePlatform">
@@ -34,36 +34,121 @@
         </ion-chip>
       </ion-item>
       <ion-card-header *ngIf="itemObject.itemDescription">
-        <ion-card-subtitle @sliderighttitle>{{ itemObject.itemDescription }}</ion-card-subtitle>
+        <ion-card-subtitle @sliderighttitle>Notes</ion-card-subtitle>
+        <ion-card-title @sliderighttitle>{{ itemObject.itemDescription }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-item *ngIf="itemObject.itemName">
-          <ion-icon @slidelefttitle slot="start" name="cube"></ion-icon>
-          <ion-label @sliderighttitle>{{ itemObject.itemName }}</ion-label>
-        </ion-item>
-        <ion-item *ngIf="itemObject.borrowingDate">
-          <ion-icon @slidelefttitle slot="start" name="time"></ion-icon>
-          <ion-label @sliderighttitle>{{ itemObject.borrowingDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
-        </ion-item>
-        <ion-item *ngIf="itemObject.lendeeName">
-          <ion-icon @slidelefttitle slot="start" name="person"></ion-icon>
-          <ion-label @sliderighttitle>{{ itemObject.lendeeName }}</ion-label>
-        </ion-item>
-        <ion-item *ngIf="itemObject.lendeeContact">
-          <ion-icon @slidelefttitle slot="start" name="call"></ion-icon>
-          <ion-label @sliderighttitle>{{ itemObject.lendeeContact }}</ion-label>
-        </ion-item>
-        <ion-item *ngIf="itemObject.lendeeEmail">
-          <ion-icon @slidelefttitle slot="start" name="mail"></ion-icon>
-          <ion-label @sliderighttitle>{{ itemObject.lendeeEmail }}</ion-label>
-        </ion-item>
+
+        <div *ngIf="itemObject.itemName">
+          <ion-item>
+            <ion-icon @slidelefttitle slot="start" name="cube" style="color: var(--ion-color-primary)"></ion-icon>
+            <ion-segment @sliderighttitle mode="ios" color="primary" disabled style="opacity: 1;">
+              <ion-segment-button mode="ios">
+                <ion-label>Item</ion-label>
+              </ion-segment-button>
+              <ion-segment-button mode="ios" checked>
+                <ion-label>{{ itemObject.itemName }}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </ion-item>
+        </div>
+
+        <div *ngIf="itemObject.eventDate">
+          <ion-item>
+            <ion-icon @slidelefttitle slot="start" name="time" style="color: var(--ion-color-secondary)"></ion-icon>
+            <ion-segment @sliderighttitle mode="ios" color="secondary" disabled style="opacity: 1;">
+              <ion-segment-button mode="ios">
+                <ion-label>Date</ion-label>
+              </ion-segment-button>
+              <ion-segment-button mode="ios" checked>
+                <ion-label>{{ itemObject.eventDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </ion-item>
+        </div>
+
+        <div *ngIf="itemObject.expectedReturnDate">
+          <ion-item>
+            <ion-icon @slidelefttitle slot="start" name="git-compare" style="color: var(--ion-color-tertiary)">
+            </ion-icon>
+            <ion-segment @sliderighttitle mode="ios" [color]="calculatePendingTime(itemObject)" disabled style="opacity: 1;">
+              <ion-segment-button mode="ios">
+                <ion-label>Status</ion-label>
+              </ion-segment-button>
+              <ion-segment-button mode="ios" checked>
+                <ion-label text-uppercase>{{ itemObject.status }}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+            <ion-icon *ngIf="!showReturnDate" style="color: var(--ion-color-primary)" @fadein slot="end"
+              name="arrow-dropdown" (click)="showReturnDate=!showReturnDate"></ion-icon>
+            <ion-icon *ngIf="showReturnDate" style="color: var(--ion-color-primary)" @fadein slot="end"
+              name="arrow-dropup" (click)="showReturnDate=!showReturnDate"></ion-icon>
+          </ion-item>
+        </div>
+
+        <div *ngIf="itemObject.expectedReturnDate && showReturnDate">
+          <ion-item>
+            <ion-icon @slidelefttitle slot="start" name="hourglass" style="color: var(--ion-color-tertiary)"></ion-icon>
+            <ion-segment @sliderighttitle mode="ios" color="tertiary" disabled style="opacity: 1;">
+              <ion-segment-button mode="ios">
+                <ion-label>Return Date</ion-label>
+              </ion-segment-button>
+              <ion-segment-button mode="ios" checked>
+                <ion-label *ngIf="itemObject.isActive">{{ itemObject.expectedReturnDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
+                <ion-label *ngIf="!itemObject.isActive">{{ itemObject.returnDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </ion-item>
+        </div>
+
+        <div *ngIf="itemObject.personName">
+          <ion-item>
+            <ion-icon @slidelefttitle slot="start" name="person" style="color: var(--ion-color-primary)"></ion-icon>
+            <ion-segment @sliderighttitle mode="ios" color="primary" disabled style="opacity: 1;">
+              <ion-segment-button mode="ios">
+                <ion-label>Name</ion-label>
+              </ion-segment-button>
+              <ion-segment-button mode="ios" checked>
+                <ion-label text-capitalize>{{ itemObject.personName }}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </ion-item>
+        </div>
+
+        <div *ngIf="itemObject.personContactNumber">
+          <ion-item>
+            <ion-icon @slidelefttitle slot="start" name="call" style="color: var(--ion-color-secondary)"></ion-icon>
+            <ion-segment @sliderighttitle mode="ios" color="secondary" disabled style="opacity: 1;">
+              <ion-segment-button mode="ios">
+                <ion-label>Phone</ion-label>
+              </ion-segment-button>
+              <ion-segment-button mode="ios" checked>
+                <ion-label>{{ itemObject.personContactNumber }}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </ion-item>
+        </div>
+
+        <div *ngIf="itemObject.personEmail">
+          <ion-item>
+            <ion-icon @slidelefttitle slot="start" name="mail" style="color: var(--ion-color-tertiary)"></ion-icon>
+            <ion-segment @sliderighttitle mode="ios" color="tertiary" disabled style="opacity: 1;">
+              <ion-segment-button mode="ios">
+                <ion-label>Email</ion-label>
+              </ion-segment-button>
+              <ion-segment-button mode="ios" checked>
+                <ion-label>{{ itemObject.personEmail }}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </ion-item>
+        </div>
       </ion-card-content>
     </ion-card>
 
     <ion-card *ngIf="isMobilePlatform && itemObject.isActive">
       <ion-card-content class="social-icon-container">
         <p @sliderighttitle>Everyone is busy nowdays.</p>
-        <p @sliderighttitle>Remind "{{ itemObject.lendeeName }}" about "{{ itemObject.itemName }}" with</p>
+        <p @sliderighttitle>Remind "{{ itemObject.personName }}" about "{{ itemObject.itemName }}" with</p>
         <div @slidebottomtitle>
           <a (click)="confirmSendingReminderWithNote(600)">
             <ion-icon style="color:#25D366" name="logo-whatsapp"></ion-icon>

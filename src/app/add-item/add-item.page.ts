@@ -229,6 +229,8 @@ export class AddItemPage implements OnInit {
       itemObject.expectedReturnDate = this._itemService.getDateOfOneMonthLater(itemObject.eventDate);
     }
     itemObject["itemImage"] = this.itemImage ? this.itemImage : BorrowedAppConstants.DEFAULT_ITEM_IMAGE;
+    itemObject.transactionType = this.transactionType;
+    itemObject.importance = this.importance;
     console.log("item :", itemObject);
     return itemObject;
   }

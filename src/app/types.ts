@@ -25,6 +25,7 @@ export interface Item {
 
     // maintenance information
     isActive?: boolean;
+    returnDate?: string;
 }
 
 export interface SocialUserInfo {

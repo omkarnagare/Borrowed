@@ -38,16 +38,25 @@ export class ItemsService implements OnDestroy {
     }
   }
 
+  calculatePendingTime(expectedReturnDate): string {
+    const today = new Date().getTime();
+    const expectedReturnTime = expectedReturnDate.getTime();
+    if (today > expectedReturnTime) {
+      return "overdue";
+    } else {
+      if (expectedReturnTime - today <= 1000 * 60 * 60 * 24) {
+        return "urgent";
+      }
+    }
+    return "normal";
+  }
+
   addItem(itemDetails: Item): Promise<any> {
     return this.collectionRef
       .add({
         itemName: itemDetails.itemName,
         itemDescription: itemDetails.itemDescription,
-        borrowingDate: itemDetails.borrowingDate,
         itemImage: itemDetails.itemImage,
-        lendeeName: itemDetails.lendeeName,
-        lendeeContact: itemDetails.lendeeContact,
-        lendeeEmail: itemDetails.lendeeEmail,
 
         transactionType: itemDetails.transactionType,
         importance: itemDetails.importance,
@@ -77,13 +86,16 @@ export class ItemsService implements OnDestroy {
       // new data - no need to process
       return data;
     } else {
-      data.transactionType = "borrowed";
+      data.transactionType = "lent";
       data.importance = "low";
       data.eventDate = data.borrowingDate;
       data.expectedReturnDate = this.getDateOfOneMonthLater(data.borrowingDate);
       data.personName = data.lendeeName;
       data.personContactNumber = data.lendeeContact;
       data.personEmail = data.lendeeEmail;
+      if (!data.isActive) {
+        data.returnDate = this.today();
+      }
       return data;
     }
   }
@@ -93,6 +105,10 @@ export class ItemsService implements OnDestroy {
     const laterDate = new Date(dateStr);
     laterDate.setMonth(date.getMonth() + 1);
     return this.dateToLocalISO(laterDate);
+  }
+
+  today(): string {
+    return this.dateToLocalISO(new Date());
   }
 
   dateToLocalISO(date: Date): string {
@@ -133,7 +149,7 @@ export class ItemsService implements OnDestroy {
       .pipe(
         map(actions => {
           const data = actions.map(action => ({ itemId: action.payload.doc.id, ...action.payload.doc.data() }));
-          
+
           // handling old-item data
           // TODO: remove when app version for all user is greater than 1.1
           const items = [];
@@ -154,7 +170,10 @@ export class ItemsService implements OnDestroy {
 
   markItemAsDone(itemId: string) {
     return this.collectionRef
-      .doc(itemId).update({ isActive: false });
+      .doc(itemId).update({ 
+        isActive: false,
+        returnDate: this.today()
+      });
   }
 
   deleteItemPermanently(itemId: string) {
@@ -164,7 +183,7 @@ export class ItemsService implements OnDestroy {
 
   remove(item: Item) {
     if (item.isActive) {
-      this.showAlertForTransactionComplete(item);
+      this.confirmCompletingTransaction(item);
     } else {
       // transaction complete or done items
       this.showAlertForDelete(item);
@@ -210,14 +229,17 @@ export class ItemsService implements OnDestroy {
     await alert.present();
   }
 
-  async showAlertForTransactionComplete(item: Item) {
+  async confirmCompletingTransaction(item: Item) {
     const alert = await this._alertController.create({
-      header: "Hurray!! Borrowing Transaction completed.",
-      message: "To view transaction-complete / done Items in Items history, go to Account details.",
+      header: this.constuctHeader(item),
+      message: this.constuctMessage(item),
       buttons: [
         {
-          text: 'Ok',
-          role: 'cancel',
+          text: 'No',
+          role: 'cancel'
+        },
+        {
+          text: 'Yes',
           handler: () => {
             this._loader.presentLoader().then(() => {
               this.markItemAsDone(item.itemId).then(() => {
@@ -232,6 +254,22 @@ export class ItemsService implements OnDestroy {
       ]
     });
     await alert.present();
+  }
+
+  constuctHeader(item: Item): string {
+    if (item.transactionType === "lent") {
+      return "Hurray!! Please confirm whether " + item.personName + " returned your \"" + item.itemName + "\" to you.";
+    } else {
+      return "Hurray!! Did you return \"" + item.itemName + "\" to " + item.personName + ".";
+    }
+  }
+
+  constuctMessage(item: Item): string {
+    if (item.transactionType === "lent") {
+      return "To view your returned Items from your friends and family in Items history, navigate using \"Star\" icon in the toolbar and go to \"completed\" section.";
+    } else {
+      return "To view Items which you have returned to your friends and family in Items history, navigate using \"Star\" icon in the toolbar and go to \"completed\" section.";
+    }
   }
 
 }
