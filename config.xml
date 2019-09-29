@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget android-versionCode="5" id="com.nagare.balkrishna.omkar.borrowed" version="1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Borrowed</name>
+    <name>Borrowing</name>
     <description>App which enables you to Un-Forget.</description>
     <author email="omtechnologies.apps@gmail.com" href="">Omkar Balkrishna Nagare</author>
     <content src="index.html" />
@@ -53,13 +53,13 @@
     </platform>
     <platform name="ios">
         <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
-            <string>Borrowed needs access to Camera</string>
+            <string>Borrowing needs access to Camera</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
-            <string>Borrowed needs access to Photo library</string>
+            <string>Borrowing needs access to Photo library</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryAddUsageDescription">
-            <string>Borrowed needs access to save pictures</string>
+            <string>Borrowing needs access to save pictures</string>
         </edit-config>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />

@@ -10,10 +10,12 @@ import { LoaderManagerService } from '../services/loader-manager.service';
 import { ToastManagerService } from '../services/toast-manager.service';
 import { BorrowedAppConstants, ImageSourceType, SOCIAL_SHARE_OPTIONS } from '../constants';
 import { GetImageService } from '../services/get-image.service';
-import { ActionSheetController, AlertController } from '@ionic/angular';
+import { ActionSheetController, AlertController, ModalController } from '@ionic/angular';
 
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { MessageComposerPage } from '../message-composer/message-composer.page';
+import { ContactFinderPage } from '../contact-finder/contact-finder.page';
 
 @Component({
   selector: 'app-item-details',
@@ -80,6 +82,7 @@ export class ItemDetailsPage implements OnDestroy {
     private _getImageService: GetImageService,
     private _actionSheetController: ActionSheetController,
     private _alertController: AlertController,
+    private _modalController: ModalController,
     private _datePipe: DatePipe,
     private _router: Router,
     activatedRoute: ActivatedRoute,
@@ -128,8 +131,7 @@ export class ItemDetailsPage implements OnDestroy {
 
   onImportanceChange(event: any) {
     this.importance = event.detail.value;
-    this.itemDetailsFormGroup.markAsTouched();
-    this.itemDetailsFormGroup.markAsDirty();
+    this.markFormDirty();
     console.log(this.importance);
   }
 
@@ -242,96 +244,125 @@ export class ItemDetailsPage implements OnDestroy {
     }
   }
 
-  async confirmSendingReminderWithNote(socialOption: SOCIAL_SHARE_OPTIONS) {
-    const alert = await this._alertController.create({
-      header: 'Include Description',
-      message: 'Do you want to send your personalized item description along with the reminder?',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-          handler: () => {
-            this.shareReminderViaSocialOptions(socialOption, false);
-          }
-        },
-        {
-          text: 'Yes',
-          handler: () => {
-            this.shareReminderViaSocialOptions(socialOption, true);
-          }
-        }
-      ]
+  async openContactFinderModal() {
+    const contactFinderModal = await this._modalController.create({
+      component: ContactFinderPage,
+      backdropDismiss: false
     });
-    await alert.present();
+
+    contactFinderModal.onDidDismiss()
+      .then((data) => {
+        const response = data.data;
+        if (response) {
+          console.log(response);
+          this.assignContactDetails(response.contactName, response.contactNumber);
+        } else {
+          // no need to take any action
+        }
+      });
+    return await contactFinderModal.present();
   }
 
-  shareReminderViaSocialOptions(socialOption: SOCIAL_SHARE_OPTIONS, includeDescription: boolean) {
+  assignContactDetails(contact: any, number: any) {
+    const trimmedName = contact.displayName.trim(); // trim whitespaces from name
+    this.itemDetailsFormGroup.get("personName").setValue(trimmedName);
+    const trimmedNumber = number.replace(/\s/g, ""); // remove all the whitespaces from number
+    this.itemDetailsFormGroup.get("personContactNumber").setValue(trimmedNumber);
+
+    this.itemDetailsFormGroup.get("personName").markAsTouched();
+    this.itemDetailsFormGroup.get("personContactNumber").markAsTouched();
+    this.markFormDirty();
+    
+  }
+
+  markFormDirty() {
+    this.itemDetailsFormGroup.markAsDirty();
+    this.itemDetailsFormGroup.markAsTouched();
+  }
+
+  async openMessageComposerModal(socialOption: SOCIAL_SHARE_OPTIONS) {
+    const composerModal = await this._modalController.create({
+      component: MessageComposerPage,
+      componentProps: {
+        item: this.itemObject
+      }
+    });
+    composerModal.onDidDismiss().then((response) => {
+      if (response.data) {
+        console.log(response.data);
+        this.shareReminderViaSocialOptions(socialOption, response.data);
+      }
+    });
+    await composerModal.present();
+  }
+
+  shareReminderViaSocialOptions(socialOption: SOCIAL_SHARE_OPTIONS, message: string) {
     switch (socialOption) {
       case SOCIAL_SHARE_OPTIONS.WHATSAPP:
-        this.sendReminderOnWhatsapp(includeDescription);
+        this.sendReminderOnWhatsapp(message);
         break;
       case SOCIAL_SHARE_OPTIONS.FACEBOOK:
-        this.sendReminderOnFacebook(includeDescription);
+        this.sendReminderOnFacebook(message);
         break;
       case SOCIAL_SHARE_OPTIONS.INSTAGRAM:
-        this.sendReminderOnInstagram(includeDescription);
+        this.sendReminderOnInstagram(message);
         break;
       case SOCIAL_SHARE_OPTIONS.TWITTER:
-        this.sendReminderOnTwitter(includeDescription);
+        this.sendReminderOnTwitter(message);
         break;
       case SOCIAL_SHARE_OPTIONS.EMAIL:
-        this.sendReminderOnEmail(includeDescription);
+        this.sendReminderOnEmail(message);
         break;
       default:
-        this.sendReminder(includeDescription);
+        this.sendReminder(message);
     }
   }
 
-  sendReminderOnWhatsapp(includeDescription: boolean) {
+  sendReminderOnWhatsapp(message: string) {
     const attr: WhatsAppAttributes = {
-      message: this.constructMessage(includeDescription),
+      message: message,
       image: this.getItemImage(),
     };
     this._socialNetworksService.shareToWhatsApp(attr);
   }
 
-  sendReminderOnFacebook(includeDescription: boolean) {
+  sendReminderOnFacebook(message: string) {
     const attr: FacebookAttributes = {
-      message: this.constructMessage(includeDescription),
+      message: message,
       image: this.getItemImage()
     };
     this._socialNetworksService.shareToFacebook(attr);
   }
 
-  sendReminderOnInstagram(includeDescription: boolean) {
+  sendReminderOnInstagram(message: string) {
     const attr: InstagramAttributes = {
-      message: this.constructMessage(includeDescription),
+      message: message,
       image: this.getItemImage(),
     };
     this._socialNetworksService.shareToInstagram(attr);
   }
 
-  sendReminderOnTwitter(includeDescription: boolean) {
+  sendReminderOnTwitter(message: string) {
     const attr: TwitterAttributes = {
-      message: this.constructMessage(includeDescription),
+      message: message,
       image: this.getItemImage(),
     };
     this._socialNetworksService.shareToTwitter(attr);
   }
 
-  sendReminder(includeDescription: boolean) {
+  sendReminder(message: string) {
     const attr: GenericShare = {
       subject: this.constructSubject(),
-      message: this.constructMessage(includeDescription),
+      message: message,
     };
     this._socialNetworksService.share(attr);
   }
 
-  sendReminderOnEmail(includeDescription: boolean) {
+  sendReminderOnEmail(message: string) {
     const toEmail = this.itemObject.lendeeEmail ? [this.itemObject.lendeeEmail] : [];
     const attr: EmailAttributes = {
       subject: this.constructSubject(),
-      message: this.constructMessage(includeDescription),
+      message: message,
       to: toEmail,
       cc: [],
       bcc: []
@@ -341,14 +372,6 @@ export class ItemDetailsPage implements OnDestroy {
 
   constructSubject(): string {
     return "Reminder for \"" + this.itemObject.itemName + "\"";
-  }
-
-  constructMessage(includeDescription: boolean): string {
-    let message = "Hi " + this.itemObject.lendeeName + ", It's been a while since We last discussed about \"" + this.itemObject.itemName + "\". The borrowing day was " + this._datePipe.transform(this.itemObject.borrowingDate, 'EEEE, dd MMMM yyyy') + ".";
-    if (includeDescription && this.itemObject.itemDescription) {
-      message = message + "My personal notes about the \"" + this.itemObject.itemName + "\" are as follows : " + this.itemObject.itemDescription + "."
-    }
-    return message;
   }
 
   getItemImage() {

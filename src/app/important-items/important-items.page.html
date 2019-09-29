@@ -60,11 +60,11 @@
       </ion-card-header>
       <ion-card-content @slidelefttitle>
         <p *ngIf="itemsType === 'important'">Add your valuable item with it's importance set as "High" to mark that item
-          as important in Borrowed.</p>
+          as important in Borrowing.</p>
         <p *ngIf="itemsType === 'overdue'">Overdue items will be highlighted with red color. Please keep an eye on items
           marked with orange color, they must be due in less than 24 hours.</p>
         <p *ngIf="itemsType === 'done'">To add Item to history after completing the borrowing transaction, Click on
-          "check" icon which will be shown after left-sliding the item from item-listing of Borrowed.</p>
+          "check" icon which will be shown after left-sliding the item from item-listing of Borrowing.</p>
       </ion-card-content>
     </ion-card>
   </div>
@@ -86,7 +86,8 @@
           </ion-thumbnail>
           <ion-grid fixed>
             <ion-row class="ribbon-box">
-              <div *ngIf="item.isActive" class="ribbon" @slidetoptitle [ngClass]="item.importance"><span>{{ item.importance }}</span></div>
+              <div *ngIf="item.isActive" class="ribbon" @slidetoptitle [ngClass]="item.importance">
+                <span>{{ item.importance }}</span></div>
               <ion-col size="2" @slidetoptitle>
               </ion-col>
               <ion-col size="8" class="bold-heading" @sliderighttitle>
@@ -97,8 +98,10 @@
                   <p *ngIf="item.isActive"> {{ item.transactionType === 'lent'? 'Lent To': 'Borrowed From' }}</p>
                   <p *ngIf="!item.isActive"> {{ item.transactionType === 'lent'? 'Got back from': 'Returned to' }}</p>
                   <p> <b style="color: var(--ion-color-primary)" text-capitalize>{{ item.personName }}</b> </p>
-                  <p *ngIf="item.isActive">on <b style="color: var(--ion-color-primary)">{{ item.eventDate  | date: 'dd MMM, yyyy' }}</b></p>
-                  <p *ngIf="!item.isActive">on or before <b style="color: var(--ion-color-primary)">{{ item.returnDate  | date: 'dd MMM, yyyy' }}</b></p>
+                  <p *ngIf="item.isActive">on <b
+                      style="color: var(--ion-color-primary)">{{ item.eventDate  | date: 'dd MMM, yyyy' }}</b></p>
+                  <p *ngIf="!item.isActive">on or before <b
+                      style="color: var(--ion-color-primary)">{{ item.returnDate  | date: 'dd MMM, yyyy' }}</b></p>
                 </ion-label>
               </ion-col>
               <ion-col size="2" @slidetoptitle>

@@ -34,7 +34,7 @@ export class ActivitiesService {
       case UserActivityType.ITEM_TRANSACTION_COMPLETE:
         return "You " + (itemDetails.transactionType === "lent" ? "got back " : "returned ") + itemDetails.itemName.toUpperCase() + (itemDetails.transactionType === "lent" ? " from " : " to ") + itemDetails.personName.toUpperCase() + this.getFormattedDateExpression() + " which was of " + itemDetails.importance.toUpperCase() + " importance.";
       case UserActivityType.ITEM_DELETE:
-        return "You permanently deleted " + itemDetails.itemName.toUpperCase() + this.getFormattedDateExpression() + " from Borrowed.";
+        return "You permanently deleted " + itemDetails.itemName.toUpperCase() + this.getFormattedDateExpression() + " from Borrowing.";
     }
   }
 

@@ -5,7 +5,8 @@
     </ion-buttons>
     <ion-title> {{ itemObject ? itemObject.itemName: "" }} </ion-title>
     <ion-buttons slot="end">
-      <ion-button @fadein *ngIf="editing && itemDetailsFormGroup.valid && itemDetailsFormGroup.dirty" (click)="confirmUpdateDetails()">
+      <ion-button @fadein *ngIf="editing && itemDetailsFormGroup.valid && itemDetailsFormGroup.dirty"
+        (click)="confirmUpdateDetails()">
         <ion-icon slot="icon-only" name="md-checkmark"></ion-icon>
       </ion-button>
       <ion-button @fadein *ngIf="editing" (click)="confirmCancelEditing()">
@@ -40,7 +41,7 @@
       <ion-card>
         <ion-img @slidetoptitle class="item-image" *ngIf="itemObject.itemImage && !editing"
           [src]="itemObject.itemImage"></ion-img>
-        <ion-item lines="none" *ngIf="isMobilePlatform && !editing">
+        <ion-item lines="none" *ngIf="isMobilePlatform && itemObject.isActive && !editing">
           <ion-chip (click)="selectImageSource()" class="center-chip">
             <ion-icon @slidelefttitle name="camera"></ion-icon>
             <ion-label @sliderighttitle>Change Image</ion-label>
@@ -286,27 +287,27 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card *ngIf="isMobilePlatform && itemObject.isActive">
+      <ion-card *ngIf="isMobilePlatform && itemObject.isActive && !editing">
         <ion-card-content class="social-icon-container">
           <p @sliderighttitle>Everyone is busy nowdays.</p>
           <p @sliderighttitle>You can remind "{{ itemObject.personName }}" about "{{ itemObject.itemName }}" with</p>
           <div @slidebottomtitle>
-            <a (click)="confirmSendingReminderWithNote(600)">
+            <a (click)="openMessageComposerModal(600)">
               <ion-icon style="color:#25D366" name="logo-whatsapp"></ion-icon>
             </a>
-            <a (click)="confirmSendingReminderWithNote(601)">
+            <a (click)="openMessageComposerModal(601)">
               <ion-icon style="color:#3b5998" name="logo-facebook"></ion-icon>
             </a>
-            <a (click)="confirmSendingReminderWithNote(602)">
+            <a (click)="openMessageComposerModal(602)">
               <ion-icon style="color:#8a3ab9" name="logo-instagram"></ion-icon>
             </a>
-            <a (click)="confirmSendingReminderWithNote(603)">
+            <a (click)="openMessageComposerModal(603)">
               <ion-icon style="color:#1da1f2" name="logo-twitter"></ion-icon>
             </a>
-            <a (click)="confirmSendingReminderWithNote(604)">
+            <a (click)="openMessageComposerModal(604)">
               <ion-icon style="color:rgb(126, 6, 6)" name="mail"></ion-icon>
             </a>
-            <a (click)="confirmSendingReminderWithNote(605)">
+            <a (click)="openMessageComposerModal(605)">
               <ion-icon style="color:rgb(0, 0, 0)" name="share"></ion-icon>
             </a>
           </div>

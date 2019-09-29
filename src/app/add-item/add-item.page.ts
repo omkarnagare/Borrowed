@@ -140,12 +140,12 @@ export class AddItemPage implements OnInit {
   }
 
   async openContactFinderModal() {
-    const pinModal = await this._modalController.create({
+    const contactFinderModal = await this._modalController.create({
       component: ContactFinderPage,
       backdropDismiss: false
     });
 
-    pinModal.onDidDismiss()
+    contactFinderModal.onDidDismiss()
       .then((data) => {
         const response = data.data;
         if (response) {
@@ -155,7 +155,7 @@ export class AddItemPage implements OnInit {
           // no need to take any action
         }
       });
-    return await pinModal.present();
+    return await contactFinderModal.present();
   }
 
   assignContactDetails(contact: any, number: any) {

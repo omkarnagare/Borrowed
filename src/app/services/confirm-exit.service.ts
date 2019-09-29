@@ -18,7 +18,7 @@ export class ConfirmExitService {
     if (!this.alertPresentedAlready) {
       this.alertPresentedAlready = true;
       const alert = await this._alertController.create({
-        header: 'Closing Borrowed..',
+        header: 'Closing Borrowing..',
         message: "This will exit the application. Do you want to continue ?",
         buttons: [
           {
@@ -32,7 +32,6 @@ export class ConfirmExitService {
             text: 'Exit',
             handler: () => {
               this.alertPresentedAlready = false;
-              this._pinVerification.verified = false;
               navigator['app'].exitApp();
             }
           }]

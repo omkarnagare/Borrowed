@@ -116,7 +116,7 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
 
   async openPinVerifyModal(expectedPIN: string = "") {
     console.log(expectedPIN);
-    const pinModal = await this._modalController.create({
+    const pinModalOfHome = await this._modalController.create({
       component: PinUnlockPage,
       componentProps: {
         title: "Enter PIN",
@@ -125,11 +125,11 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
       },
       backdropDismiss: false // user cannot dissmiss by clicking outside
     });
-    pinModal.onDidDismiss()
+    pinModalOfHome.onDidDismiss()
       .then((data) => {
         this._pinVerification.verified = true;
       });
-    return await pinModal.present();
+    return await pinModalOfHome.present();
   }
 
   ngAfterViewInit() {

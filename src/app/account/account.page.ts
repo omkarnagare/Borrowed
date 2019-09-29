@@ -275,12 +275,12 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
     pinModalData.pinSetupState = pinSetupState;
     pinModalData.expectedPIN = expectedPIN;
 
-    const pinModal = await this._modalController.create({
+    const pinModalOfAccount = await this._modalController.create({
       component: PinUnlockPage,
       componentProps: pinModalData,
     });
 
-    pinModal.onDidDismiss()
+    pinModalOfAccount.onDidDismiss()
       .then((data) => {
         const response = data.data;
         if (response) {
@@ -300,7 +300,7 @@ export class AccountPage implements OnInit, AfterViewInit, OnDestroy {
         }
       });
 
-    return await pinModal.present();
+    return await pinModalOfAccount.present();
   }
 
   processPinModalData(pinModalData: PinModalData) {

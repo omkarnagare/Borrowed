@@ -38,10 +38,6 @@ export class AppComponent {
         else {
           this._router.navigate(["/log-in"]);
         }
-      })
-
-      this.platform.pause.subscribe(() => {
-        this._pinVerificationService.verified = false;
       });
 
     });

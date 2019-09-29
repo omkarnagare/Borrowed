@@ -92,7 +92,7 @@ export class SettingsPage implements OnInit, AfterViewInit, OnDestroy {
   share() {
     console.log(this._appInfoService.getAppName() + ": v" + this.appVersion);
     this._socialNetworkService.share({
-      message: "Hello there!! I am using Borrowed to help me Un-Forget. It's simply amazing and very easy to use. To install, click on the link below",
+      message: "Hello there!! I am using Borrowing to help me Un-Forget. It's simply amazing and very easy to use. To install, click on the link below",
       subject: this._appInfoService.getAppDetails(),
       // file: "",
       url: this.getAppURL()

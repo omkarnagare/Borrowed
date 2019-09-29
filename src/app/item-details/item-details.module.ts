@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ItemDetailsPage } from './item-details.page';
+import { MessageComposerPageModule } from '../message-composer/message-composer.module';
+import { ContactFinderPageModule } from '../contact-finder/contact-finder.module';
 
 const routes: Routes = [
   {
@@ -16,6 +18,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    ContactFinderPageModule,
+    MessageComposerPageModule,
     ReactiveFormsModule,
     CommonModule,
     FormsModule,

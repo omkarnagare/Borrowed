@@ -1,6 +1,6 @@
 export class BorrowedAppConstants {
 
-    public static APP_NAME = "Borrowed";
+    public static APP_NAME = "Borrowing";
     public static APP_VERSION = "1.2";
     public static SUPPORT_EMAIL = "omtechnologies.apps@gmail.com";
     public static DISPLAY_NAME_UPDATE_SUCCESS_MESSAGE = "Display name updated successfully.";
@@ -14,6 +14,9 @@ export class BorrowedAppConstants {
 
     //sort popover keys
     public static SORT_POPOVER_ICON_KEY = "icon";
+
+    //message composer modal keys
+    public static MESSAGE_COMPOSER_ITEM_KEY = "item";
 
     // firestore
     public static USER_COLLECTION = "users";
@@ -54,7 +57,7 @@ export class BorrowedAppConstants {
     public static USER_IMAGE_SUCCESS_MESSAGE = "Profile Image set successfully.";
     public static ITEM_IMAGE_SUCCESS_MESSAGE = "Item Image set successfully.";
     public static ITEM_UPDATE_DETAILS_SUCCESS_MESSAGE = "Item details updated successfully.";
-    public static DEVICE_OFFLINE_MESSAGE = "Your device seems to be Offline. Borrowed may not work correctly. The app will exit now.";
+    public static DEVICE_OFFLINE_MESSAGE = "Your device seems to be Offline. Borrowing may not work correctly. The app will exit now.";
     public static ERROR_MESSAGE = "Some Error Occurred. Please try again.";
     public static INVALID_FIELDS_MESSAGE = "Please fill all the fields with appropriate values.";
     public static PASSWORD_MISSMATCH_MESSAGE = "Passwords did not match. Please try again.";

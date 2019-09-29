@@ -35,7 +35,7 @@ export class NetworkService implements OnDestroy {
     if (!this.alertPresented) {
       this.alertPresented = true;
       const alert = await this._alertController.create({
-        header: 'Borrowed Exiting ..',
+        header: 'Borrowing Exiting ..',
         message: message,
         buttons: [{
           text: 'Exit App',
