@@ -1,17 +1,20 @@
-<ion-header translucent>
-  <ion-toolbar color="primary">
-    <ion-title>
-      Borrowed
-    </ion-title>
+<ion-header translucent lines="none">
+  <ion-toolbar color="primary" lines="none">
+      <ion-title>
+        Borrowed
+      </ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="selectSortField($event)">
+          <ion-icon slot="icon-only" name="ios-funnel"></ion-icon>
+        </ion-button>
+      </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar color="primary" @slidetoptitle lines="none">
+    <ion-searchbar (ionChange)="onSearchInput($event)" debounce="500"></ion-searchbar>
+</ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
-
-  <div @slidelefttitle>
-    <ion-searchbar (ionChange)="onSearchInput($event)" debounce="500"></ion-searchbar>
-  </div>
-
   <div>
     <ion-item @sliderighttitle lines="none">
       <ion-segment mode="ios" (ionChange)="onItemsTypeChange($event)" color="secondary">

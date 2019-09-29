@@ -28,6 +28,12 @@ export interface Item {
     returnDate?: string;
 }
 
+export interface Activity {
+    activityId?: string;
+    activityDetails?: string;
+    activityDate?: string;
+}
+
 export interface SocialUserInfo {
     uid?: string;
     displayName: string;

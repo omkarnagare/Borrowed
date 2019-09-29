@@ -12,9 +12,13 @@ export class BorrowedAppConstants {
     public static PIN_KEY = "pin";
     public static PIN_VERIFIED_KEY = "verified";
 
+    //sort popover keys
+    public static SORT_POPOVER_ICON_KEY = "icon";
+
     // firestore
     public static USER_COLLECTION = "users";
     public static ITEMS_COLLECTION = "items";
+    public static ACTIVITIES_COLLECTION = "activities";
 
     // firebase storage
     public static PROFILE_IMAGES_COLLECTION = "userProfiles";
@@ -162,4 +166,11 @@ export enum SOCIAL_SHARE_OPTIONS {
     TWITTER = 603,
     EMAIL = 604,
     GENERAL = 605
+}
+
+export enum UserActivityType {
+    ITEM_ADD = 700,
+    ITEM_UPDATE = 701,
+    ITEM_TRANSACTION_COMPLETE = 702,
+    ITEM_DELETE = 703
 }

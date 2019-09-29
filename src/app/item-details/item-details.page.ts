@@ -254,6 +254,7 @@ export class ItemDetailsPage implements OnDestroy {
         console.log("imageData", itemImage);
         //update item image
         this._itemService.updateItem(this.itemId, {
+          itemName: this.itemObject.itemName,
           itemImage: itemImage
         }).then(response => {
           this._toastManager.showToast(BorrowedAppConstants.ITEM_IMAGE_SUCCESS_MESSAGE);

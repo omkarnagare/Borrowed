@@ -73,9 +73,7 @@ export class ImportantItemsPage implements OnInit, AfterViewInit, OnDestroy {
   onItemsTypeChange(event) {
     this.itemsType = event.detail.value;
     console.log(this.itemsType);
-    if (this.allItems) {
-      this.filterItems();
-    }
+    this.filterItems();
   }
 
   onSearchInput(event: any) {
@@ -94,6 +92,10 @@ export class ImportantItemsPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   filterItems() {
+    if (!this.allItems || (this.allItems && this.allItems.length <= 0)) {
+      return;
+    }
+    
     this.searching = true;
     this.items = this.allItems.filter(item => {
       this.searching = false;

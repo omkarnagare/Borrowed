@@ -14,6 +14,7 @@ import { AdmobAdsService } from '../services/admob-ads.service';
 
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { ContactFinderPage } from '../contact-finder/contact-finder.page';
+import { Utils } from '../utils';
 
 @Component({
   selector: 'app-add-item',
@@ -70,6 +71,7 @@ export class AddItemPage implements OnInit {
 
   constructor(
     private _itemService: ItemsService,
+    private _utils: Utils,
     private _loader: LoaderManagerService,
     private _toastManager: ToastManagerService,
     private _getImageService: GetImageService,
@@ -213,7 +215,7 @@ export class AddItemPage implements OnInit {
       this._itemService
         .addItem(itemObject)
         .then((result) => {
-          this._toastManager.showToast("Item " + itemObject.itemName + " added successfully.");
+          this._toastManager.showToast("\"" + itemObject.itemName + "\" added successfully.");
           this.redirectToHomePage();
         }).catch((error) => {
           this._toastManager.showErrorToast(error);
@@ -226,7 +228,7 @@ export class AddItemPage implements OnInit {
   preProcessingItemOject(value: any): Item {
     const itemObject: Item = { ...value };
     if (!itemObject.expectedReturnDate) {
-      itemObject.expectedReturnDate = this._itemService.getDateOfOneMonthLater(itemObject.eventDate);
+      itemObject.expectedReturnDate = this._utils.getDateOfOneMonthLater(itemObject.eventDate);
     }
     itemObject["itemImage"] = this.itemImage ? this.itemImage : BorrowedAppConstants.DEFAULT_ITEM_IMAGE;
     itemObject.transactionType = this.transactionType;

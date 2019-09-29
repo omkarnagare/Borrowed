@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Item } from '../types';
 import { ItemsService } from '../services/items.service';
-import { Platform, ModalController } from '@ionic/angular';
+import { Platform, ModalController, PopoverController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { PinVerificationService } from '../services/pin-verification.service';
 import { PIN_STATE } from '../constants';
@@ -10,6 +10,7 @@ import { PinUnlockPage } from '../pin-unlock/pin-unlock.page';
 import { ConfirmExitService } from '../services/confirm-exit.service';
 
 import { trigger, state, transition, style, animate } from '@angular/animations';
+import { SortItemsComponent } from '../sort-items/sort-items.component';
 
 @Component({
   selector: 'app-borrowed',
@@ -59,6 +60,7 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
 
   itemsType: string = null;
   searchTerm: string = "";
+  sortBy: string = null;
 
   searching: boolean;
 
@@ -68,7 +70,8 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
     private _itemsService: ItemsService,
     private _pinVerification: PinVerificationService,
     private _confirmExitService: ConfirmExitService,
-    private _modalController: ModalController
+    private _modalController: ModalController,
+    private _popOverController: PopoverController
   ) {
   }
 
@@ -90,6 +93,25 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
       }
       this._splashScreen.hide();
     });
+  }
+
+  async selectSortField(event: any) {
+    const popover = await this._popOverController.create({
+      component: SortItemsComponent,
+      event: event,
+      animated: true,
+      showBackdrop: true,
+      componentProps: {
+        icon: this.sortBy
+      }
+    });
+    popover.onDidDismiss().then(response => {
+      if (response.data && this.sortBy !== response.data.icon) {
+        this.sortBy = response.data.icon;
+        this.filterItems();
+      }
+    })
+    return await popover.present();
   }
 
   async openPinVerifyModal(expectedPIN: string = "") {
@@ -129,9 +151,7 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
   onItemsTypeChange(event) {
     this.itemsType = event.detail.value;
     console.log(this.itemsType);
-    if (this.allItems) {
-      this.filterItems();
-    }
+    this.filterItems();
   }
 
   calculatePendingTime(date: string, item: any) {
@@ -141,6 +161,10 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   filterItems() {
+    if (!this.allItems || (this.allItems && this.allItems.length <= 0)) {
+      return;
+    }
+
     this.searching = true;
     this.items = this.allItems.filter(item => {
       this.searching = false;
@@ -160,6 +184,40 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
         return false;
       }
 
+    });
+    if (this.sortBy) {
+      this.sortItems();
+    }
+  }
+
+  sortItems() {
+    this.items.sort((item1: Item, item2: Item) => {
+      switch (this.sortBy) {
+        case "cube":
+          if (item1.itemName > item2.itemName) {
+            return 1;
+          }
+          if (item1.itemName < item2.itemName) {
+            return -1;
+          }
+          return 0;
+        case "time":
+          return new Date(item2.eventDate).getTime() - new Date(item1.eventDate).getTime();
+        case "hourglass":
+          if (item1.isActive) {
+            return new Date(item2.expectedReturnDate).getTime() - new Date(item1.expectedReturnDate).getTime();
+          } else {
+            return new Date(item2.returnDate).getTime() - new Date(item1.returnDate).getTime();
+          }
+        case "person":
+          if (item1.personName > item2.personName) {
+            return 1;
+          }
+          if (item1.personName < item2.personName) {
+            return -1;
+          }
+          return 0;
+      }
     });
   }
 

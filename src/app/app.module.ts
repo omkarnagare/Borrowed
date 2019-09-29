@@ -34,10 +34,11 @@ import { AppComponent } from './app.component';
 import { DatePipe } from '@angular/common';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { alertEnterAnimation, toastEnterAnimation, alertLeaveAnimation, toastLeaveAnimation } from './app-animations';
+import { SortItemsComponent } from './sort-items/sort-items.component';
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [AppComponent, SortItemsComponent],
+  entryComponents: [ SortItemsComponent ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,

@@ -4,66 +4,44 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>
-      Items History
+      Your Activity
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
 
-  <div *ngIf="!transcationCompleteItems">
+  <div *ngIf="activities === null">
     <ion-card *ngFor="let x of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]">
+      <ion-skeleton-text animated></ion-skeleton-text>
       <ion-skeleton-text animated></ion-skeleton-text>
       <ion-skeleton-text animated></ion-skeleton-text>
     </ion-card>
   </div>
 
-  <div *ngIf="(transcationCompleteItems | async)?.length === 0">
-    <ion-card class="card-center">
-      <ion-img @slidetoptitle src="/assets/empty-box.svg" class="center-image"></ion-img>
+  <div *ngIf="activities !== null && activities.length === 0">
+    <ion-card class="card-center" routerLink="/tabs/add-item">
+      <!-- <ion-img @slidetoptitle src="/assets/empty-box.svg" class="center-image"></ion-img> -->
       <ion-card-header>
-        <ion-card-title @slidelefttitle>No items present in the history.</ion-card-title>
+        <ion-card-title @slidelefttitle>No User Activities recorded.</ion-card-title>
       </ion-card-header>
       <ion-card-content @sliderighttitle>
-        <h2>To complete borrowing transaction for an Item : </h2>
-        <p>Click on "check" icon which will be shown after
-          left-sliding the item on the home page.</p>
+        <p>It seems you haven't used Borrowed for un-forgetting your Items till date !!</p>
+        <h2>Click here to add your first Item.</h2>
       </ion-card-content>
     </ion-card>
   </div>
 
-  <div *ngIf="(transcationCompleteItems | async) as loadedItems">
-    <ion-list *ngIf="loadedItems.length > 0">
-      <ion-list-header @slidelefttitle>Done Items</ion-list-header>
-      <ion-item-sliding *ngFor="let transcationCompleteItem of loadedItems">
-        <ion-item-options side="end">
-          <ion-item-option color="danger" (click)="removeItem( transcationCompleteItem )">
-            <ion-icon *ngIf="transcationCompleteItem.isActive" name="checkmark" slot="icon-only"></ion-icon>
-            <ion-icon *ngIf="!transcationCompleteItem.isActive" name="trash" slot="icon-only"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-
-        <ion-item [routerLink]="['item-details', transcationCompleteItem.itemId]" class="item-grid-content"
-          [style.opacity]="transcationCompleteItem.isActive ? 1 : 0.5">
-          <ion-grid fixed>
-            <ion-row>
-              <ion-col size="3" @slidebottomtitle>
-                <ion-thumbnail>
-                  <img [src]="transcationCompleteItem.itemImage">
-                </ion-thumbnail>
-              </ion-col>
-              <ion-col size="9" class="bold-heading" @sliderighttitle>
-                <ion-label>
-                  <h2 text-uppercase>{{ transcationCompleteItem.itemName }}</h2>
-                  <p> Lent to <b>{{ transcationCompleteItem.lendeeName }}</b> on
-                    <b>{{ transcationCompleteItem.borrowingDate  | date: 'dd MMM, yyyy' }}</b></p>
-                </ion-label>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-        
-      </ion-item-sliding>
+  <div *ngIf="activities !== null">
+    <ion-list *ngIf="activities.length > 0" no-margin no-padding lines="none">
+      <!-- <ion-list-header @slidelefttitle>Your Activity</ion-list-header> -->
+      <ion-item *ngFor="let activity of activities; let i = index;" class="item-grid-content"
+      [color]="i%2 !== 0 ? 'secondary': ''">
+        <ion-icon @slidelefttitle [name]="fetchIcon(i)" slot="start"></ion-icon>
+        <ion-label @sliderighttitle style="white-space: initial;">
+          {{ activity.activityDetails }}
+        </ion-label>
+      </ion-item>
     </ion-list>
   </div>
 

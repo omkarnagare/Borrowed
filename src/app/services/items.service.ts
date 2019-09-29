@@ -3,12 +3,14 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Item } from '../types';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { BorrowedAppConstants } from '../constants';
+import { BorrowedAppConstants, UserActivityType } from '../constants';
 import { AuthenticationService } from './authentication.service';
 import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { LoaderManagerService } from './loader-manager.service';
 import { ToastManagerService } from './toast-manager.service';
+import { ActivitiesService } from './activities.service';
+import { Utils } from '../utils';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +21,12 @@ export class ItemsService implements OnDestroy {
   constructor(
     private _angularFirestore: AngularFirestore,
     private _authenticationService: AuthenticationService,
+    private _activitiesService: ActivitiesService,
     private _toastManager: ToastManagerService,
     private _loader: LoaderManagerService,
     private _alertController: AlertController,
-    private _storage: Storage
+    private _storage: Storage,
+    private _utils: Utils
   ) {
     this.collectionRef = this._angularFirestore
       .collection(BorrowedAppConstants.ITEMS_COLLECTION)
@@ -67,6 +71,8 @@ export class ItemsService implements OnDestroy {
         personEmail: itemDetails.personEmail,
 
         isActive: true
+      }).finally(() => {
+        this._activitiesService.addActivity(itemDetails, UserActivityType.ITEM_ADD);
       });
   }
 
@@ -89,58 +95,15 @@ export class ItemsService implements OnDestroy {
       data.transactionType = "lent";
       data.importance = "low";
       data.eventDate = data.borrowingDate;
-      data.expectedReturnDate = this.getDateOfOneMonthLater(data.borrowingDate);
+      data.expectedReturnDate = this._utils.getDateOfOneMonthLater(data.borrowingDate);
       data.personName = data.lendeeName;
       data.personContactNumber = data.lendeeContact;
       data.personEmail = data.lendeeEmail;
       if (!data.isActive) {
-        data.returnDate = this.today();
+        data.returnDate = this._utils.today();
       }
       return data;
     }
-  }
-
-  getDateOfOneMonthLater(dateStr: string): string {
-    const date = new Date(dateStr);
-    const laterDate = new Date(dateStr);
-    laterDate.setMonth(date.getMonth() + 1);
-    return this.dateToLocalISO(laterDate);
-  }
-
-  today(): string {
-    return this.dateToLocalISO(new Date());
-  }
-
-  dateToLocalISO(date: Date): string {
-    var tzo = -date.getTimezoneOffset(),
-      dif = tzo >= 0 ? '+' : '-',
-      pad = function (num) {
-        var norm = Math.floor(Math.abs(num));
-        return (norm < 10 ? '0' : '') + norm;
-      };
-    return date.getFullYear() +
-      '-' + pad(date.getMonth() + 1) +
-      '-' + pad(date.getDate()) +
-      'T' + pad(date.getHours()) +
-      ':' + pad(date.getMinutes()) +
-      ':' + pad(date.getSeconds()) +
-      '.' + pad(date.getMilliseconds()) +
-      dif + pad(tzo / 60) +
-      ':' + pad(tzo % 60);
-  }
-
-  getActiveItems(): Observable<any> {
-    return this.getAllItems().pipe(
-      map((data) => {
-        return data.filter(item => item["isActive"] === true);
-      }));
-  }
-
-  getDoneItems(): Observable<any> {
-    return this.getAllItems().pipe(
-      map((data) => {
-        return data.filter(item => item["isActive"] === false);
-      }));
   }
 
   getAllItems(): Observable<any> {
@@ -165,20 +128,25 @@ export class ItemsService implements OnDestroy {
 
   updateItem(itemId: string, itemDetails: any) {
     return this.collectionRef
-      .doc(itemId).update(itemDetails);
-  }
-
-  markItemAsDone(itemId: string) {
-    return this.collectionRef
-      .doc(itemId).update({ 
-        isActive: false,
-        returnDate: this.today()
+      .doc(itemId).update(itemDetails).finally(() => {
+        this._activitiesService.addActivity(itemDetails, UserActivityType.ITEM_UPDATE);
       });
   }
 
-  deleteItemPermanently(itemId: string) {
+  markItemAsDone(itemDetails: Item) {
+    itemDetails.isActive = false;
+    itemDetails.returnDate = this._utils.today();
     return this.collectionRef
-      .doc(itemId).delete();
+      .doc(itemDetails.itemId).update(itemDetails).finally(() => {
+        this._activitiesService.addActivity(itemDetails, UserActivityType.ITEM_TRANSACTION_COMPLETE);
+      });
+  }
+
+  deleteItemPermanently(item: Item) {
+    return this.collectionRef
+      .doc(item.itemId).delete().finally(() => {
+        this._activitiesService.addActivity(item, UserActivityType.ITEM_DELETE);
+      });;
   }
 
   remove(item: Item) {
@@ -188,14 +156,6 @@ export class ItemsService implements OnDestroy {
       // transaction complete or done items
       this.showAlertForDelete(item);
     }
-  }
-
-  getImportantItems(): Observable<any> {
-    return this.getActiveItems().pipe(
-      map((data) => {
-        return data.filter(item => item.importance === "high");
-      })
-    );
   }
 
   ngOnDestroy() {
@@ -215,7 +175,7 @@ export class ItemsService implements OnDestroy {
           text: 'Yes',
           handler: () => {
             this._loader.presentLoader().then(() => {
-              this.deleteItemPermanently(item.itemId).then(() => {
+              this.deleteItemPermanently(item).then(() => {
               }).catch(error => {
                 this._toastManager.showErrorToast(error);
               }).finally(() => {
@@ -242,7 +202,7 @@ export class ItemsService implements OnDestroy {
           text: 'Yes',
           handler: () => {
             this._loader.presentLoader().then(() => {
-              this.markItemAsDone(item.itemId).then(() => {
+              this.markItemAsDone(item).then(() => {
               }).catch(error => {
                 this._toastManager.showErrorToast(error);
               }).finally(() => {
@@ -266,7 +226,7 @@ export class ItemsService implements OnDestroy {
 
   constuctMessage(item: Item): string {
     if (item.transactionType === "lent") {
-      return "To view your returned Items from your friends and family in Items history, navigate using \"Star\" icon in the toolbar and go to \"completed\" section.";
+      return "To view your Items which were returned by your friends and family in Items history, navigate using \"Star\" icon in the toolbar and go to \"completed\" section.";
     } else {
       return "To view Items which you have returned to your friends and family in Items history, navigate using \"Star\" icon in the toolbar and go to \"completed\" section.";
     }
