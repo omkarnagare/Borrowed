@@ -6,9 +6,9 @@ import { ActivitiesService } from '../services/activities.service';
 import { Activity } from '../types';
 
 @Component({
-  selector: 'app-items-history',
-  templateUrl: './items-history.page.html',
-  styleUrls: ['./items-history.page.scss'],
+  selector: 'app-user-activity',
+  templateUrl: './user-activity.page.html',
+  styleUrls: ['./user-activity.page.scss'],
   animations: [
     trigger('fadein', [
       state('void', style({ opacity: 0 })),
@@ -43,7 +43,7 @@ import { Activity } from '../types';
     ])
   ]
 })
-export class ItemsHistoryPage implements OnInit, OnDestroy {
+export class UserActivityPage implements OnInit, OnDestroy {
 
   activities: Activity[] = null;
   activities$: Subscription;

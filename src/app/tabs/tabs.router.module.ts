@@ -58,12 +58,12 @@ const routes: Routes = [
               import('../account/account.module').then(m => m.AccountPageModule)
           },
           {
-            path: 'items-history',
+            path: 'user-activity',
             children: [
               {
                 path: '',
                 loadChildren: () =>
-                  import('../items-history/items-history.module').then(m => m.ItemsHistoryPageModule)
+                  import('../user-activity/user-activity.module').then(m => m.UserActivityPageModule)
               },
               {
                 path: 'item-details/:itemId',

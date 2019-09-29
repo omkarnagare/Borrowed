@@ -13,6 +13,7 @@ import { GetImageService } from '../services/get-image.service';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 
 import { trigger, state, transition, style, animate } from '@angular/animations';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-item-details',
@@ -24,6 +25,9 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
       transition('void => *', [
         style({ opacity: 0 }),
         animate('600ms ease-out', style({ opacity: 1 }))
+      ]),
+      transition('* => void', [
+        animate('600ms ease-in', style({ opacity: 0 }))
       ])
     ]),
     trigger('slidelefttitle', [
@@ -60,6 +64,13 @@ export class ItemDetailsPage implements OnDestroy {
 
   isMobilePlatform: boolean = false;
 
+  today: any;
+  itemDetailsFormGroup: FormGroup;
+  validationMessages: any;
+  itemImage: any;
+  importance: string;
+  editing: boolean = false;
+
   constructor(
     private _itemService: ItemsService,
     private _loader: LoaderManagerService,
@@ -71,8 +82,10 @@ export class ItemDetailsPage implements OnDestroy {
     private _alertController: AlertController,
     private _datePipe: DatePipe,
     private _router: Router,
-    activatedRoute: ActivatedRoute
+    activatedRoute: ActivatedRoute,
+    formBuilder: FormBuilder
   ) {
+    this.today = new Date().toISOString();
     this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
 
     this.itemId = activatedRoute.snapshot.params["itemId"];
@@ -81,8 +94,133 @@ export class ItemDetailsPage implements OnDestroy {
         console.log("item details", item);
         if (item) {
           this.itemObject = item;
+          this.prePopulateValues();
         }
       });
+
+    this.itemDetailsFormGroup = formBuilder.group({
+      // item related
+      itemName: ["", [Validators.required]],
+      eventDate: ["", [Validators.required]],
+      expectedReturnDate: "",
+      itemDescription: "",
+      personName: ["", [Validators.required, Validators.pattern("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")]],
+      personContactNumber: ["", [Validators.pattern("^([+][0-9]{0,4}\-?)?[0-9]{10}$")]],
+      personEmail: ["", [Validators.email]],
+    });
+
+    this.validationMessages = {
+      'itemName': [{ type: 'required', message: 'Item name cannot be left blank.' }],
+      'eventDate': [{ type: 'required', message: 'Date of event cannot be left blank.' }],
+      'personName': [
+        { type: 'required', message: 'Person name cannot be left blank.' },
+        { type: 'pattern', message: 'Not a valid Name.' }],
+      'personContactNumber': [
+        { type: 'pattern', message: 'Valid Examples:  +91-1234567890, +911234567890, 1234567890' }],
+      'personEmail': [
+        { type: 'email', message: 'Not a valid Email address.' }],
+    };
+  }
+
+  isError(name: string, validationType: string): boolean {
+    return this.itemDetailsFormGroup.get(name).hasError(validationType) && (this.itemDetailsFormGroup.get(name).dirty || this.itemDetailsFormGroup.get(name).touched)
+  }
+
+  onImportanceChange(event: any) {
+    this.importance = event.detail.value;
+    this.itemDetailsFormGroup.markAsTouched();
+    this.itemDetailsFormGroup.markAsDirty();
+    console.log(this.importance);
+  }
+
+  async confirmCancelEditing() {
+    if (this.itemDetailsFormGroup.touched && this.itemDetailsFormGroup.dirty) {
+      const alert = await this._alertController.create({
+        header: 'Confirm Cancel',
+        message: 'There are unsaved changes. The changes will be lost upon confirmation. Do you still want to continue?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel'
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              this.itemDetailsFormGroup.markAsUntouched();
+              this.prePopulateValues();
+              this.editing = !this.editing;
+            }
+          }
+        ]
+      });
+      await alert.present();
+    } else {
+      this.editing = !this.editing;
+    }
+  }
+
+  async confirmUpdateDetails() {
+    if (this.itemDetailsFormGroup.touched && this.itemDetailsFormGroup.dirty) {
+      const alert = await this._alertController.create({
+        header: 'Confirm Update',
+        message: 'This action will update the existing item details permanently. Do you want to continue?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel'
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              this.updateItemDetails();
+              this.editing = !this.editing;
+            }
+          }
+        ]
+      });
+      await alert.present();
+    } else {
+      this.editing = !this.editing;
+    }
+  }
+
+  updateItemDetails() {
+    const modifiedItem: Item = this.itemDetailsFormGroup.value;
+    modifiedItem.importance = this.importance;
+    const resultantItem = Object.assign({}, this.itemObject, modifiedItem);
+    console.log(this.itemObject, this.itemDetailsFormGroup.value, resultantItem);
+    this._loader.presentLoader().then(() => {
+      this._itemService.updateItem(this.itemId, resultantItem).then(response => {
+        this._toastManager.showToast(BorrowedAppConstants.ITEM_UPDATE_DETAILS_SUCCESS_MESSAGE);
+      }).catch(error => {
+        this._toastManager.showErrorToast(error);
+      }).finally(() => {
+        this._loader.stopLoader();
+      });
+    });
+  }
+
+  prePopulateValues() {
+    if (this.itemObject.expectedReturnDate) {
+      this.itemDetailsFormGroup.get('expectedReturnDate').setValue(this.itemObject.expectedReturnDate);
+    }
+    if (this.itemObject.itemDescription) {
+      this.itemDetailsFormGroup.get('itemDescription').setValue(this.itemObject.itemDescription);
+    }
+    if (this.itemObject.personContactNumber) {
+      this.itemDetailsFormGroup.get('personContactNumber').setValue(this.itemObject.personContactNumber);
+    }
+    if (this.itemObject.personEmail) {
+      this.itemDetailsFormGroup.get('personEmail').setValue(this.itemObject.personEmail);
+    }
+    this.itemDetailsFormGroup.get('itemName').setValue(this.itemObject.itemName);
+    this.itemDetailsFormGroup.get('eventDate').setValue(this.itemObject.eventDate);
+    this.itemDetailsFormGroup.get('personName').setValue(this.itemObject.personName);
+    this.importance = this.itemObject.importance;
+  }
+
+  ionViewDidEnter() {
+    this.editing = false;
   }
 
   calculatePendingTime(item) {
@@ -253,14 +391,18 @@ export class ItemDetailsPage implements OnDestroy {
         const itemImage = BorrowedAppConstants.BASE64_IMAGE_PREFIX_DATA + imageData;
         console.log("imageData", itemImage);
         //update item image
-        this._itemService.updateItem(this.itemId, {
-          itemName: this.itemObject.itemName,
-          itemImage: itemImage
-        }).then(response => {
-          this._toastManager.showToast(BorrowedAppConstants.ITEM_IMAGE_SUCCESS_MESSAGE);
-        }).catch(error => {
-          this._toastManager.showErrorToast(error);
-        })
+        this._loader.presentLoader().then(() => {
+          this._itemService.updateItem(this.itemId, {
+            itemName: this.itemObject.itemName,
+            itemImage: itemImage
+          }).then(response => {
+            this._toastManager.showToast(BorrowedAppConstants.ITEM_IMAGE_SUCCESS_MESSAGE);
+          }).catch(error => {
+            this._toastManager.showErrorToast(error);
+          }).finally(() => {
+            this._loader.stopLoader();
+          });
+        });
       },
         (error) => {
           console.log("error occurred while getting Item Image: ", error);

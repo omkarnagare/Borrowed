@@ -8,14 +8,11 @@
     <ion-title>
       Account
     </ion-title>
-    <!-- <ion-buttons slot="end">
-      <ion-button (click)="logOut()">
-        <ion-icon slot="icon-only" name="power" color="danger"></ion-icon>
+    <ion-buttons slot="end">
+      <ion-button routerLink="user-activity">
+        <ion-icon slot="icon-only" name="filing"></ion-icon>
       </ion-button>
-      <ion-button routerLink="settings">
-        <ion-icon slot="icon-only" name="settings"></ion-icon>
-      </ion-button>
-    </ion-buttons> -->
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -90,7 +87,7 @@
             </div>
 
             <div @sliderighttitle>
-              <ion-item routerLink="items-history">
+              <ion-item>
                 <ion-icon slot="start" name="mail"></ion-icon>
                 <ion-label>{{ userProfile.email }}</ion-label>
               </ion-item>

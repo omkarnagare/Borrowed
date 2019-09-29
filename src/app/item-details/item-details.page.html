@@ -4,6 +4,17 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title> {{ itemObject ? itemObject.itemName: "" }} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button @fadein *ngIf="editing && itemDetailsFormGroup.valid && itemDetailsFormGroup.dirty" (click)="confirmUpdateDetails()">
+        <ion-icon slot="icon-only" name="md-checkmark"></ion-icon>
+      </ion-button>
+      <ion-button @fadein *ngIf="editing" (click)="confirmCancelEditing()">
+        <ion-icon slot="icon-only" name="md-close"></ion-icon>
+      </ion-button>
+      <ion-button @fadein *ngIf="!editing && itemObject && itemObject.isActive" (click)="editing = !editing;">
+        <ion-icon slot="icon-only" name="ios-create"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -24,167 +35,284 @@
     </ion-card>
   </div>
 
-  <div *ngIf="itemObject !== null" [style.opacity]="itemObject.isActive ? 1 : 0.5">
-    <ion-card>
-      <ion-img @slidetoptitle class="item-image" *ngIf="itemObject.itemImage" [src]="itemObject.itemImage"></ion-img>
-      <ion-item lines="none" *ngIf="isMobilePlatform">
-        <ion-chip (click)="selectImageSource()" class="center-chip">
-          <ion-icon @slidelefttitle name="camera"></ion-icon>
-          <ion-label @sliderighttitle>Change Image</ion-label>
-        </ion-chip>
-      </ion-item>
-      <ion-card-header *ngIf="itemObject.itemDescription">
-        <ion-card-subtitle @sliderighttitle>Notes</ion-card-subtitle>
-        <ion-card-title @sliderighttitle>{{ itemObject.itemDescription }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
+  <form [formGroup]="itemDetailsFormGroup">
+    <div *ngIf="itemObject !== null" [style.opacity]="itemObject.isActive ? 1 : 0.5">
+      <ion-card>
+        <ion-img @slidetoptitle class="item-image" *ngIf="itemObject.itemImage && !editing"
+          [src]="itemObject.itemImage"></ion-img>
+        <ion-item lines="none" *ngIf="isMobilePlatform && !editing">
+          <ion-chip (click)="selectImageSource()" class="center-chip">
+            <ion-icon @slidelefttitle name="camera"></ion-icon>
+            <ion-label @sliderighttitle>Change Image</ion-label>
+          </ion-chip>
+        </ion-item>
+        <ion-card-header *ngIf="itemObject.itemDescription && !editing">
+          <ion-card-subtitle @sliderighttitle>Notes</ion-card-subtitle>
+          <ion-card-title @sliderighttitle>{{ itemObject.itemDescription }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content no-padding no-margin>
 
-        <div *ngIf="itemObject.expectedReturnDate && itemObject.isActive">
-          <ion-item>
-            <ion-icon @slidelefttitle slot="start" name="git-compare">
-            </ion-icon>
-            <ion-segment @sliderighttitle mode="ios" [color]="calculatePendingTime(itemObject)" disabled
-              style="opacity: 1;">
-              <ion-segment-button mode="ios" checked>
-                <ion-label>Status</ion-label>
-              </ion-segment-button>
-              <ion-segment-button mode="ios" checked>
-                <ion-label text-uppercase>{{ itemObject.status }}</ion-label>
-              </ion-segment-button>
-            </ion-segment>
-            <ion-icon *ngIf="!showReturnDate" style="color: var(--ion-color-primary)" @fadein slot="end"
-              name="arrow-dropdown" (click)="showReturnDate=!showReturnDate"></ion-icon>
-            <ion-icon *ngIf="showReturnDate" style="color: var(--ion-color-primary)" @fadein slot="end"
-              name="arrow-dropup" (click)="showReturnDate=!showReturnDate"></ion-icon>
-          </ion-item>
-        </div>
+          <div *ngIf="!editing">
+            <div *ngIf="itemObject.expectedReturnDate && itemObject.isActive">
+              <ion-item no-padding no-margin lines="none">
+                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="git-compare">
+                </ion-icon>
+                <ion-segment @sliderighttitle mode="ios" [color]="calculatePendingTime(itemObject)" disabled
+                  style="opacity: 1;">
+                  <ion-segment-button mode="ios" checked>
+                    <ion-label>Status</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button mode="ios">
+                    <ion-label text-uppercase>{{ itemObject.status }}</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-item>
+            </div>
+            <div *ngIf="itemObject.returnDate && !itemObject.isActive">
+              <ion-item no-padding no-margin lines="none">
+                <ion-icon @slidelefttitle slot="start"
+                  style="color: var(--ion-color-success); margin-left: 8px; margin-right: 8px;" name="done-all">
+                </ion-icon>
+                <ion-segment @sliderighttitle mode="ios" color="success" disabled style="opacity: 1;">
+                  <ion-segment-button mode="ios" checked>
+                    <ion-label>Returned</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button mode="ios">
+                    <ion-label>{{ itemObject.returnDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-item>
+            </div>
+            <div *ngIf="itemObject.importance">
+              <ion-item no-padding no-margin lines="none">
+                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="medical">
+                </ion-icon>
+                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                  <ion-segment-button mode="ios" checked>
+                    <ion-label>Importance</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button mode="ios">
+                    <ion-label text-uppercase>{{ itemObject.importance }}</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-item>
+            </div>
+            <div *ngIf="itemObject.itemName">
+              <ion-item no-padding no-margin lines="none">
+                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="cube">
+                </ion-icon>
+                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                  <ion-segment-button mode="ios" checked>
+                    <ion-label>Item</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button mode="ios">
+                    <ion-label>{{ itemObject.itemName }}</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-item>
+            </div>
+            <div *ngIf="itemObject.eventDate">
+              <ion-item no-padding no-margin lines="none">
+                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="time">
+                </ion-icon>
+                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                  <ion-segment-button mode="ios" checked>
+                    <ion-label>{{ itemObject.transactionType === "lent" ? 'Given on': 'Taken on' }}</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button mode="ios">
+                    <ion-label>{{ itemObject.eventDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-item>
+            </div>
+            <div *ngIf="itemObject.expectedReturnDate && itemObject.isActive">
+              <ion-item no-padding no-margin lines="none">
+                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="hourglass">
+                </ion-icon>
+                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                  <ion-segment-button mode="ios" checked>
+                    <ion-label>Expected</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button mode="ios">
+                    <ion-label>{{ itemObject.expectedReturnDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-item>
+            </div>
+            <div *ngIf="itemObject.personName">
+              <ion-item no-padding no-margin lines="none">
+                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="person">
+                </ion-icon>
+                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                  <ion-segment-button mode="ios" checked>
+                    <ion-label>Name</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button mode="ios">
+                    <ion-label text-capitalize>{{ itemObject.personName }}</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-item>
+            </div>
+            <div *ngIf="itemObject.personContactNumber">
+              <ion-item no-padding no-margin lines="none">
+                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="call">
+                </ion-icon>
+                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                  <ion-segment-button mode="ios" checked>
+                    <ion-label>Phone</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button mode="ios">
+                    <ion-label>{{ itemObject.personContactNumber }}</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-item>
+            </div>
+            <div *ngIf="itemObject.personEmail">
+              <ion-item no-padding no-margin lines="none">
+                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="mail">
+                </ion-icon>
+                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                  <ion-segment-button mode="ios" checked>
+                    <ion-label>Email</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button mode="ios">
+                    <ion-label>{{ itemObject.personEmail }}</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-item>
+            </div>
+          </div>
 
-        <div *ngIf="itemObject.expectedReturnDate && showReturnDate">
-          <ion-item>
-            <ion-icon @slidelefttitle slot="start" name="hourglass"></ion-icon>
-            <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
-              <ion-segment-button mode="ios" checked>
-                <ion-label>Expected</ion-label>
-              </ion-segment-button>
-              <ion-segment-button mode="ios">
-                <ion-label>{{ itemObject.expectedReturnDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
-              </ion-segment-button>
-            </ion-segment>
-          </ion-item>
-        </div>
+          <div *ngIf="editing">
+            <div>
+              <ion-label class="input-label" @slidelefttitle>Item*</ion-label>
+              <ion-item @slidelefttitle>
+                <ion-input placeholder="Enter Item name" formControlName="itemName" type="text"></ion-input>
+              </ion-item>
+              <div *ngFor="let validation of validationMessages.itemName" class="validation-errors">
+                <ion-item class="error-message" *ngIf="isError('itemName', validation.type)">
+                  <ion-icon name="alert"></ion-icon>
+                  <ion-label>{{ validation.message }}</ion-label>
+                </ion-item>
+              </div>
+            </div>
+            <div>
+              <ion-label class="input-label" @sliderighttitle>Importance*</ion-label>
+              <ion-item @sliderighttitle lines="none">
+                <ion-segment [value]="importance" mode="ios" (ionChange)="onImportanceChange($event)" color="primary">
+                  <ion-segment-button value="high" mode="ios">
+                    <ion-label>High</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button value="medium" mode="ios">
+                    <ion-label>Medium</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button value="low" mode="ios">
+                    <ion-label>Low</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-item>
+            </div>
+            <div>
+              <ion-label class="input-label" @slidelefttitle>Event Date*</ion-label>
+              <ion-item @slidelefttitle>
+                <ion-datetime [max]="today" displayFormat="DD MMM YYYY" formControlName="eventDate"
+                  placeholder="Enter Date of event">
+                </ion-datetime>
+              </ion-item>
+              <div *ngFor="let validation of validationMessages.eventDate" class="validation-errors">
+                <ion-item class="error-message" *ngIf="isError('eventDate', validation.type)">
+                  <ion-icon name="alert"></ion-icon>
+                  <ion-label>{{ validation.message }}</ion-label>
+                </ion-item>
+              </div>
+            </div>
+            <div>
+              <ion-label class="input-label" @sliderighttitle>Expected Date</ion-label>
+              <ion-item @sliderighttitle>
+                <ion-datetime [min]="today" displayFormat="DD MMM YYYY" formControlName="expectedReturnDate"
+                  placeholder="Enter Date of return">
+                </ion-datetime>
+              </ion-item>
+            </div>
+            <div>
+              <ion-label class="input-label" @slidelefttitle>Notes about item</ion-label>
+              <ion-item @slidelefttitle>
+                <ion-textarea placeholder="Add something more about the item here (Optional)"
+                  formControlName="itemDescription">
+                </ion-textarea>
+              </ion-item>
+            </div>
+            <div>
+              <ion-label class="input-label" @sliderighttitle>Name of the Person*</ion-label>
+              <ion-item @sliderighttitle>
+                <ion-input text-capitalize placeholder="Enter Name" formControlName="personName" type="text">
+                </ion-input>
+                <ion-icon *ngIf="isMobilePlatform" name="paper" (click)="openContactFinderModal()"></ion-icon>
+              </ion-item>
+              <div *ngFor="let validation of validationMessages.personName" class="validation-errors">
+                <ion-item class="error-message" *ngIf="isError('personName', validation.type)">
+                  <ion-icon name="alert"></ion-icon>
+                  <ion-label>{{ validation.message }}</ion-label>
+                </ion-item>
+              </div>
+            </div>
+            <div>
+              <ion-label class="input-label" @slidelefttitle>Contact Number</ion-label>
+              <ion-item @slidelefttitle>
+                <ion-input placeholder="Enter Contact Number" formControlName="personContactNumber" type="text">
+                </ion-input>
+              </ion-item>
+              <div *ngFor="let validation of validationMessages.personContactNumber" class="validation-errors">
+                <ion-item class="error-message" *ngIf="isError('personContactNumber', validation.type)">
+                  <ion-icon name="alert"></ion-icon>
+                  <ion-label>{{ validation.message }}</ion-label>
+                </ion-item>
+              </div>
+            </div>
+            <div>
+              <ion-label class="input-label" @sliderighttitle>Email Information</ion-label>
+              <ion-item @sliderighttitle>
+                <ion-input placeholder="Enter Email" formControlName="personEmail" type="text"></ion-input>
+              </ion-item>
+              <div *ngFor="let validation of validationMessages.personEmail" class="validation-errors">
+                <ion-item class="error-message" *ngIf="isError('personEmail', validation.type)">
+                  <ion-icon name="alert"></ion-icon>
+                  <ion-label>{{ validation.message }}</ion-label>
+                </ion-item>
+              </div>
+            </div>
+          </div>
 
-        <div *ngIf="itemObject.returnDate">
-          <ion-item>
-            <ion-icon @slidelefttitle slot="start" name="done-all" style="color: var(--ion-color-success)"></ion-icon>
-            <ion-segment @sliderighttitle mode="ios" color="success" disabled style="opacity: 1;">
-              <ion-segment-button mode="ios" checked>
-                <ion-label>Returned</ion-label>
-              </ion-segment-button>
-              <ion-segment-button mode="ios">
-                <ion-label>{{ itemObject.returnDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
-              </ion-segment-button>
-            </ion-segment>
-          </ion-item>
-        </div>
+        </ion-card-content>
+      </ion-card>
 
-        <div *ngIf="itemObject.itemName">
-          <ion-item>
-            <ion-icon @slidelefttitle slot="start" name="cube"></ion-icon>
-            <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
-              <ion-segment-button mode="ios" checked>
-                <ion-label>Item</ion-label>
-              </ion-segment-button>
-              <ion-segment-button mode="ios">
-                <ion-label>{{ itemObject.itemName }}</ion-label>
-              </ion-segment-button>
-            </ion-segment>
-          </ion-item>
-        </div>
-
-        <div *ngIf="itemObject.eventDate">
-          <ion-item>
-            <ion-icon @slidelefttitle slot="start" name="time"></ion-icon>
-            <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
-              <ion-segment-button mode="ios" checked>
-                <ion-label>Date</ion-label>
-              </ion-segment-button>
-              <ion-segment-button mode="ios">
-                <ion-label>{{ itemObject.eventDate  | date: 'dd-MMM-yyyy HH:mm' }}</ion-label>
-              </ion-segment-button>
-            </ion-segment>
-          </ion-item>
-        </div>
-
-        <div *ngIf="itemObject.personName">
-          <ion-item>
-            <ion-icon @slidelefttitle slot="start" name="person"></ion-icon>
-            <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
-              <ion-segment-button mode="ios" checked>
-                <ion-label>Name</ion-label>
-              </ion-segment-button>
-              <ion-segment-button mode="ios">
-                <ion-label text-capitalize>{{ itemObject.personName }}</ion-label>
-              </ion-segment-button>
-            </ion-segment>
-          </ion-item>
-        </div>
-
-        <div *ngIf="itemObject.personContactNumber">
-          <ion-item>
-            <ion-icon @slidelefttitle slot="start" name="call"></ion-icon>
-            <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
-              <ion-segment-button mode="ios" checked>
-                <ion-label>Phone</ion-label>
-              </ion-segment-button>
-              <ion-segment-button mode="ios">
-                <ion-label>{{ itemObject.personContactNumber }}</ion-label>
-              </ion-segment-button>
-            </ion-segment>
-          </ion-item>
-        </div>
-
-        <div *ngIf="itemObject.personEmail">
-          <ion-item>
-            <ion-icon @slidelefttitle slot="start" name="mail" ></ion-icon>
-            <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
-              <ion-segment-button mode="ios" checked>
-                <ion-label>Email</ion-label>
-              </ion-segment-button>
-              <ion-segment-button mode="ios">
-                <ion-label>{{ itemObject.personEmail }}</ion-label>
-              </ion-segment-button>
-            </ion-segment>
-          </ion-item>
-        </div>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card *ngIf="isMobilePlatform && itemObject.isActive">
-      <ion-card-content class="social-icon-container">
-        <p @sliderighttitle>Everyone is busy nowdays.</p>
-        <p @sliderighttitle>You can remind "{{ itemObject.personName }}" about "{{ itemObject.itemName }}" with</p>
-        <div @slidebottomtitle>
-          <a (click)="confirmSendingReminderWithNote(600)">
-            <ion-icon style="color:#25D366" name="logo-whatsapp"></ion-icon>
-          </a>
-          <a (click)="confirmSendingReminderWithNote(601)">
-            <ion-icon style="color:#3b5998" name="logo-facebook"></ion-icon>
-          </a>
-          <a (click)="confirmSendingReminderWithNote(602)">
-            <ion-icon style="color:#8a3ab9" name="logo-instagram"></ion-icon>
-          </a>
-          <a (click)="confirmSendingReminderWithNote(603)">
-            <ion-icon style="color:#1da1f2" name="logo-twitter"></ion-icon>
-          </a>
-          <a (click)="confirmSendingReminderWithNote(604)">
-            <ion-icon style="color:rgb(126, 6, 6)" name="mail"></ion-icon>
-          </a>
-          <a (click)="confirmSendingReminderWithNote(605)">
-            <ion-icon style="color:rgb(0, 0, 0)" name="share"></ion-icon>
-          </a>
-        </div>
-      </ion-card-content>
-    </ion-card>
-  </div>
+      <ion-card *ngIf="isMobilePlatform && itemObject.isActive">
+        <ion-card-content class="social-icon-container">
+          <p @sliderighttitle>Everyone is busy nowdays.</p>
+          <p @sliderighttitle>You can remind "{{ itemObject.personName }}" about "{{ itemObject.itemName }}" with</p>
+          <div @slidebottomtitle>
+            <a (click)="confirmSendingReminderWithNote(600)">
+              <ion-icon style="color:#25D366" name="logo-whatsapp"></ion-icon>
+            </a>
+            <a (click)="confirmSendingReminderWithNote(601)">
+              <ion-icon style="color:#3b5998" name="logo-facebook"></ion-icon>
+            </a>
+            <a (click)="confirmSendingReminderWithNote(602)">
+              <ion-icon style="color:#8a3ab9" name="logo-instagram"></ion-icon>
+            </a>
+            <a (click)="confirmSendingReminderWithNote(603)">
+              <ion-icon style="color:#1da1f2" name="logo-twitter"></ion-icon>
+            </a>
+            <a (click)="confirmSendingReminderWithNote(604)">
+              <ion-icon style="color:rgb(126, 6, 6)" name="mail"></ion-icon>
+            </a>
+            <a (click)="confirmSendingReminderWithNote(605)">
+              <ion-icon style="color:rgb(0, 0, 0)" name="share"></ion-icon>
+            </a>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </form>
 
 </ion-content>
