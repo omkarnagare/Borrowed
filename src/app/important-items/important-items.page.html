@@ -1,16 +1,16 @@
 <ion-header translucent>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="primary" [scrollVanish]="itemsContent">
     <div @slidelefttitle>
       <ion-searchbar (ionChange)="onSearchInput($event)" debounce="500"></ion-searchbar>
     </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen>
+<ion-content fullscreen #itemsContent scrollEvents="true">
 
-  <div>
+  <div slot="fixed">
     <ion-item @sliderighttitle lines="none">
-      <ion-segment mode="ios" (ionChange)="onItemsTypeChange($event)" color="secondary">
+      <ion-segment mode="ios" (ionChange)="onItemsTypeChange($event)" color="secondary" class="bottom-shadow">
         <ion-segment-button mode="ios" value="important" checked>
           <ion-label>Important</ion-label>
         </ion-segment-button>
@@ -24,14 +24,14 @@
     </ion-item>
   </div>
 
-  <div *ngIf="searching" class="spinner-container">
+  <div *ngIf="searching" class="spinner-container" style="margin-top: 56px;">
     <div class="spinner">
       <div class="double-bounce1"></div>
       <div class="double-bounce2"></div>
     </div>
   </div>
 
-  <div *ngIf="items === null">
+  <div *ngIf="items === null" style="margin-top: 56px;">
     <ion-card *ngFor="let x of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]">
       <ion-grid fixed>
         <ion-row>
@@ -50,7 +50,7 @@
     </ion-card>
   </div>
 
-  <div *ngIf="items !== null && items.length === 0">
+  <div *ngIf="items !== null && items.length === 0" style="margin-top: 56px;">
     <ion-card class="card-center">
       <ion-img @slidetoptitle src="/assets/empty-box.svg" class="center-image"></ion-img>
       <ion-card-header>
@@ -69,7 +69,7 @@
     </ion-card>
   </div>
 
-  <div *ngIf="items !== null">
+  <div *ngIf="items !== null" style="margin-top: 56px;">
     <ion-list *ngIf="items.length > 0">
       <ion-item-sliding *ngFor="let item of items">
         <ion-item-options side="end">

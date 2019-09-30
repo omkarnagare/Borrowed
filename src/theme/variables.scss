@@ -106,7 +106,11 @@
 	.popover-content {
 		border-radius: 16px !important;
 	}
-
+	.bottom-shadow {
+		-webkit-box-shadow: 0 8px 6px -6px black;
+	   	-moz-box-shadow: 0 8px 6px -6px black;
+		box-shadow: 0 8px 6px -6px black;
+	}
 	.spinner-container {
 		height: 100%;
 		width: 100%;

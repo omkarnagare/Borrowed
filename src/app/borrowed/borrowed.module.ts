@@ -5,9 +5,11 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BorrowedPage } from './borrowed.page';
 import { PinUnlockPageModule } from '../pin-unlock/pin-unlock.module';
+import { ScrollVanishDirectiveModule } from '../directives/scroll-vanish.directive.module';
 
 @NgModule({
   imports: [
+    ScrollVanishDirectiveModule,
     PinUnlockPageModule,
     IonicModule,
     CommonModule,
