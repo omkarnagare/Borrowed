@@ -11,6 +11,7 @@ import { ConfirmExitService } from '../services/confirm-exit.service';
 
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { SortItemsComponent } from '../sort-items/sort-items.component';
+import { LocalNotificationsManagerService } from '../services/local-notifications-manager.service';
 
 @Component({
   selector: 'app-borrowed',
@@ -71,13 +72,16 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
     private _pinVerification: PinVerificationService,
     private _confirmExitService: ConfirmExitService,
     private _modalController: ModalController,
-    private _popOverController: PopoverController
+    private _popOverController: PopoverController,
+    private _localNotificationsManager: LocalNotificationsManagerService
   ) {
     this.items$ = this._itemsService.getAllItems().subscribe(items => {
       this.allItems = items;
       this.items = [... this.allItems];
       console.log(this.items)
       this.filterItems();
+
+      this._localNotificationsManager.handleLocalNotifications(this.allItems);
     });
   }
 
@@ -103,7 +107,8 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
       showBackdrop: true,
       componentProps: {
         icon: this.sortBy
-      }
+      },
+      cssClass: "sort-items"
     });
     popover.onDidDismiss().then(response => {
       if (response.data && this.sortBy !== response.data.icon) {

@@ -6,6 +6,7 @@ import { ThemingService } from './services/theming.service';
 import { AuthenticationService } from './services/authentication.service';
 import { Router } from '@angular/router';
 import { PinVerificationService } from './services/pin-verification.service';
+import { PushNotificationsManagerService } from './services/push-notifications-manager.service';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ export class AppComponent {
   constructor(
     private _themingService: ThemingService, // this is needed to set the theme via constructor
     private _pinVerificationService: PinVerificationService,
+    private _pushNotificationsManager: PushNotificationsManagerService,
     private platform: Platform,
     private statusBar: StatusBar,
     private _authenticationService: AuthenticationService,
@@ -27,6 +29,7 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this._pushNotificationsManager.setUpFCM();
       this.statusBar.styleDefault();
       // no need to check for internet connection as data persistence is enabled
       // this._networkService.initializeNetworkEvents();

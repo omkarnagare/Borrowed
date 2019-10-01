@@ -1,12 +1,12 @@
-<ion-card class="card-center" no-margin>
+<ion-card class="card-center" no-margin @fadein>
   <ion-card-header>
-    <ion-card-subtitle @slidetoptitle>Select Field to Sort items</ion-card-subtitle>
+    <ion-card-subtitle>Select Field to Sort items</ion-card-subtitle>
   </ion-card-header>
-  <ion-card-content @slidebottomtitle>
+  <ion-card-content>
     <ion-list *ngIf="sortFields.length > 0" no-margin no-padding lines="none"
       style="border: 1px solid black; border-radius: 8px;">
       <ion-item *ngFor="let sortField of sortFields; let i = index" [color]="i%2 === 0 ? 'secondary': ''"
-        @slidebottomtitle (click)="selectField(sortField)">
+        (click)="selectField(sortField)">
 
         <ion-icon *ngIf="sortField.isSelected" name="checkmark" slot="end"></ion-icon>
         <ion-label style="white-space: initial">{{ sortField.label }}</ion-label>
@@ -15,11 +15,11 @@
       </ion-item>
     </ion-list>
 
-    <ion-button @slidelefttitle (click)="applySorting()" class="expand-button" color="success">
-        Apply</ion-button>
-    <ion-button @slidelefttitle (click)="reset()" class="expand-button" color="danger">
+    <ion-button (click)="applySorting()" class="expand-button" color="success">
+      Apply</ion-button>
+    <ion-button (click)="reset()" class="expand-button" color="danger">
       Reset</ion-button>
-    <ion-icon @slidetoptitle style="position: fixed; right: 5%; top: 3%; font-size:24px;" (click)="dismiss()" name="close" class="expand-button"></ion-icon>
+    <ion-icon style="position: fixed; right: 5%; top: 3%; font-size:24px;" (click)="dismiss()" name="close"></ion-icon>
 
   </ion-card-content>
 </ion-card>

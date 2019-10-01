@@ -7,8 +7,7 @@ import { DomController } from '@ionic/angular';
 export class ScrollVanishDirective implements OnInit {
   @Input("scrollVanish") scrollArea;
 
-  private hidden: boolean = false;
-  private triggerDistance: number = 20;
+  private triggerUnit: number = 25;
 
   constructor(
     private _element: ElementRef,
@@ -21,13 +20,40 @@ export class ScrollVanishDirective implements OnInit {
 
     this.scrollArea.ionScroll.subscribe(scrollEvent => {
       let delta = scrollEvent.detail.deltaY;
+      let top = scrollEvent.detail.scrollTop;
+      // console.log("top", top, "delta", delta);
+      if (top > 4 * this.triggerUnit && delta >= 0 ) {
 
-      if (scrollEvent.detail.currentY === 0 && this.hidden) {
-        this.show();
-      } else if (!this.hidden && delta > this.triggerDistance) {
-        this.hide();
-      } else if (this.hidden && delta < -this.triggerDistance) {
-        this.show();
+        this.hideCompletely();
+
+      } else if (top > 3 * this.triggerUnit && delta >= 0 ) {
+
+        this.showQuarter();
+
+      } else if (top > 2 * this.triggerUnit && delta >= 0 ) {
+
+        this.showHalf();
+
+      } else if (top > this.triggerUnit && delta >= 0 ) {
+
+        this.showThreeQuarters();
+
+      } else if (top >= 0 && top < this.triggerUnit) {
+
+        this.showCompletely();
+
+      } else if (top < 2 * this.triggerUnit && delta <= 0 ) {
+
+        this.showThreeQuarters();
+
+      } else if (top < 3 * this.triggerUnit && delta <= 0 ) {
+
+        this.showHalf();
+
+      } else if (top <= 4 * this.triggerUnit && delta <= 0 ) {
+
+        this.showQuarter();
+
       }
     });
   }
@@ -43,25 +69,48 @@ export class ScrollVanishDirective implements OnInit {
     });
   }
 
-  hide() {
-    this._domController.write(() => {
-      this._renderer.setStyle(this._element.nativeElement, "min-height", "0px");
-      this._renderer.setStyle(this._element.nativeElement, "height", "0px");
-      this._renderer.setStyle(this._element.nativeElement, "opacity", "0");
-      this._renderer.setStyle(this._element.nativeElement, "padding", "0");
-    });
-
-    this.hidden = true;
-  }
-
-  show() {
+  showCompletely() {
     this._domController.write(() => {
       this._renderer.setStyle(this._element.nativeElement, "height", "56px");
-      this._renderer.removeStyle(this._element.nativeElement, "opacity");
+      // this._renderer.removeStyle(this._element.nativeElement, "opacity");
       this._renderer.removeStyle(this._element.nativeElement, "min-height");
       this._renderer.removeStyle(this._element.nativeElement, "padding");
     });
+  }
 
-    this.hidden = false;
+  showQuarter() {
+    this._domController.write(() => {
+      this._renderer.setStyle(this._element.nativeElement, "min-height", "0px");
+      this._renderer.setStyle(this._element.nativeElement, "height", "14px");
+      // this._renderer.setStyle(this._element.nativeElement, "opacity", "0.25");
+      this._renderer.setStyle(this._element.nativeElement, "padding", "0");
+    });
+  }
+
+  showHalf() {
+    this._domController.write(() => {
+      this._renderer.setStyle(this._element.nativeElement, "min-height", "0px");
+      this._renderer.setStyle(this._element.nativeElement, "height", "28px");
+      // this._renderer.setStyle(this._element.nativeElement, "opacity", "0.5");
+      this._renderer.setStyle(this._element.nativeElement, "padding", "0");
+    });
+  }
+
+  showThreeQuarters() {
+    this._domController.write(() => {
+      this._renderer.setStyle(this._element.nativeElement, "min-height", "0px");
+      this._renderer.setStyle(this._element.nativeElement, "height", "42px");
+      // this._renderer.setStyle(this._element.nativeElement, "opacity", "0.75");
+      this._renderer.setStyle(this._element.nativeElement, "padding", "0");
+    });
+  }
+
+  hideCompletely() {
+    this._domController.write(() => {
+      this._renderer.setStyle(this._element.nativeElement, "min-height", "0px");
+      this._renderer.setStyle(this._element.nativeElement, "height", "0px");
+      // this._renderer.setStyle(this._element.nativeElement, "opacity", "0");
+      this._renderer.setStyle(this._element.nativeElement, "padding", "0");
+    });
   }
 }

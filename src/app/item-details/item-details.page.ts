@@ -270,7 +270,7 @@ export class ItemDetailsPage implements OnDestroy {
     this.itemDetailsFormGroup.get("personName").markAsTouched();
     this.itemDetailsFormGroup.get("personContactNumber").markAsTouched();
     this.markFormDirty();
-    
+
   }
 
   markFormDirty() {
@@ -295,6 +295,7 @@ export class ItemDetailsPage implements OnDestroy {
   }
 
   shareReminderViaSocialOptions(socialOption: SOCIAL_SHARE_OPTIONS, message: string) {
+    message += " ( NOTE: This message is generated via \"Borrowing - An app which makes you Un-Forget\". To install Borrowing for Android, go to \"https://play.google.com/store/apps/details?id=com.nagare.balkrishna.omkar.borrowed\". IOS users can visit \"https://borrowed-o20121991.firebaseapp.com\" to use Borrowing.)"
     switch (socialOption) {
       case SOCIAL_SHARE_OPTIONS.WHATSAPP:
         this.sendReminderOnWhatsapp(message);

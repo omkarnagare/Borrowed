@@ -22,6 +22,8 @@ import { Network } from '@ionic-native/network/ngx';
 import { Contacts } from '@ionic-native/contacts/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx'
+import { FCM } from '@ionic-native/fcm/ngx'
 
 import { AdMobPro } from '@ionic-native/admob-pro/ngx';
 
@@ -38,7 +40,7 @@ import { SortItemsComponent } from './sort-items/sort-items.component';
 
 @NgModule({
   declarations: [AppComponent, SortItemsComponent],
-  entryComponents: [ SortItemsComponent ],
+  entryComponents: [SortItemsComponent],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
@@ -73,6 +75,8 @@ import { SortItemsComponent } from './sort-items/sort-items.component';
     StatusBar,
     SplashScreen,
     Clipboard,
+    LocalNotifications,
+    FCM,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

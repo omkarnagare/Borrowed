@@ -31,6 +31,13 @@ export class BorrowedAppConstants {
     public static DEFAULT_APP_THEME = "blue";
     public static APP_THEME = "settings.borrowedTheme";
 
+    //local notification
+    public static ITEM_ATTENTION_NOTIFICATION = 1;
+    public static ITEM_OVERDUE_NOTIFICATION = 2;
+
+    //push notifications
+    public static PUSH_NOTIFICATION_TOPIC = "borrowing";
+
     //google pay info
     public static GOOGLE_PAY_ID = "omkar.balkrishan@okhdfcbank";
 
