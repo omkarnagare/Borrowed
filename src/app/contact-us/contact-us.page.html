@@ -32,17 +32,17 @@
   </div>
 
   <form [formGroup]="contactUsFormGroup" *ngIf="isMobilePlatform === true">
-    <ion-card>
+    <ion-card @fadein>
       <ion-card-header>
-        <ion-card-title @slidetoptitle>Facing issue with Borrowing??</ion-card-title>
-        <ion-card-subtitle @slidebottomtitle>
+        <ion-card-title>Facing issue with Borrowing??</ion-card-title>
+        <ion-card-subtitle>
           <p>Don't worry, We are here to help you.</p>
           <p>Fill in the following details.</p>
         </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
         <div>
-          <ion-item @slidelefttitle>
+          <ion-item>
             <ion-input placeholder="What happened" formControlName="subject" type="text"></ion-input>
           </ion-item>
 
@@ -54,7 +54,7 @@
           </div>
         </div>
         <div>
-          <ion-item @sliderighttitle>
+          <ion-item>
             <ion-textarea placeholder="Describe your issue here" formControlName="body" type="text"></ion-textarea>
           </ion-item>
 
@@ -67,7 +67,7 @@
         </div>
 
 
-        <ion-button @slidebottomtitle [disabled]="!contactUsFormGroup.valid" (click)="showAlertForSendingEmail()"
+        <ion-button [disabled]="!contactUsFormGroup.valid" (click)="showAlertForSendingEmail()"
           class="expand-button">
           Send</ion-button>
       </ion-card-content>
@@ -75,10 +75,10 @@
   </form>
 
   <div *ngIf="isMobilePlatform === false">
-    <ion-card>
+    <ion-card @fadein>
       <ion-card-header>
-        <ion-card-title @slidetoptitle>Facing issue with Borrowing??</ion-card-title>
-        <ion-card-subtitle @slidebottomtitle>
+        <ion-card-title>Facing issue with Borrowing??</ion-card-title>
+        <ion-card-subtitle>
           <p>Don't worry, We are here to help you.</p>
           <p> Support Email: <br> <b>{{ supportEmail }}</b>
           </p>

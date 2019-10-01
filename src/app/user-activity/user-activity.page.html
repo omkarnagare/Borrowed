@@ -11,7 +11,7 @@
 
 <ion-content fullscreen>
 
-  <div *ngIf="activities === null">
+  <div *ngIf="monthlyActivities === null">
     <ion-card *ngFor="let x of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]">
       <ion-skeleton-text animated></ion-skeleton-text>
       <ion-skeleton-text animated></ion-skeleton-text>
@@ -19,29 +19,29 @@
     </ion-card>
   </div>
 
-  <div *ngIf="activities !== null && activities.length === 0">
+  <div *ngIf="monthlyActivities !== null && monthlyActivities.length === 0" @fadedin>
     <ion-card class="card-center" routerLink="/tabs/add-item">
-      <!-- <ion-img @slidetoptitle src="/assets/empty-box.svg" class="center-image"></ion-img> -->
       <ion-card-header>
-        <ion-card-title @slidelefttitle>No User Activities recorded.</ion-card-title>
+        <ion-card-title>No User Activities recorded.</ion-card-title>
       </ion-card-header>
-      <ion-card-content @sliderighttitle>
+      <ion-card-content>
         <p>It seems you haven't used Borrowing for un-forgetting your Items till date !!</p>
         <h2>Click here to add your first Item.</h2>
       </ion-card-content>
     </ion-card>
   </div>
 
-  <div *ngIf="activities !== null">
-    <ion-list *ngIf="activities.length > 0" no-margin no-padding lines="none">
-      <!-- <ion-list-header @slidelefttitle>Your Activity</ion-list-header> -->
-      <ion-item *ngFor="let activity of activities; let i = index;" class="item-grid-content"
-      [color]="i%2 !== 0 ? 'secondary': ''">
-        <ion-icon @slidelefttitle [name]="fetchIcon(i)" slot="start"></ion-icon>
-        <ion-label @sliderighttitle style="white-space: initial;">
-          {{ activity.activityDetails }}
-        </ion-label>
-      </ion-item>
+  <div *ngIf="monthlyActivities !== null" @fadein>
+    <ion-list *ngIf="monthlyActivities.length > 0" no-margin no-padding lines="none">
+      <ion-list *ngFor="let monthlyActivity of monthlyActivities" no-margin no-padding lines="none">
+          <ion-list-header style="border: 2px solid var(--ion-color-secondary); border-radius: 8px;">{{ monthlyActivity.monthlyTimeline }}</ion-list-header>
+          <ion-item *ngFor="let activity of monthlyActivity.activities; let i = index;" class="item-grid-content">
+            <ion-icon [name]="fetchIcon(i)" slot="start" style="color: var(--ion-color-secondary);"></ion-icon>
+            <ion-label style="white-space: initial; font-size: 12px;">
+              {{ activity.activityDetails }}
+            </ion-label>
+          </ion-item>
+        </ion-list>
     </ion-list>
   </div>
 

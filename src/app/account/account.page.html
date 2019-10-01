@@ -17,12 +17,12 @@
 </ion-header>
 
 <ion-content fullscreen>
-  <div *ngIf="showAccountDetails">
+  <div *ngIf="showAccountDetails" @fadein>
 
     <form [formGroup]="userInfoFormGroup">
       <ion-card>
         <ion-card-header>
-          <ion-card-subtitle @fadein>Account Details</ion-card-subtitle>
+          <ion-card-subtitle>Account Details</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
 
@@ -58,7 +58,7 @@
               </ion-row>
             </ion-grid>
 
-            <div @slidelefttitle>
+            <div>
               <ion-item *ngIf="!editingName">
                 <ion-icon slot="start" name="person"></ion-icon>
                 <ion-label>{{ userProfile.name }}</ion-label>
@@ -86,7 +86,7 @@
               </div>
             </div>
 
-            <div @sliderighttitle>
+            <div>
               <ion-item>
                 <ion-icon slot="start" name="mail"></ion-icon>
                 <ion-label>{{ userProfile.email }}</ion-label>
@@ -98,13 +98,19 @@
       </ion-card>
     </form>
 
-    <ion-card *ngIf="allItems !== null">
+    <ion-card>
       <ion-card-header>
-        <ion-card-subtitle @fadein>Summary</ion-card-subtitle>
+        <ion-card-subtitle>Summary</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
 
-        <div @slidelefttitle>
+        <div *ngIf="allItems === null || userProfile === null">
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </div>
+
+        <div *ngIf="allItems !== null && userProfile !== null">
           <ion-item>
             <ion-label>
               Total Lent Items
@@ -131,18 +137,18 @@
 
     <ion-card>
       <ion-card-header>
-        <ion-card-subtitle @fadein>Security</ion-card-subtitle>
+        <ion-card-subtitle>Security</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
 
-        <div *ngIf="!userProfile">
+        <div *ngIf="userProfile === null">
           <ion-skeleton-text animated></ion-skeleton-text>
           <ion-skeleton-text animated></ion-skeleton-text>
           <ion-skeleton-text animated></ion-skeleton-text>
         </div>
 
         <div *ngIf="userProfile !== null">
-          <div @sliderighttitle>
+          <div>
             <ion-item *ngIf="!userProfile.pin" (click)="confirmPinAction(500)">
               <ion-icon style="color:black" slot="start" name="apps"></ion-icon>
               <ion-label>Set PIN</ion-label>
@@ -160,8 +166,8 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-button @slidebottomtitle (click)="confirmLogOut()" class="expand-button" style="padding: 0px 8px 0px 8px"
-      color="danger"> Log Out
+    <ion-button *ngIf="userProfile !== null" (click)="confirmLogOut()" class="expand-button"
+      style="padding: 0px 8px 0px 8px" color="danger"> Log Out
     </ion-button>
   </div>
 </ion-content>

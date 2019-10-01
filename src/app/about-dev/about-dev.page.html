@@ -11,45 +11,106 @@
 
 <ion-content fullscreen>
 
-  <div *ngIf="showAboutDevPage">
-    <ion-card>
-      <ion-img @slidetoptitle
-        src='https://scontent.fbom19-1.fna.fbcdn.net/v/t1.0-9/13412880_1144444512243242_4366767483771827322_n.jpg?_nc_cat=108&_nc_oc=AQmCok0zRuVS7EOHizw7zw-xMTplFuXfKTROTWcrBVin0ebUwmftb57ljhtG4EQRXmQ&_nc_ht=scontent.fbom19-1.fna&oh=cf0c3a32456ba0d3ef061d7a1885c684&oe=5E154793'>
-      </ion-img>
+  <div @fadein>
+    <ion-card *ngIf="showAboutDevPage">
+      <ion-avatar class="dev-picture">
+        <ion-img
+          src='https://scontent.fbom19-1.fna.fbcdn.net/v/t1.0-9/13412880_1144444512243242_4366767483771827322_n.jpg?_nc_cat=108&_nc_oc=AQmCok0zRuVS7EOHizw7zw-xMTplFuXfKTROTWcrBVin0ebUwmftb57ljhtG4EQRXmQ&_nc_ht=scontent.fbom19-1.fna&oh=cf0c3a32456ba0d3ef061d7a1885c684&oe=5E154793'>
+        </ion-img>
+      </ion-avatar>
       <ion-card-content>
         <section class="introduction-section">
-          <h1 @slidelefttitle>Hi folks, I'm OMKAR</h1>
+          <h1>Hi folks, I'm OMKAR</h1>
         </section>
         <section class="introduction-section">
-          <h1 @slidelefttitle>Introduction</h1>
-          <p @sliderighttitle>I am a Full stack developer with Java-Angular technologies and soon to be a successful
+          <h1>Introduction</h1>
+          <p>I am a Full stack developer with Java-Angular technologies and soon to be a successful
             Ionic Developer.</p>
-          <p @sliderighttitle>I love the internet, technology, building things and most importantly people.</p>
+          <p>I love the internet, technology, building things and most importantly people.</p>
         </section>
         <section class="location-section">
-          <h1 @slidelefttitle>More Apps by me</h1>
-          <p @sliderighttitle><a href="https://play.google.com/store/apps/details?id=com.nagare.balkrishna.omkar.unmouse" target="_blank">
-            Un-Mouse
-          </a></p>
+          <h1>More Apps by me</h1>
+          <p><a href="https://play.google.com/store/apps/details?id=com.nagare.balkrishna.omkar.unmouse"
+              target="_blank">
+              Un-Mouse
+            </a></p>
         </section>
         <section class="questions-section">
-          <!-- <h1 @slidelefttitle>More About Me</h1> -->
+          <!-- <h1>More About Me</h1> -->
 
-          <h2 @slidebottomtitle>What are your favorite hobbies?</h2>
-          <p @sliderighttitle>My favorite hobby is building mobile applications. I like to keep on building things and
+          <h2>What are your favorite hobbies?</h2>
+          <p>My favorite hobby is building mobile applications. I like to keep on building things and
             make them available
-            to people for free. The code for all of my applications is publicly available.</p>
-          <p @sliderighttitle>I am a movie/web-series buff and a big fan of Anime & K-dramas. I love reading Manga in my
+            to people for free.</p>
+          <p>I am a movie/web-series buff and a big fan of Anime & K-dramas. I love reading Manga in my
             free time. Workout
             is my stress buster and Sketching calms my nerves</p>
 
-          <h2 @slidebottomtitle>What's your dream job?</h2>
-          <p @sliderighttitle>I don't work in my dreams :P</p>
+          <h2>What's your dream job?</h2>
+          <p>I don't work in my dreams :P</p>
 
-          <h2 @slidebottomtitle>Why do you want to be a Ionic developer?</h2>
-          <p @sliderighttitle>Because programming is awesome and programming for the mobile platforms is even more
+          <h2>Why do you want to be a Ionic developer?</h2>
+          <p>Because programming is awesome and programming for the mobile platforms is even more
             awesome.</p>
 
+        </section>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="!showAboutDevPage">
+      <ion-avatar class="dev-picture">
+        <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
+      </ion-avatar>
+      <ion-card-content>
+        <section class="introduction-section">
+          <h1>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h1>
+        </section>
+        <section class="introduction-section">
+          <h1>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h1>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
+        </section>
+        <section class="location-section">
+          <h1>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h1>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
+        </section>
+        <section class="questions-section">
+          <h2>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h2>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
+          <h2>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h2>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
+          <h2>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h2>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
+          <h2>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h2>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
         </section>
       </ion-card-content>
     </ion-card>
@@ -57,9 +118,9 @@
     <ion-card>
       <ion-card-content class="social-icon-container">
         <section class="questions-section">
-          <h2 @slidebottomtitle> Say Hi to me on Social Networks </h2>
+          <h2> Say Hi to me on Social Networks </h2>
         </section>
-        <div @slidebottomtitle>
+        <div>
           <a href="https://www.linkedin.com/in/omkar-nagare-aa8ba266/" target="_blank">
             <ion-icon style="color:#0e76a8" name="logo-linkedin"></ion-icon>
           </a>

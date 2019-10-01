@@ -45,16 +45,13 @@ export class AboutDevPage implements OnInit {
 
   showAboutDevPage: boolean = false;
 
-  constructor(
-    private _admobService: AdmobAdsService
-  ) { }
+  constructor() { }
 
   ngOnInit() {
   }
 
   ionViewDidEnter() {
     this.showAboutDevPage = true;
-    this._admobService.showInterStitialAd();
   }
 
   ionViewWillLeave() {

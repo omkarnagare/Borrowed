@@ -14,6 +14,10 @@ export class Utils {
         return this.months[date.getMonth()];
     }
 
+    getMonthlyTimeline(date: Date): string {
+        return this.months[date.getMonth()] + " "+ date.getFullYear();
+    }
+
     getDateOfOneMonthLater(dateStr: string): string {
         const date = new Date(dateStr);
         const laterDate = new Date(dateStr);

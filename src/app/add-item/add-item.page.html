@@ -13,12 +13,12 @@
 
 <ion-content fullscreen>
 
-  <ion-card no-margin *ngIf="showItemDetailsForm">
+  <ion-card no-margin @fadein *ngIf="showAddItemForm">
     <ion-card-content>
       <form [formGroup]="itemDetailsFormGroup">
 
         <div>
-          <ion-item @sliderighttitle lines="none">
+          <ion-item lines="none">
             <ion-segment mode="ios" (ionChange)="onTransactionTypeChange($event)" color="secondary">
               <ion-segment-button mode="ios" value="lent" checked>
                 <ion-label>Lent</ion-label>
@@ -33,13 +33,13 @@
         </div>
 
         <div *ngIf="isMobilePlatform">
-          <ion-item lines="none" @slidetoptitle>
+          <ion-item lines="none">
             <ion-avatar class="item-picture">
               <ion-img [src]="itemImage">
               </ion-img>
             </ion-avatar>
           </ion-item>
-          <ion-item lines="none" @slidetoptitle>
+          <ion-item lines="none">
             <ion-chip (click)="selectImageSource()" class="center-chip">
               <ion-icon name="camera"></ion-icon>
               <ion-label> {{ itemImage ? "Change Image" : "Add Image (Optional)" }}</ion-label>
@@ -48,8 +48,8 @@
         </div>
 
         <div>
-          <ion-label class="input-label" @slidelefttitle>Item*</ion-label>
-          <ion-item @slidelefttitle>
+          <ion-label class="input-label">Item*</ion-label>
+          <ion-item>
             <ion-input placeholder="Enter Item name" formControlName="itemName" type="text"></ion-input>
           </ion-item>
           <div *ngFor="let validation of validationMessages.itemName" class="validation-errors">
@@ -61,8 +61,8 @@
         </div>
 
         <div>
-          <ion-label class="input-label" @sliderighttitle>Importance*</ion-label>
-          <ion-item @sliderighttitle lines="none">
+          <ion-label class="input-label">Importance*</ion-label>
+          <ion-item lines="none">
             <ion-segment mode="ios" (ionChange)="onImportanceChange($event)" color="primary">
               <ion-segment-button value="high" mode="ios">
                 <ion-label>High</ion-label>
@@ -78,8 +78,8 @@
         </div>
 
         <div>
-          <ion-label class="input-label" @slidelefttitle>Event Date*</ion-label>
-          <ion-item @slidelefttitle>
+          <ion-label class="input-label">Event Date*</ion-label>
+          <ion-item>
             <ion-datetime [max]="today" displayFormat="DD MMM YYYY" formControlName="eventDate"
               placeholder="Enter Date of event">
             </ion-datetime>
@@ -93,8 +93,8 @@
         </div>
 
         <div>
-          <ion-label class="input-label" @sliderighttitle>Expected Date</ion-label>
-          <ion-item @sliderighttitle>
+          <ion-label class="input-label">Expected Date</ion-label>
+          <ion-item>
             <ion-datetime [min]="today" displayFormat="DD MMM YYYY" formControlName="expectedReturnDate"
               placeholder="Enter Date of return">
             </ion-datetime>
@@ -102,8 +102,8 @@
         </div>
 
         <div>
-          <ion-label class="input-label" @slidelefttitle>Notes about item</ion-label>
-          <ion-item @slidelefttitle>
+          <ion-label class="input-label">Notes about item</ion-label>
+          <ion-item>
             <ion-textarea placeholder="Add something more about the item here (Optional)"
               formControlName="itemDescription">
             </ion-textarea>
@@ -111,8 +111,8 @@
         </div>
 
         <div>
-          <ion-label class="input-label" @sliderighttitle>Name of the Person*</ion-label>
-          <ion-item @sliderighttitle>
+          <ion-label class="input-label">Name of the Person*</ion-label>
+          <ion-item>
             <ion-input text-capitalize placeholder="Enter Name" formControlName="personName" type="text"></ion-input>
             <ion-icon *ngIf="isMobilePlatform" name="paper" (click)="openContactFinderModal()"></ion-icon>
           </ion-item>
@@ -125,8 +125,8 @@
         </div>
 
         <div>
-          <ion-label class="input-label" @slidelefttitle>Contact Number</ion-label>
-          <ion-item @slidelefttitle>
+          <ion-label class="input-label">Contact Number</ion-label>
+          <ion-item>
             <ion-input placeholder="Enter Contact Number" formControlName="personContactNumber" type="text"></ion-input>
           </ion-item>
           <div *ngFor="let validation of validationMessages.personContactNumber" class="validation-errors">
@@ -138,8 +138,8 @@
         </div>
 
         <div>
-          <ion-label class="input-label" @sliderighttitle>Email Information</ion-label>
-          <ion-item @sliderighttitle>
+          <ion-label class="input-label">Email Information</ion-label>
+          <ion-item>
             <ion-input placeholder="Enter Email" formControlName="personEmail" type="text"></ion-input>
           </ion-item>
           <div *ngFor="let validation of validationMessages.personEmail" class="validation-errors">
@@ -150,7 +150,7 @@
           </div>
         </div>
 
-        <ion-button @slidebottomtitle (click)="addItem()" [disabled]="itemDetailsFormGroup.invalid"
+        <ion-button (click)="addItem()" [disabled]="itemDetailsFormGroup.invalid"
           class="expand-button">
           Add</ion-button>
       </form>

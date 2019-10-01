@@ -3,7 +3,8 @@ import { Observable, Subscription } from 'rxjs';
 
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { ActivitiesService } from '../services/activities.service';
-import { Activity } from '../types';
+import { Activity, MonthlyActivities } from '../types';
+import { Utils } from '../utils';
 
 @Component({
   selector: 'app-user-activity',
@@ -45,13 +46,14 @@ import { Activity } from '../types';
 })
 export class UserActivityPage implements OnInit, OnDestroy {
 
-  activities: Activity[] = null;
+  monthlyActivities: MonthlyActivities[] = null;
   activities$: Subscription;
 
   icons: string[] = ["american-football", "baseball", "basketball", "football", "tennisball"];
 
   constructor(
-    private _activitiesService: ActivitiesService
+    private _activitiesService: ActivitiesService,
+    private _utils: Utils
   ) {
   }
 
@@ -62,8 +64,30 @@ export class UserActivityPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.activities$ = this._activitiesService.getActivities().subscribe((data) => {
       console.log("activities", data);
-      this.activities = [...data];
+      this.processActivities([...data]);
     });
+  }
+
+  processActivities(activities: Activity[]) {
+    this.monthlyActivities = [];
+    activities.forEach(activity => {
+      const monthlyTimeline = this._utils.getMonthlyTimeline(new Date(activity.activityDate));
+      const monthlyActivity = this.monthlyActivities.find((monthlyActivity) => {
+        return monthlyActivity.monthlyTimeline === monthlyTimeline;
+      });
+      if (monthlyActivity) {
+        monthlyActivity.activities.push(activity);
+      } else {
+        const newMonthlyActivity = {
+          monthlyTimeline: monthlyTimeline,
+          activities: [
+            activity
+          ]
+        }
+        this.monthlyActivities.push(newMonthlyActivity);
+      }
+    });
+
   }
 
   ionViewDidEnter() {
@@ -74,7 +98,7 @@ export class UserActivityPage implements OnInit, OnDestroy {
       this.activities$.unsubscribe();
       this.activities$ = null;
     }
-    this.activities = null;
+    this.monthlyActivities = null;
   }
 
 }

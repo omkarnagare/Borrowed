@@ -73,18 +73,18 @@ export class BorrowedPage implements OnInit, OnDestroy, AfterViewInit {
     private _modalController: ModalController,
     private _popOverController: PopoverController
   ) {
-  }
-
-  ngOnInit() {
-  }
-
-  ionViewDidEnter() {
     this.items$ = this._itemsService.getAllItems().subscribe(items => {
       this.allItems = items;
       this.items = [... this.allItems];
       console.log(this.items)
       this.filterItems();
     });
+  }
+
+  ngOnInit() {
+  }
+
+  ionViewDidEnter() {
     this._pinVerification.isVerified().then((data) => {
       if (data.verified) {
         // safe to go ahead

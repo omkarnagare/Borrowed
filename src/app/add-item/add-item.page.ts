@@ -56,7 +56,7 @@ import { Utils } from '../utils';
 })
 export class AddItemPage implements OnInit {
 
-  showItemDetailsForm: boolean = false;
+  showAddItemForm: boolean = false;
 
   itemDetailsFormGroup: FormGroup;
   validationMessages: any;
@@ -125,12 +125,12 @@ export class AddItemPage implements OnInit {
   }
 
   ionViewDidEnter() {
-    this.showItemDetailsForm = true;
+    this.showAddItemForm = true;
     this.resetForm();
   }
 
   ionViewWillLeave() {
-    this.showItemDetailsForm = false;
+    this.showAddItemForm = false;
   }
 
   resetForm() {

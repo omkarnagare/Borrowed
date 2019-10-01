@@ -66,6 +66,12 @@ export class ImportantItemsPage implements OnInit, AfterViewInit, OnDestroy {
     private _loader: LoaderManagerService,
     private _toastManager: ToastManagerService
   ) {
+    this.items$ = this._itemsService.getAllItems().subscribe((data) => {
+      console.log(" items: ", data);
+      this.allItems = data;
+      this.items = [...this.allItems];
+      this.filterItems();
+    });
   }
 
   ngOnInit() { }
@@ -136,12 +142,6 @@ export class ImportantItemsPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ionViewDidEnter() {
-    this.items$ = this._itemsService.getAllItems().subscribe((data) => {
-      console.log(" items: ", data);
-      this.allItems = data;
-      this.items = [...this.allItems];
-      this.filterItems();
-    });
   }
 
   removeItem(item: Item) {

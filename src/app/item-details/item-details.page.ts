@@ -27,9 +27,6 @@ import { ContactFinderPage } from '../contact-finder/contact-finder.page';
       transition('void => *', [
         style({ opacity: 0 }),
         animate('600ms ease-out', style({ opacity: 1 }))
-      ]),
-      transition('* => void', [
-        animate('600ms ease-in', style({ opacity: 0 }))
       ])
     ]),
     trigger('slidelefttitle', [
@@ -148,7 +145,6 @@ export class ItemDetailsPage implements OnDestroy {
           {
             text: 'Yes',
             handler: () => {
-              this.itemDetailsFormGroup.markAsUntouched();
               this.prePopulateValues();
               this.editing = !this.editing;
             }
@@ -203,6 +199,8 @@ export class ItemDetailsPage implements OnDestroy {
   }
 
   prePopulateValues() {
+    this.itemDetailsFormGroup.reset();
+    this.itemDetailsFormGroup.markAsUntouched();
     if (this.itemObject.expectedReturnDate) {
       this.itemDetailsFormGroup.get('expectedReturnDate').setValue(this.itemObject.expectedReturnDate);
     }

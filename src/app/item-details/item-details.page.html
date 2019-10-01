@@ -39,27 +39,25 @@
   <form [formGroup]="itemDetailsFormGroup">
     <div *ngIf="itemObject !== null" [style.opacity]="itemObject.isActive ? 1 : 0.5">
       <ion-card>
-        <ion-img @slidetoptitle class="item-image" *ngIf="itemObject.itemImage && !editing"
-          [src]="itemObject.itemImage"></ion-img>
+        <ion-img class="item-image" *ngIf="itemObject.itemImage && !editing" [src]="itemObject.itemImage"></ion-img>
         <ion-item lines="none" *ngIf="isMobilePlatform && itemObject.isActive && !editing">
           <ion-chip (click)="selectImageSource()" class="center-chip">
-            <ion-icon @slidelefttitle name="camera"></ion-icon>
-            <ion-label @sliderighttitle>Change Image</ion-label>
+            <ion-icon name="camera"></ion-icon>
+            <ion-label>Change Image</ion-label>
           </ion-chip>
         </ion-item>
         <ion-card-header *ngIf="itemObject.itemDescription && !editing">
-          <ion-card-subtitle @sliderighttitle>Notes</ion-card-subtitle>
-          <ion-card-title @sliderighttitle>{{ itemObject.itemDescription }}</ion-card-title>
+          <ion-card-subtitle>Notes</ion-card-subtitle>
+          <ion-card-title>{{ itemObject.itemDescription }}</ion-card-title>
         </ion-card-header>
         <ion-card-content no-padding no-margin>
 
           <div *ngIf="!editing">
             <div *ngIf="itemObject.expectedReturnDate && itemObject.isActive">
               <ion-item no-padding no-margin lines="none">
-                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="git-compare">
+                <ion-icon slot="start" style="margin-left: 8px; margin-right: 8px;" name="git-compare">
                 </ion-icon>
-                <ion-segment @sliderighttitle mode="ios" [color]="calculatePendingTime(itemObject)" disabled
-                  style="opacity: 1;">
+                <ion-segment mode="ios" [color]="calculatePendingTime(itemObject)" disabled style="opacity: 1;">
                   <ion-segment-button mode="ios" checked>
                     <ion-label>Status</ion-label>
                   </ion-segment-button>
@@ -71,10 +69,10 @@
             </div>
             <div *ngIf="itemObject.returnDate && !itemObject.isActive">
               <ion-item no-padding no-margin lines="none">
-                <ion-icon @slidelefttitle slot="start"
-                  style="color: var(--ion-color-success); margin-left: 8px; margin-right: 8px;" name="done-all">
+                <ion-icon slot="start" style="color: var(--ion-color-success); margin-left: 8px; margin-right: 8px;"
+                  name="done-all">
                 </ion-icon>
-                <ion-segment @sliderighttitle mode="ios" color="success" disabled style="opacity: 1;">
+                <ion-segment mode="ios" color="success" disabled style="opacity: 1;">
                   <ion-segment-button mode="ios" checked>
                     <ion-label>Returned</ion-label>
                   </ion-segment-button>
@@ -86,9 +84,9 @@
             </div>
             <div *ngIf="itemObject.importance">
               <ion-item no-padding no-margin lines="none">
-                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="medical">
+                <ion-icon slot="start" style="margin-left: 8px; margin-right: 8px;" name="medical">
                 </ion-icon>
-                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                <ion-segment mode="ios" disabled style="opacity: 1;">
                   <ion-segment-button mode="ios" checked>
                     <ion-label>Importance</ion-label>
                   </ion-segment-button>
@@ -100,9 +98,9 @@
             </div>
             <div *ngIf="itemObject.itemName">
               <ion-item no-padding no-margin lines="none">
-                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="cube">
+                <ion-icon slot="start" style="margin-left: 8px; margin-right: 8px;" name="cube">
                 </ion-icon>
-                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                <ion-segment mode="ios" disabled style="opacity: 1;">
                   <ion-segment-button mode="ios" checked>
                     <ion-label>Item</ion-label>
                   </ion-segment-button>
@@ -114,9 +112,9 @@
             </div>
             <div *ngIf="itemObject.eventDate">
               <ion-item no-padding no-margin lines="none">
-                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="time">
+                <ion-icon slot="start" style="margin-left: 8px; margin-right: 8px;" name="time">
                 </ion-icon>
-                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                <ion-segment mode="ios" disabled style="opacity: 1;">
                   <ion-segment-button mode="ios" checked>
                     <ion-label>{{ itemObject.transactionType === "lent" ? 'Given on': 'Taken on' }}</ion-label>
                   </ion-segment-button>
@@ -128,9 +126,9 @@
             </div>
             <div *ngIf="itemObject.expectedReturnDate && itemObject.isActive">
               <ion-item no-padding no-margin lines="none">
-                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="hourglass">
+                <ion-icon slot="start" style="margin-left: 8px; margin-right: 8px;" name="hourglass">
                 </ion-icon>
-                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                <ion-segment mode="ios" disabled style="opacity: 1;">
                   <ion-segment-button mode="ios" checked>
                     <ion-label>Expected</ion-label>
                   </ion-segment-button>
@@ -142,9 +140,9 @@
             </div>
             <div *ngIf="itemObject.personName">
               <ion-item no-padding no-margin lines="none">
-                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="person">
+                <ion-icon slot="start" style="margin-left: 8px; margin-right: 8px;" name="person">
                 </ion-icon>
-                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                <ion-segment mode="ios" disabled style="opacity: 1;">
                   <ion-segment-button mode="ios" checked>
                     <ion-label>Name</ion-label>
                   </ion-segment-button>
@@ -156,9 +154,9 @@
             </div>
             <div *ngIf="itemObject.personContactNumber">
               <ion-item no-padding no-margin lines="none">
-                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="call">
+                <ion-icon slot="start" style="margin-left: 8px; margin-right: 8px;" name="call">
                 </ion-icon>
-                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                <ion-segment mode="ios" disabled style="opacity: 1;">
                   <ion-segment-button mode="ios" checked>
                     <ion-label>Phone</ion-label>
                   </ion-segment-button>
@@ -170,9 +168,9 @@
             </div>
             <div *ngIf="itemObject.personEmail">
               <ion-item no-padding no-margin lines="none">
-                <ion-icon @slidelefttitle slot="start" style="margin-left: 8px; margin-right: 8px;" name="mail">
+                <ion-icon slot="start" style="margin-left: 8px; margin-right: 8px;" name="mail">
                 </ion-icon>
-                <ion-segment @sliderighttitle mode="ios" disabled style="opacity: 1;">
+                <ion-segment mode="ios" disabled style="opacity: 1;">
                   <ion-segment-button mode="ios" checked>
                     <ion-label>Email</ion-label>
                   </ion-segment-button>
@@ -184,10 +182,10 @@
             </div>
           </div>
 
-          <div *ngIf="editing">
+          <div *ngIf="editing" @fadein>
             <div>
-              <ion-label class="input-label" @slidelefttitle>Item*</ion-label>
-              <ion-item @slidelefttitle>
+              <ion-label class="input-label">Item*</ion-label>
+              <ion-item>
                 <ion-input placeholder="Enter Item name" formControlName="itemName" type="text"></ion-input>
               </ion-item>
               <div *ngFor="let validation of validationMessages.itemName" class="validation-errors">
@@ -198,8 +196,8 @@
               </div>
             </div>
             <div>
-              <ion-label class="input-label" @sliderighttitle>Importance*</ion-label>
-              <ion-item @sliderighttitle lines="none">
+              <ion-label class="input-label">Importance*</ion-label>
+              <ion-item lines="none">
                 <ion-segment [value]="importance" mode="ios" (ionChange)="onImportanceChange($event)" color="primary">
                   <ion-segment-button value="high" mode="ios">
                     <ion-label>High</ion-label>
@@ -214,8 +212,8 @@
               </ion-item>
             </div>
             <div>
-              <ion-label class="input-label" @slidelefttitle>Event Date*</ion-label>
-              <ion-item @slidelefttitle>
+              <ion-label class="input-label">Event Date*</ion-label>
+              <ion-item>
                 <ion-datetime [max]="today" displayFormat="DD MMM YYYY" formControlName="eventDate"
                   placeholder="Enter Date of event">
                 </ion-datetime>
@@ -228,24 +226,24 @@
               </div>
             </div>
             <div>
-              <ion-label class="input-label" @sliderighttitle>Expected Date</ion-label>
-              <ion-item @sliderighttitle>
+              <ion-label class="input-label">Expected Date</ion-label>
+              <ion-item>
                 <ion-datetime [min]="today" displayFormat="DD MMM YYYY" formControlName="expectedReturnDate"
                   placeholder="Enter Date of return">
                 </ion-datetime>
               </ion-item>
             </div>
             <div>
-              <ion-label class="input-label" @slidelefttitle>Notes about item</ion-label>
-              <ion-item @slidelefttitle>
+              <ion-label class="input-label">Notes about item</ion-label>
+              <ion-item>
                 <ion-textarea placeholder="Add something more about the item here (Optional)"
                   formControlName="itemDescription">
                 </ion-textarea>
               </ion-item>
             </div>
             <div>
-              <ion-label class="input-label" @sliderighttitle>Name of the Person*</ion-label>
-              <ion-item @sliderighttitle>
+              <ion-label class="input-label">Name of the Person*</ion-label>
+              <ion-item>
                 <ion-input text-capitalize placeholder="Enter Name" formControlName="personName" type="text">
                 </ion-input>
                 <ion-icon *ngIf="isMobilePlatform" name="paper" (click)="openContactFinderModal()"></ion-icon>
@@ -258,8 +256,8 @@
               </div>
             </div>
             <div>
-              <ion-label class="input-label" @slidelefttitle>Contact Number</ion-label>
-              <ion-item @slidelefttitle>
+              <ion-label class="input-label">Contact Number</ion-label>
+              <ion-item>
                 <ion-input placeholder="Enter Contact Number" formControlName="personContactNumber" type="text">
                 </ion-input>
               </ion-item>
@@ -271,8 +269,8 @@
               </div>
             </div>
             <div>
-              <ion-label class="input-label" @sliderighttitle>Email Information</ion-label>
-              <ion-item @sliderighttitle>
+              <ion-label class="input-label">Email Information</ion-label>
+              <ion-item>
                 <ion-input placeholder="Enter Email" formControlName="personEmail" type="text"></ion-input>
               </ion-item>
               <div *ngFor="let validation of validationMessages.personEmail" class="validation-errors">
@@ -287,11 +285,11 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card *ngIf="isMobilePlatform && itemObject.isActive && !editing">
+      <ion-card *ngIf="isMobilePlatform && itemObject.isActive && !editing" @slidebottomtitle>
         <ion-card-content class="social-icon-container">
-          <p @sliderighttitle>Everyone is busy nowdays.</p>
-          <p @sliderighttitle>You can remind "{{ itemObject.personName }}" about "{{ itemObject.itemName }}" with</p>
-          <div @slidebottomtitle>
+          <p>Everyone is busy nowdays.</p>
+          <p>You can remind "{{ itemObject.personName }}" about "{{ itemObject.itemName }}" with</p>
+          <div>
             <a (click)="openMessageComposerModal(600)">
               <ion-icon style="color:#25D366" name="logo-whatsapp"></ion-icon>
             </a>

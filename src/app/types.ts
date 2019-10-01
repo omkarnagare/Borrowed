@@ -34,6 +34,11 @@ export interface Activity {
     activityDate?: string;
 }
 
+export interface MonthlyActivities {
+    monthlyTimeline?: string;
+    activities?: Activity[];
+}
+
 export interface SocialUserInfo {
     uid?: string;
     displayName: string;
