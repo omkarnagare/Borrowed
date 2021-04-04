@@ -67,7 +67,7 @@ export class FAQsPage implements OnInit {
 
   ionViewDidEnter() {
     this.showFAQs = true;
-    this._admobService.showInterStitialAd();
+    // this._admobService.showInterStitialAd();
   }
 
   ionViewWillLeave() {

@@ -41,16 +41,16 @@ export class AdmobAdsService implements OnDestroy {
   //   }
   // }
 
-  showInterStitialAd() {
-    if (this._platformInfoService.isAndroidDevice()) {
-      this._admob.prepareInterstitial(environment.interstitialAdConfig).then((success) => {
-        console.log(success);
-        this._admob.showInterstitial();
-      }).catch(error => {
-        console.error(error);
-      });
-    }
-  }
+  // showInterStitialAd() {
+  //   if (this._platformInfoService.isAndroidDevice()) {
+  //     this._admob.prepareInterstitial(environment.interstitialAdConfig).then((success) => {
+  //       console.log(success);
+  //       this._admob.showInterstitial();
+  //     }).catch(error => {
+  //       console.error(error);
+  //     });
+  //   }
+  // }
 
   // removeBanner() {
   //   if (this._platformInfoService.isAndroidDevice()) {

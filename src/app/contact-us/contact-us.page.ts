@@ -91,7 +91,7 @@ export class ContactUsPage implements OnInit {
 
   ionViewDidEnter() {
     this.isMobilePlatform = this._platformInfoService.isMobilePlatform();
-    this._admobService.showInterStitialAd();
+    // this._admobService.showInterStitialAd();
   }
 
   async showAlertForSendingEmail() {

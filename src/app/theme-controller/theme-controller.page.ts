@@ -60,7 +60,7 @@ export class ThemeControllerPage implements OnInit {
 
   ionViewDidEnter() {
     this.showThemeSelection = true;
-    this._admobServices.showInterStitialAd();
+    // this._admobServices.showInterStitialAd();
   }
 
   ionViewWillLeave() {
