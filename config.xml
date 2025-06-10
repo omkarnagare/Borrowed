@@ -25,8 +25,8 @@
     <preference name="SplashScreenSpinnerColor" value="#291B37" />
     <preference name="CameraUsesGeolocation" value="false" />
     <preference name="deployment-target" value="7.0" />
-    <preference name="TwitterConsumerKey" value="NU5jNJT5J7RXLQ07DcZNZKGsU" />
-    <preference name="TwitterConsumerSecret" value="McAPWNwByhMGZFocnJgpXYfpIPKf6UQGxE4XxCt8DpeFo607Xh" />
+    <preference name="TwitterConsumerKey" value="XXXXX" />
+    <preference name="TwitterConsumerSecret" value="XXXXX" />
     <platform name="android">
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
             <application android:networkSecurityConfig="@xml/network_security_config" />
